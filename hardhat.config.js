@@ -49,7 +49,7 @@ module.exports = {
       // accounts: [{privateKey: process.env.PRIVATE_KEY, balance: parseEther("10000").toString()}],
     },
     bnb: {
-      url: process.env.BNB_URL,
+      url: `${process.env.BNB_URL}`,
       accounts: process.env.PRIVATE_KEY !== undefined ? [process.env.PRIVATE_KEY] : [],
       gas: 20e6 // lets see if this solves problem, as auto gas estimation makes deploy scripts to fail
     },
