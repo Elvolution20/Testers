@@ -23,7 +23,7 @@ import "../interfaces/IClipSwapFarm.sol";
     @custom:oz-upgrades-unsafe-allow constructor state-variable-immutable
  */
 
-contract StargateUSDT is Initializable, UUPSUpgradeable, OwnableUpgradeable, IStrategy {
+contract StargateStrategy is Initializable, UUPSUpgradeable, OwnableUpgradeable, IStrategy {
     error CallerUpgrader();
 
     /**
