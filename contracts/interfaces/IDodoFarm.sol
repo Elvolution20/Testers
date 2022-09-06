@@ -1,7 +1,7 @@
 //SPDX-License-Identifier: Unlicense
 pragma solidity ^0.8.0;
 
-interface IClipswapFarm {
+interface IDodoFarm {
   function BONUS_MULTIPLIER (  ) external view returns ( uint256 );
   function CLIP (  ) external view returns ( address );
   function CLIPPerBlock (  ) external view returns ( uint256 );
