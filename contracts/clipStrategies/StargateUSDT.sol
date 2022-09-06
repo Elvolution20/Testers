@@ -2,9 +2,9 @@
 
 pragma solidity ^0.8.0;
 import "../deps/openzeppelin/contracts/token/ERC20/IERC20.sol";
-// import "../deps/uniswap/v2-periphery/contracts/interfaces/IUniswapV2Router02.sol";
-// import "../deps/uniswap/v2-core/contracts/interfaces/IUniswapV2Pair.sol";
-// import "../deps/uniswap/v2-core/contracts/interfaces/IUniswapV2Factory.sol";
+import "../deps/uniswap/v2-periphery/contracts/interfaces/IUniswapV2Router02.sol";
+import "../deps/uniswap/v2-core/contracts/interfaces/IUniswapV2Pair.sol";
+import "../deps/uniswap/v2-core/contracts/interfaces/IUniswapV2Factory.sol";
 import "../interfaces/IStrategy.sol";
 import "../interfaces/IStargateRouter.sol";
 import "../interfaces/IClipswapFarm.sol";
@@ -119,8 +119,8 @@ contract StargateUSDT is Initializable, UUPSUpgradeable, OwnableUpgradeable, ISt
         returns (uint256 amountWithdrawn)
     {
         Parameters memory _p = params;
-        // address token0 = IUniswapV2Pair(address(_p.lpToken)).token0();
-        // address token1 = IUniswapV2Pair(address(_p.lpToken)).token1();
+        address token0 = IUniswapV2Pair(address(_p.lpToken)).token0();
+        address token1 = IUniswapV2Pair(address(_p.lpToken)).token1();
         // uint256 balance0 = IERC20(token0).balanceOf(address(_p.lpToken));
         uint256 balanceLp = IClipswapFarm(_p.farm).myStakedBalance();
         // uint256 amountA = strategyTokenAmountToWithdraw / 2;
@@ -162,37 +162,37 @@ contract StargateUSDT is Initializable, UUPSUpgradeable, OwnableUpgradeable, ISt
         return strategyTokenAmountToWithdraw;
     }
 
-    // function compound() external override onlyOwner {
-    //     // inside withdraw happens CLIP rewards collection
-    //     _p.farm.withdraw(poolId, 0);
-    //     // use balance because CLIP is harvested on deposit and withdraw calls
-    //     uint256 clipAmount = _p.clip.balanceOf(address(this));
+    function compound() external override onlyOwner {
+        // inside withdraw happens CLIP rewards collection
+        _p.farm.withdraw(poolId, 0);
+        // use balance because CLIP is harvested on deposit and withdraw calls
+        uint256 clipAmount = _p.clip.balanceOf(address(this));
 
-    //     if (clipAmount > 0) {
-    //         fix_leftover(0);
-    //         sellReward(clipAmount);
-    //         uint256 balanceA = _p.tokenA.balanceOf(address(this));
-    //         uint256 balanceB = _p.tokenB.balanceOf(address(this));
+        if (clipAmount > 0) {
+            fix_leftover(0);
+            sellReward(clipAmount);
+            uint256 balanceA = _p.tokenA.balanceOf(address(this));
+            uint256 balanceB = _p.tokenB.balanceOf(address(this));
 
-    //         tokenA.approve(address(_p.clipRouter), balanceA);
-    //         tokenB.approve(address(_p.clipRouter), balanceB);
+            tokenA.approve(address(_p.clipRouter), balanceA);
+            tokenB.approve(address(_p.clipRouter), balanceB);
 
-    //         _p.clipRouter.addLiquidity(
-    //             address(_p.tokenA),
-    //             address(_p.tokenB),
-    //             balanceA,
-    //             balanceB,
-    //             0,
-    //             0,
-    //             address(this),
-    //             block.timestamp
-    //         );
+            _p.clipRouter.addLiquidity(
+                address(_p.tokenA),
+                address(_p.tokenB),
+                balanceA,
+                balanceB,
+                0,
+                0,
+                address(this),
+                block.timestamp
+            );
 
-    //         uint256 lpAmount = _p.lpToken.balanceOf(address(this));
-    //         _p.lpToken.approve(_p.farm, lpAmount);
-    //         IClipswapFarm(_p.farm).deposit(_p.poolId, lpAmount);
-    //     }
-    // }
+            uint256 lpAmount = _p.lpToken.balanceOf(address(this));
+            _p.lpToken.approve(_p.farm, lpAmount);
+            IClipswapFarm(_p.farm).deposit(_p.poolId, lpAmount);
+        }
+    }
 
     // function totalTokens() external view override returns (uint256) {
     //     (uint256 liquidity, ) = IClipswapFarm(_p.farm).userInfo(_p.poolId, address(this));
@@ -250,24 +250,24 @@ contract StargateUSDT is Initializable, UUPSUpgradeable, OwnableUpgradeable, ISt
         }
     }
 
-    /// @dev Swaps leftover tokens for a better ratio for LP.
-    // function fix_leftover(uint256 amountIgnore) private {
-    //     Exchange exchange = _p.strategyRouter.getExchange();
-    //     uint256 amountB = _p.tokenB.balanceOf(address(this));
-    //     uint256 amountA = _p.tokenA.balanceOf(address(this)) - amountIgnore;
-    //     uint256 toSwap;
-    //     if (amountB > amountA && (toSwap = amountB - amountA) > LEFTOVER_THRESHOLD_TOKEN_B) {
-    //         uint256 dexFee = exchange.getFee(toSwap / 2, address(_p.tokenA), address(_p.tokenB));
-    //         toSwap = calculateSwapAmount(toSwap / 2, dexFee);
-    //         _p.tokenB.transfer(address(exchange), toSwap);
-    //         exchange.swap(toSwap, address(_p.tokenB), address(_p.tokenA), address(this));
-    //     } else if (amountA > amountB && (toSwap = amountA - amountB) > LEFTOVER_THRESHOLD_TOKEN_A) {
-    //         uint256 dexFee = exchange.getFee(toSwap / 2, address(_p.tokenA), address(_p.tokenB));
-    //         toSwap = calculateSwapAmount(toSwap / 2, dexFee);
-    //         _p.tokenA.transfer(address(exchange), toSwap);
-    //         exchange.swap(toSwap, address(_p.tokenA), address(_p.tokenB), address(this));
-    //     }
-    // }
+    // @dev Swaps leftover tokens for a better ratio for LP.
+    function fix_leftover(uint256 amountIgnore) private {
+        Exchange exchange = _p.strategyRouter.getExchange();
+        uint256 amountB = _p.tokenB.balanceOf(address(this));
+        uint256 amountA = _p.tokenA.balanceOf(address(this)) - amountIgnore;
+        uint256 toSwap;
+        if (amountB > amountA && (toSwap = amountB - amountA) > LEFTOVER_THRESHOLD_TOKEN_B) {
+            uint256 dexFee = exchange.getFee(toSwap / 2, address(_p.tokenA), address(_p.tokenB));
+            toSwap = calculateSwapAmount(toSwap / 2, dexFee);
+            _p.tokenB.transfer(address(exchange), toSwap);
+            exchange.swap(toSwap, address(_p.tokenB), address(_p.tokenA), address(this));
+        } else if (amountA > amountB && (toSwap = amountA - amountB) > LEFTOVER_THRESHOLD_TOKEN_A) {
+            uint256 dexFee = exchange.getFee(toSwap / 2, address(_p.tokenA), address(_p.tokenB));
+            toSwap = calculateSwapAmount(toSwap / 2, dexFee);
+            _p.tokenA.transfer(address(exchange), toSwap);
+            exchange.swap(toSwap, address(_p.tokenA), address(_p.tokenB), address(this));
+        }
+    }
 
     // swap clip for _p.tokenA & _p.tokenB in proportions 50/50
     function sellReward(
