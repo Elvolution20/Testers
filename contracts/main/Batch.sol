@@ -1,4 +1,5 @@
 //SPDX-License-Identifier: Unlicense
+
 pragma solidity ^0.8.0;
 
 import "../deps/openzeppelin/contracts/token/ERC20/IERC20.sol";
@@ -14,8 +15,6 @@ import {StrategyRouter} from "./StrategyRouter.sol";
 import {Exchange} from "../exchange/Exchange.sol";
 import "../deps/EnumerableSetExtension.sol";
 import "../interfaces/IUsdOracle.sol";
-
-// import "hardhat/console.sol";
 
 /// @notice This contract contains batch related code, serves as part of StrategyRouter.
 /// @notice This contract should be owned by StrategyRouter.

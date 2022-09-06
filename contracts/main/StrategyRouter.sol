@@ -148,11 +148,13 @@ contract StrategyRouter is Initializable, UUPSUpgradeable, OwnableUpgradeable, M
 
     function _authorizeUpgrade(address newImplementation) internal override onlyOwner {}
 
-    // Universal Functions
+    /**
+        Universal Functions
 
-    /// @notice Send pending money collected in the batch into the strategies.
-    /// @notice Can be called when `cycleDuration` seconds has been passed or
-    ///         batch usd value has reached `minUsdPerCycle`.
+        @notice Send pending money collected in the batch into the strategies.
+        @notice Can be called when `cycleDuration` seconds has been passed or
+                batch usd value has reached `minUsdPerCycle`.
+    */
     function allocateToStrategies() external {
         /*
         step 1 - preparing data and assigning local variables for later reference
@@ -235,8 +237,11 @@ contract StrategyRouter is Initializable, UUPSUpgradeable, OwnableUpgradeable, M
         cycles[_currentCycleId].startAt = block.timestamp;
     }
 
-    /// @notice Harvest yield from farms, and reinvest these rewards into strategies.
-    /// @notice Part of the harvested rewards is taken as protocol comission.
+    /**
+    
+        @notice Harvest yield from farms, and reinvest these rewards into strategies.
+        @notice Part of the harvested rewards is taken as protocol comission.
+    */
     function compoundAll() external {
         if (sharesToken.totalSupply() == 0) revert();
 

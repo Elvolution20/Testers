@@ -6,8 +6,6 @@ import "../deps/openzeppelin/contracts-upgradeable/access/OwnableUpgradeable.sol
 import "../deps/openzeppelin/contracts-upgradeable/proxy/utils/UUPSUpgradeable.sol";
 import "../deps/openzeppelin/contracts-upgradeable/proxy/utils/Initializable.sol";
 
-// import "hardhat/console.sol";
-
 contract ReceiptNFT is ERC721Upgradeable, UUPSUpgradeable, OwnableUpgradeable {
 
     error NonExistingToken();
