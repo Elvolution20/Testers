@@ -7,7 +7,7 @@ import "../deps/uniswap/v2-core/contracts/interfaces/IUniswapV2Pair.sol";
 import "../deps/uniswap/v2-core/contracts/interfaces/IUniswapV2Factory.sol";
 import "../interfaces/IStrategy.sol";
 import "../interfaces/IStargateRouter.sol";
-import "../interfaces/IClipswapFarm.sol";
+import "../interfaces/IClipSwapFarm.sol";
 
 /** @title Stargate USDT Liquidity pool.
         How is works
@@ -22,6 +22,7 @@ import "../interfaces/IClipswapFarm.sol";
 
     @custom:oz-upgrades-unsafe-allow constructor state-variable-immutable
  */
+
 contract StargateUSDT is Initializable, UUPSUpgradeable, OwnableUpgradeable, IStrategy {
     error CallerUpgrader();
 
