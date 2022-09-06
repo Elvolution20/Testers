@@ -1,0 +1,15 @@
+node_modules
+.env
+coverage
+coverage.json
+typechain
+remix-compiler.config.js
+tenderly.yaml
+#Hardhat files
+cache
+artifacts
+.vscode/
+.idea/*
+
+# OpenZeppelin
+.openzeppelin/unknown-*.json
