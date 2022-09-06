@@ -5,14 +5,26 @@ import "@uniswap/v2-periphery/contracts/interfaces/IUniswapV2Router02.sol";
 import "@uniswap/v2-core/contracts/interfaces/IUniswapV2Pair.sol";
 import "@uniswap/v2-core/contracts/interfaces/IUniswapV2Factory.sol";
 import "../interfaces/IStrategy.sol";
-import "../interfaces/IBiswapFarm.sol";
+import "../interfaces/IDodoFarm.sol";
 import "../main/StrategyRouter.sol";
 
 import "hardhat/console.sol";
 
-// Base contract to be inherited, works with biswap MasterChef:
-// address on BNB Chain: 0xDbc1A13490deeF9c3C12b44FE77b503c1B061739
-// their code on github: https://github.com/biswap-org/staking/blob/main/contracts/MasterChef.sol
+/** @title Dodo Exchange USDT Liquidity pool.
+        How is works
+        ------------
+        - USDT is converted to an LP token in the BUSD-USDT Pool on the DODO Exchange
+        - USDT LP token is staked in the BUSD-USDT liquidity mining farm.
+        - Rewards are received as DODO tokens.
+        - DODO tokens are sold for USDT and deposited back into the pool.
+
+    @notice: 
+        params.clip : Contract of the reward token. (In this case Dodo)
+        param.farm : Liquidity Mining Farm.
+
+    @custom:oz-upgrades-unsafe-allow constructor state-variable-immutable
+ */
+
 
 /// @custom:oz-upgrades-unsafe-allow constructor state-variable-immutable
 contract DodoStrategy is Initializable, UUPSUpgradeable, OwnableUpgradeable, IStrategy {
@@ -25,9 +37,9 @@ contract DodoStrategy is Initializable, UUPSUpgradeable, OwnableUpgradeable, ISt
     ERC20 internal immutable lpToken;
     StrategyRouter internal immutable strategyRouter;
 
-    ERC20 internal constant dodo = ERC20(0x965F527D9159dCe6288a2219DB51fc6Eef120dD1);
-    IBiswapFarm internal constant farm = IBiswapFarm(0xDbc1A13490deeF9c3C12b44FE77b503c1B061739);
-    IUniswapV2Router02 internal constant biswapRouter = IUniswapV2Router02(0x3a6d8cA21D1CF76F653A67577FA0D27453350dD8);
+    ERC20 internal constant dodo = ERC20(0x67ee3Cb086F8a16f34beE3ca72FAD36F7Db929e2);
+    IDodoFarm internal constant farm = IDodoFarm();
+    IUniswapV2Router02 internal constant dodoRouter = IUniswapV2Router02();
 
     uint256 internal immutable poolId;
 
@@ -83,9 +95,9 @@ contract DodoStrategy is Initializable, UUPSUpgradeable, OwnableUpgradeable, ISt
         tokenA.transfer(address(exchange), amountB);
         amountB = exchange.swap(amountB, address(tokenA), address(tokenB), address(this));
 
-        tokenA.approve(address(biswapRouter), amountA);
-        tokenB.approve(address(biswapRouter), amountB);
-        (, , uint256 liquidity) = biswapRouter.addLiquidity(
+        tokenA.approve(address(dodoRouter), amountA);
+        tokenB.approve(address(dodoRouter), amountB);
+        (, , uint256 liquidity) = dodoRouter.addLiquidity(
             address(tokenA),
             address(tokenB),
             amountA,
@@ -116,13 +128,13 @@ contract DodoStrategy is Initializable, UUPSUpgradeable, OwnableUpgradeable, ISt
 
         (balance0, balance1) = token0 == address(tokenA) ? (balance0, balance1) : (balance1, balance0);
 
-        amountB = biswapRouter.quote(amountB, balance0, balance1);
+        amountB = dodoRouter.quote(amountB, balance0, balance1);
 
         uint256 liquidityToRemove = (lpToken.totalSupply() * (amountA + amountB)) / (balance0 + balance1);
 
         farm.withdraw(poolId, liquidityToRemove);
-        lpToken.approve(address(biswapRouter), liquidityToRemove);
-        (amountA, amountB) = biswapRouter.removeLiquidity(
+        lpToken.approve(address(dodoRouter), liquidityToRemove);
+        (amountA, amountB) = dodoRouter.removeLiquidity(
             address(tokenA),
             address(tokenB),
             lpToken.balanceOf(address(this)),
@@ -151,10 +163,10 @@ contract DodoStrategy is Initializable, UUPSUpgradeable, OwnableUpgradeable, ISt
             uint256 balanceA = tokenA.balanceOf(address(this));
             uint256 balanceB = tokenB.balanceOf(address(this));
 
-            tokenA.approve(address(biswapRouter), balanceA);
-            tokenB.approve(address(biswapRouter), balanceB);
+            tokenA.approve(address(dodoRouter), balanceA);
+            tokenB.approve(address(dodoRouter), balanceB);
 
-            biswapRouter.addLiquidity(
+            dodoRouter.addLiquidity(
                 address(tokenA),
                 address(tokenB),
                 balanceA,
@@ -189,7 +201,7 @@ contract DodoStrategy is Initializable, UUPSUpgradeable, OwnableUpgradeable, ISt
                 : (balanceA, balanceB);
 
             // convert amountB to amount tokenA
-            amountA += biswapRouter.quote(amountB, _reserve0, _reserve1);
+            amountA += dodoRouter.quote(amountB, _reserve0, _reserve1);
         }
 
         return amountA;
@@ -200,8 +212,8 @@ contract DodoStrategy is Initializable, UUPSUpgradeable, OwnableUpgradeable, ISt
         if (amount > 0) {
             farm.withdraw(poolId, amount);
             uint256 lpAmount = lpToken.balanceOf(address(this));
-            lpToken.approve(address(biswapRouter), lpAmount);
-            biswapRouter.removeLiquidity(
+            lpToken.approve(address(dodoRouter), lpAmount);
+            dodoRouter.removeLiquidity(
                 address(tokenA),
                 address(tokenB),
                 lpToken.balanceOf(address(this)),
