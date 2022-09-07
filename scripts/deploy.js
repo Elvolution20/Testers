@@ -15,25 +15,6 @@ async function main() {
   console.log("Deploying contracts with the account:", deployer.address);
   console.log("Account balance:", (await deployer.getBalance()).toString());
 
-  // console.log(
-  //   "Deploying TestToken: "
-  // );
-  // const TestToken = await ethers.getContractFactory("TestToken");
-  // const testToken = await TestToken.deploy();
-  // await testToken.deployed();
-  // const testAddress = testToken.address;
-  // console.log("TestTokem deployed to:", testAddress);
-
-  //DEXPOOL
-  // console.log("Deploying FactoryOneFile");
-  // const DexPoolOneFile = await ethers.getContractFactory("DexPoolOneFile");
-  // const dexPoolOneFile = await DexPoolOneFile.deploy();
-  // // const dexPoolOneFile = await DexPoolOneFile.deploy("0xE3BC9A5B6edC1a113a33613208003d00C696aAeb");
-  // await dexPoolOneFile.deployed();
-  // const dexAddress = dexPoolOneFile.address;
-  // console.log("DexPoolOneFile deployed to:", dexAddress);
-
-
   console.log("Deploying CBridge: ");
   const CBridgeUSDT = await ethers.getContractFactory("CBridgeUSDT");
   const cBridgeUSDT = await CBridgeUSDT.deploy();
