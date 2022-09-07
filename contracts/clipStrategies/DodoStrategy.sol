@@ -4,6 +4,7 @@ import "../deps/openzeppelin/contracts/token/ERC20/IERC20.sol";
 import "../deps/uniswap/v2-periphery/contracts/interfaces/IUniswapV2Router02.sol";
 import "../deps/uniswap/v2-core/contracts/interfaces/IUniswapV2Pair.sol";
 import "../deps/uniswap/v2-core/contracts/interfaces/IUniswapV2Factory.sol";
+// import "../interfaces/IDodoV1Router.sol";
 import "../interfaces/IStrategy.sol";
 import "../interfaces/IDodoStrategy.sol";
 import "../main/StrategyRouter.sol";
@@ -16,7 +17,7 @@ import "../main/StrategyRouter.sol";
         - Rewards are received as DODO tokens.
         - DODO tokens are sold for USDT and deposited back into the pool.
 
-    @notice: 
+ @notice: 
         params.clip : Contract of the reward token. (In this case Dodo)
         param.farm : Liquidity Mining Farm.
 
@@ -28,14 +29,14 @@ contract DodoStrategy is Initializable, UUPSUpgradeable, OwnableUpgradeable, ISt
 
     address internal upgrader;
     
-    ERC20 internal immutable tokenA;
-    ERC20 internal immutable tokenB;
-    ERC20 internal immutable lpToken;
-    StrategyRouter internal immutable strategyRouter;
+    ERC20 internal immutable tokenA; // USDT Token to deposit
+    ERC20 internal immutable tokenB; // BUSD 
+    ERC20 internal immutable lpToken; // BUSD-USDT LpToken
+    StrategyRouter internal immutable strategyRouter; // StrategyRouter contract
 
-    ERC20 internal constant dodo = ERC20(0x67ee3Cb086F8a16f34beE3ca72FAD36F7Db929e2);
-    IDodoFarm internal constant farm = IDodoFarm();
-    IUniswapV2Router02 internal constant dodoRouter = IUniswapV2Router02();
+    ERC20 internal constant dodo = ERC20(0x67ee3Cb086F8a16f34beE3ca72FAD36F7Db929e2); //reward token
+    IDodoFarm internal constant farm = IDodoFarm("Paste Dodo farm address here"); // Dodo farm
+    IUniswapV2Factory internal constant dodoRouter = IUniswapV2Router02("Paste Dodo riouter address here"); // Dodo Exchange
 
     uint256 internal immutable poolId;
 
@@ -84,7 +85,7 @@ contract DodoStrategy is Initializable, UUPSUpgradeable, OwnableUpgradeable, ISt
         Exchange exchange = strategyRouter.getExchange();
 
         // uint256 dexFee = exchange.getFee(amount / 2, address(tokenA), address(tokenB));
-        //uint256 amountB = calculateSwapAmount(amount / 2, dexFee);
+        uint256 amountB = calculateSwapAmount(amount / 2, 0);
         uint256 amountB = calculateSwapAmount(amount / 2);
         uint256 amountA = amount - amountB;
 
@@ -315,17 +316,4 @@ contract DodoStrategy is Initializable, UUPSUpgradeable, OwnableUpgradeable, ISt
     }
 
 
-}
-
-/// @custom:oz-upgrades-unsafe-allow constructor state-variable-immutable
-contract DodoBusdUsdt is DodoStrategy {
-    constructor(StrategyRouter _strategyRouter)
-        DodoStrategy(
-            _strategyRouter,
-            1, // poolId
-            ERC20(0xe9e7CEA3DedcA5984780Bafc599bD69ADd087D56), // tokenA // 
-            ERC20(0x55d398326f99059fF775485246999027B3197955), // tokenB
-            ERC20() // lpToken
-        )
-    {}
 }

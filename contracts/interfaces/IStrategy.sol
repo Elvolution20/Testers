@@ -1,10 +1,9 @@
 //SPDX-License-Identifier: Unlicense
 pragma solidity ^0.8.0;
 
+import "../main/StrategyRouter.sol";
 
-import "./Parameters.sol";
-
-interface IStrategy is Parameters {
+interface IStrategy {
      /* EVENTS */
 
     /// @notice Fires when user deposits in batch.
