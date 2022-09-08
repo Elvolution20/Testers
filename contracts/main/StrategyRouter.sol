@@ -238,7 +238,6 @@ contract StrategyRouter is Initializable, UUPSUpgradeable, OwnableUpgradeable, M
     }
 
     /**
-    
         @notice Harvest yield from farms, and reinvest these rewards into strategies.
         @notice Part of the harvested rewards is taken as protocol comission.
     */

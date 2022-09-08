@@ -16,6 +16,12 @@ import "../main/StrategyRouter.sol";
         - USDT LP token is staked in the BUSD-USDT liquidity mining farm.
         - Rewards are received as DODO tokens.
         - DODO tokens are sold for USDT and deposited back into the pool.
+           
+        @notice Functions: 
+            o deposit()
+            o withdraw()
+            o withdrawall()
+            o compound()
 
  @notice: 
         params.clip : Contract of the reward token. (In this case Dodo)
@@ -142,7 +148,7 @@ contract DodoStrategy is Initializable, UUPSUpgradeable, OwnableUpgradeable, ISt
         );
 
         Exchange exchange = strategyRouter.getExchange();
-        tokenB.transfer(address(exchange), amountB);
+        tokenB.approve(address(exchange), amountB);
         amountA += exchange.swap(amountB, address(tokenB), address(tokenA), address(this));
         tokenA.transfer(msg.sender, amountA);
         return amountA;

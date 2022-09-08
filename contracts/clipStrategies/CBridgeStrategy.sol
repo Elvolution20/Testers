@@ -25,6 +25,11 @@ import "../deps/openzeppelin/contracts/security/ReentrancyGuard.sol";
         Most rewards are received as CELR tokens. Some rewards, which come from bridge fees, are compounded directly into the pool.
         CELR rewards are sold for USDT and USDT is redeposited to strategy to earn fees.
         
+        @notice Functions: 
+            o deposit()
+            o withdraw()
+            o withdrawall()
+            o compound()
         
     @custom:oz-upgrades-unsafe-allow constructor state-variable-immutable
  */
@@ -105,16 +110,7 @@ contract CBridgeStrategyT is Initializable, UUPSUpgradeable, OwnableUpgradeable,
     }
 
     ///@notice The chain Id used here is Testnet
-    function withdraw(
-        uint64 _wdSeq,
-        address _receiver,
-        uint64 _toChain,
-        uint64[] calldata _fromChains,
-        address[] calldata _tokens,
-        uint32[] calldata _ratios,
-        uint32[] calldata _slippages,
-        uint256 strategyTokenAmountToWithdraw
-    )
+    function withdraw(uint256 amtToWithdraw)
         external
         override
         onlyOwner
@@ -123,27 +119,35 @@ contract CBridgeStrategyT is Initializable, UUPSUpgradeable, OwnableUpgradeable,
        
         IClipswapFarm(farm).withdraw(_p.poolId, amtToWithdraw);
         // celrRewardToken.approve(address(celrRouter), amtToWithdraw);
-        IWithdrawInbox(inbox).withdraw(_wdSeq, _receiver, _toChain, _fromChains, _tokens, _ratios, _slippages);
+        IWithdrawInbox(inbox).withdraw(
+             poolId, 
+            _msgSender(), 
+            97, // BSC Testnet 
+            [97], 
+            [tokenA], 
+            [1], 
+            [0]
+        );
         lpToken.approve(address(celrRouter), amtToWithdraw);
         uint bal = celrRewardToken.balanceOf(address(this));
 
         Exchange exchange = strategyRouter.getExchange();
         celrRewardToken.transfer(address(exchange), bal);
-        uint amountA = exchange.swap(bai, address(celrRewardToken), address(tokenA), address(this));
+        uint amountA = exchange.swap(bal, address(celrRewardToken), address(tokenA), address(this));
         tokenA.transfer(msg.sender, amountA);
        
         return amountA;
     }
 
     function compound() external override onlyOwner {
-        // inside withdraw happens STG rewards collection
+        // inside withdraw happens CELR rewards collection
         farm.withdraw(poolId, 0);
-        // use balance because STG is harvested on deposit and withdraw calls
-        uint256 stgAmount = stg.balanceOf(address(this));
+        // use balance because CELR is harvested on deposit and withdraw calls
+        uint256 celrAmount = celr.balanceOf(address(this));
 
-        if (stgAmount > 0) {
+        if (celrAmount > 0) {
             fix_leftover(0);
-            sellReward(stgAmount);
+            sellReward(celrAmount);
             uint256 balanceA = tokenA.balanceOf(address(this));
             uint256 balanceB = celrRewardToken.balanceOf(address(this));
 
@@ -158,20 +162,20 @@ contract CBridgeStrategyT is Initializable, UUPSUpgradeable, OwnableUpgradeable,
     }
 
 
-    function withdrawAll(uint256 destinationPoolId, uint lpAmountToRedeem) external override onlyOwner returns (uint256 amountWithdrawn) {
+    function withdrawAll() external override onlyOwner returns (uint256 amountWithdrawn) {
         (uint256 amount, ) = farm.userInfo(poolId, address(this));
         if (amount > 0) {
             farm.withdraw(poolId, amount);
             uint256 lpAmount = lpToken.balanceOf(address(this));
             lpToken.approve(address(celrRouter), lpAmount);
-            IcBridgeRouter(cBridgeRouter).redeemLocal(
-                chainId, 
+            IWithdrawInbox(inbox).withdraw(
                 poolId, 
-                destinationPoolId, 
-                address(this), 
-                lpAmountToRedeem, 
-                abi.encode(address(this)), 
-                lzTxObj(0, 0, "")
+                _msgSender(), 
+                97, // BSC Testnet 
+                [97], 
+                [tokenA], 
+                [1], 
+                [0]
             );
         }
 

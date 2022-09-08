@@ -20,6 +20,12 @@ import "../interfaces/IClipswapFarm.sol";
         stg : Contract of the reward token. (In this case STG)
         farm : Liquidity Mining Farm.
 
+    @notice Functions: 
+        o deposit()
+        o withdraw()
+        o withdrawall()
+        o compound()
+
     @custom:oz-upgrades-unsafe-allow constructor state-variable-immutable
  */
 
@@ -104,33 +110,22 @@ contract StargateStrategy is Initializable, UUPSUpgradeable, OwnableUpgradeable,
         onlyOwner
         returns (uint256 amountWithdrawn)
     {
-        // address token0 = IUniswapV2Pair(address(this)).token0();
-        // address token1 = IUniswapV2Pair(address(this)).token1();
-        // uint256 balance0 = IERC20(token0).balanceOf(address(this));
-        // uint256 balance1 = IERC20(token1).balanceOf(address(this));
-
-        // uint256 amountA = strategyTokenAmountToWithdraw / 2;
-        // uint256 amountB = strategyTokenAmountToWithdraw - amountA;
-
-        // (balance0, balance1) = token0 == address(tokenA) ? (balance0, balance1) : (balance1, balance0);
-        // uint256 balanceLp = IClipswapFarm(farm).myStakedBalance();
-        // amountB = biswapRouter.quote(amountB, balance0, balance1);
         IClipswapFarm(farm).withdraw(_p.poolId, amtToWithdraw);
+        uint256 balance1 = stgRewardToken.balanceOf(address(this));
         // stgRewardToken.approve(address(stgRouter), amtToWithdraw);
         IStargateRouter(_p.stargateRouter).redeemLocal(
-            _p.chainId, 
-            _p.poolId, 
-            destinationPoolId, 
+            chainId, 
+            poolId, 
+            97, // BSC testnet
             address(this), 
-            lpAmountToRedeem, 
+            balance1, 
             abi.encode(address(this)), 
             lzTxObj(0, 0, "")
         );
         lpToken.approve(address(stgRouter), amtToWithdraw);
-        uint bal = stgRewardToken.balanceOf(address(this));
 
         Exchange exchange = strategyRouter.getExchange();
-        stgRewardToken.transfer(address(exchange), bal);
+        stgRewardToken.approve(address(exchange), balance1);
         uint amountA = exchange.swap(bai, address(stgRewardToken), address(tokenA), address(this));
         tokenA.transfer(msg.sender, amountA);
        
@@ -160,7 +155,7 @@ contract StargateStrategy is Initializable, UUPSUpgradeable, OwnableUpgradeable,
     }
 
 
-    function withdrawAll(uint256 destinationPoolId, uint lpAmountToRedeem) external override onlyOwner returns (uint256 amountWithdrawn) {
+    function withdrawAll(uint lpAmountToRedeem) external override onlyOwner returns (uint256 amountWithdrawn) {
         (uint256 amount, ) = farm.userInfo(poolId, address(this));
         if (amount > 0) {
             farm.withdraw(poolId, amount);
@@ -169,7 +164,7 @@ contract StargateStrategy is Initializable, UUPSUpgradeable, OwnableUpgradeable,
             IStargateRouter(stargateRouter).redeemLocal(
                 chainId, 
                 poolId, 
-                destinationPoolId, 
+                poolId, 
                 address(this), 
                 lpAmountToRedeem, 
                 abi.encode(address(this)), 
