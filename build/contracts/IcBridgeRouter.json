@@ -1,0 +1,479 @@
+{
+  "contractName": "IcBridgeRouter",
+  "abi": [
+    {
+      "inputs": [
+        {
+          "internalType": "address",
+          "name": "_token",
+          "type": "address"
+        },
+        {
+          "internalType": "uint256",
+          "name": "_amount",
+          "type": "uint256"
+        }
+      ],
+      "name": "addLiquidity",
+      "outputs": [],
+      "stateMutability": "nonpayable",
+      "type": "function"
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "bytes32",
+          "name": "withdrawId",
+          "type": "bytes32"
+        }
+      ],
+      "name": "withdraws",
+      "outputs": [
+        {
+          "internalType": "bool",
+          "name": "",
+          "type": "bool"
+        }
+      ],
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "bytes",
+          "name": "_wdmsg",
+          "type": "bytes"
+        },
+        {
+          "internalType": "bytes[]",
+          "name": "_sigs",
+          "type": "bytes[]"
+        },
+        {
+          "internalType": "address[]",
+          "name": "_signers",
+          "type": "address[]"
+        },
+        {
+          "internalType": "uint256[]",
+          "name": "_powers",
+          "type": "uint256[]"
+        }
+      ],
+      "name": "withdraw",
+      "outputs": [],
+      "stateMutability": "nonpayable",
+      "type": "function"
+    }
+  ],
+  "metadata": "{\"compiler\":{\"version\":\"0.8.15+commit.e14f2714\"},\"language\":\"Solidity\",\"output\":{\"abi\":[{\"inputs\":[{\"internalType\":\"address\",\"name\":\"_token\",\"type\":\"address\"},{\"internalType\":\"uint256\",\"name\":\"_amount\",\"type\":\"uint256\"}],\"name\":\"addLiquidity\",\"outputs\":[],\"stateMutability\":\"nonpayable\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"bytes\",\"name\":\"_wdmsg\",\"type\":\"bytes\"},{\"internalType\":\"bytes[]\",\"name\":\"_sigs\",\"type\":\"bytes[]\"},{\"internalType\":\"address[]\",\"name\":\"_signers\",\"type\":\"address[]\"},{\"internalType\":\"uint256[]\",\"name\":\"_powers\",\"type\":\"uint256[]\"}],\"name\":\"withdraw\",\"outputs\":[],\"stateMutability\":\"nonpayable\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"bytes32\",\"name\":\"withdrawId\",\"type\":\"bytes32\"}],\"name\":\"withdraws\",\"outputs\":[{\"internalType\":\"bool\",\"name\":\"\",\"type\":\"bool\"}],\"stateMutability\":\"view\",\"type\":\"function\"}],\"devdoc\":{\"kind\":\"dev\",\"methods\":{},\"version\":1},\"userdoc\":{\"kind\":\"user\",\"methods\":{},\"notice\":\"From your contract, call the withdraw function of WithdrawInbox. Some explanations of the parameters: _wdSeq is a unique identifier for each withdrawal. _receiver is the receiver address on _toChain. _toChain is the chain ID to receive the tokens withdrawn. _fromChains are a list of chain IDs to withdraw the tokens from. We support cross-chain withdrawals, that is to withdraw the liquidity from multiple chains to a single chain. _tokens are the token addresses on each chain. Make sure they refer to the same token symbol and they are supported by cBridge on all the chains involved. _ratios are the percentages of liquidity to be withdrawn from each chain. They should be all positive. The max ratio is 100000000, which means 100%. _slippages are the maximal allowed slippages for cross-chain withdrawals. Usually a small number such as 5000, which means 0.5%, should suffice. The max slippage is 1000000, which means 100%.\",\"version\":1}},\"settings\":{\"compilationTarget\":{\"project:/contracts/interfaces/IcBridgeRouter.sol\":\"IcBridgeRouter\"},\"evmVersion\":\"london\",\"libraries\":{},\"metadata\":{\"bytecodeHash\":\"ipfs\"},\"optimizer\":{\"enabled\":false,\"runs\":200},\"remappings\":[]},\"sources\":{\"project:/contracts/interfaces/IcBridgeRouter.sol\":{\"keccak256\":\"0x8c72160cb06349030268555bc20abd9502990ad410aa793d975d62dbdebe40b5\",\"license\":\"GPL-3.0-only\",\"urls\":[\"bzz-raw://6c9f86a358e93d92ece5791d2956094734cb17fb59c759aa264a2ed07fe2ed3f\",\"dweb:/ipfs/QmfGDRSBcmiG8FJTPigTbkCxrCVdPbG3cLrJCcV2ofnTNz\"]}},\"version\":1}",
+  "bytecode": "0x",
+  "deployedBytecode": "0x",
+  "immutableReferences": {},
+  "generatedSources": [],
+  "deployedGeneratedSources": [],
+  "sourceMap": "",
+  "deployedSourceMap": "",
+  "source": "// SPDX-License-Identifier: GPL-3.0-only\r\n\r\npragma solidity >=0.8.0;\r\n\r\n/**\r\n  From your contract, call the withdraw function of WithdrawInbox.\r\n  Some explanations of the parameters:\r\n  _wdSeq is a unique identifier for each withdrawal.\r\n  _receiver is the receiver address on _toChain.\r\n  _toChain is the chain ID to receive the tokens withdrawn.\r\n  _fromChains are a list of chain IDs to withdraw the tokens from. We support cross-chain withdrawals, that is to withdraw the liquidity from multiple chains to a single chain.\r\n  _tokens are the token addresses on each chain. Make sure they refer to the same token symbol and they are supported by cBridge on all the chains involved.\r\n  _ratios are the percentages of liquidity to be withdrawn from each chain. They should be all positive. The max ratio is 100000000, which means 100%.\r\n  _slippages are the maximal allowed slippages for cross-chain withdrawals. Usually a small number such as 5000, which means 0.5%, should suffice. The max slippage is 1000000, which means 100%.\r\n */\r\ninterface IcBridgeRouter {\r\n    function addLiquidity(address _token, uint256 _amount) external;\r\n\r\n    function withdraws(bytes32 withdrawId) external view returns (bool);\r\n\r\n    function withdraw(\r\n        bytes calldata _wdmsg,\r\n        bytes[] calldata _sigs,\r\n        address[] calldata _signers,\r\n        uint256[] calldata _powers\r\n    ) external;\r\n}",
+  "sourcePath": "C:\\Users\\FVO_MMILLLER\\Desktop\\elvolution\\Testers\\contracts\\interfaces\\IcBridgeRouter.sol",
+  "ast": {
+    "absolutePath": "project:/contracts/interfaces/IcBridgeRouter.sol",
+    "exportedSymbols": {
+      "IcBridgeRouter": [
+        21076
+      ]
+    },
+    "id": 21077,
+    "license": "GPL-3.0-only",
+    "nodeType": "SourceUnit",
+    "nodes": [
+      {
+        "id": 21046,
+        "literals": [
+          "solidity",
+          ">=",
+          "0.8",
+          ".0"
+        ],
+        "nodeType": "PragmaDirective",
+        "src": "44:24:64"
+      },
+      {
+        "abstract": false,
+        "baseContracts": [],
+        "canonicalName": "IcBridgeRouter",
+        "contractDependencies": [],
+        "contractKind": "interface",
+        "documentation": {
+          "id": 21047,
+          "nodeType": "StructuredDocumentation",
+          "src": "72:964:64",
+          "text": "From your contract, call the withdraw function of WithdrawInbox.\nSome explanations of the parameters:\n_wdSeq is a unique identifier for each withdrawal.\n_receiver is the receiver address on _toChain.\n_toChain is the chain ID to receive the tokens withdrawn.\n_fromChains are a list of chain IDs to withdraw the tokens from. We support cross-chain withdrawals, that is to withdraw the liquidity from multiple chains to a single chain.\n_tokens are the token addresses on each chain. Make sure they refer to the same token symbol and they are supported by cBridge on all the chains involved.\n_ratios are the percentages of liquidity to be withdrawn from each chain. They should be all positive. The max ratio is 100000000, which means 100%.\n_slippages are the maximal allowed slippages for cross-chain withdrawals. Usually a small number such as 5000, which means 0.5%, should suffice. The max slippage is 1000000, which means 100%."
+        },
+        "fullyImplemented": false,
+        "id": 21076,
+        "linearizedBaseContracts": [
+          21076
+        ],
+        "name": "IcBridgeRouter",
+        "nameLocation": "1048:14:64",
+        "nodeType": "ContractDefinition",
+        "nodes": [
+          {
+            "functionSelector": "56688700",
+            "id": 21054,
+            "implemented": false,
+            "kind": "function",
+            "modifiers": [],
+            "name": "addLiquidity",
+            "nameLocation": "1079:12:64",
+            "nodeType": "FunctionDefinition",
+            "parameters": {
+              "id": 21052,
+              "nodeType": "ParameterList",
+              "parameters": [
+                {
+                  "constant": false,
+                  "id": 21049,
+                  "mutability": "mutable",
+                  "name": "_token",
+                  "nameLocation": "1100:6:64",
+                  "nodeType": "VariableDeclaration",
+                  "scope": 21054,
+                  "src": "1092:14:64",
+                  "stateVariable": false,
+                  "storageLocation": "default",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_address",
+                    "typeString": "address"
+                  },
+                  "typeName": {
+                    "id": 21048,
+                    "name": "address",
+                    "nodeType": "ElementaryTypeName",
+                    "src": "1092:7:64",
+                    "stateMutability": "nonpayable",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_address",
+                      "typeString": "address"
+                    }
+                  },
+                  "visibility": "internal"
+                },
+                {
+                  "constant": false,
+                  "id": 21051,
+                  "mutability": "mutable",
+                  "name": "_amount",
+                  "nameLocation": "1116:7:64",
+                  "nodeType": "VariableDeclaration",
+                  "scope": 21054,
+                  "src": "1108:15:64",
+                  "stateVariable": false,
+                  "storageLocation": "default",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_uint256",
+                    "typeString": "uint256"
+                  },
+                  "typeName": {
+                    "id": 21050,
+                    "name": "uint256",
+                    "nodeType": "ElementaryTypeName",
+                    "src": "1108:7:64",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_uint256",
+                      "typeString": "uint256"
+                    }
+                  },
+                  "visibility": "internal"
+                }
+              ],
+              "src": "1091:33:64"
+            },
+            "returnParameters": {
+              "id": 21053,
+              "nodeType": "ParameterList",
+              "parameters": [],
+              "src": "1133:0:64"
+            },
+            "scope": 21076,
+            "src": "1070:64:64",
+            "stateMutability": "nonpayable",
+            "virtual": false,
+            "visibility": "external"
+          },
+          {
+            "functionSelector": "e09ab428",
+            "id": 21061,
+            "implemented": false,
+            "kind": "function",
+            "modifiers": [],
+            "name": "withdraws",
+            "nameLocation": "1151:9:64",
+            "nodeType": "FunctionDefinition",
+            "parameters": {
+              "id": 21057,
+              "nodeType": "ParameterList",
+              "parameters": [
+                {
+                  "constant": false,
+                  "id": 21056,
+                  "mutability": "mutable",
+                  "name": "withdrawId",
+                  "nameLocation": "1169:10:64",
+                  "nodeType": "VariableDeclaration",
+                  "scope": 21061,
+                  "src": "1161:18:64",
+                  "stateVariable": false,
+                  "storageLocation": "default",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_bytes32",
+                    "typeString": "bytes32"
+                  },
+                  "typeName": {
+                    "id": 21055,
+                    "name": "bytes32",
+                    "nodeType": "ElementaryTypeName",
+                    "src": "1161:7:64",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_bytes32",
+                      "typeString": "bytes32"
+                    }
+                  },
+                  "visibility": "internal"
+                }
+              ],
+              "src": "1160:20:64"
+            },
+            "returnParameters": {
+              "id": 21060,
+              "nodeType": "ParameterList",
+              "parameters": [
+                {
+                  "constant": false,
+                  "id": 21059,
+                  "mutability": "mutable",
+                  "name": "",
+                  "nameLocation": "-1:-1:-1",
+                  "nodeType": "VariableDeclaration",
+                  "scope": 21061,
+                  "src": "1204:4:64",
+                  "stateVariable": false,
+                  "storageLocation": "default",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_bool",
+                    "typeString": "bool"
+                  },
+                  "typeName": {
+                    "id": 21058,
+                    "name": "bool",
+                    "nodeType": "ElementaryTypeName",
+                    "src": "1204:4:64",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_bool",
+                      "typeString": "bool"
+                    }
+                  },
+                  "visibility": "internal"
+                }
+              ],
+              "src": "1203:6:64"
+            },
+            "scope": 21076,
+            "src": "1142:68:64",
+            "stateMutability": "view",
+            "virtual": false,
+            "visibility": "external"
+          },
+          {
+            "functionSelector": "a21a9280",
+            "id": 21075,
+            "implemented": false,
+            "kind": "function",
+            "modifiers": [],
+            "name": "withdraw",
+            "nameLocation": "1227:8:64",
+            "nodeType": "FunctionDefinition",
+            "parameters": {
+              "id": 21073,
+              "nodeType": "ParameterList",
+              "parameters": [
+                {
+                  "constant": false,
+                  "id": 21063,
+                  "mutability": "mutable",
+                  "name": "_wdmsg",
+                  "nameLocation": "1261:6:64",
+                  "nodeType": "VariableDeclaration",
+                  "scope": 21075,
+                  "src": "1246:21:64",
+                  "stateVariable": false,
+                  "storageLocation": "calldata",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_bytes_calldata_ptr",
+                    "typeString": "bytes"
+                  },
+                  "typeName": {
+                    "id": 21062,
+                    "name": "bytes",
+                    "nodeType": "ElementaryTypeName",
+                    "src": "1246:5:64",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_bytes_storage_ptr",
+                      "typeString": "bytes"
+                    }
+                  },
+                  "visibility": "internal"
+                },
+                {
+                  "constant": false,
+                  "id": 21066,
+                  "mutability": "mutable",
+                  "name": "_sigs",
+                  "nameLocation": "1295:5:64",
+                  "nodeType": "VariableDeclaration",
+                  "scope": 21075,
+                  "src": "1278:22:64",
+                  "stateVariable": false,
+                  "storageLocation": "calldata",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_array$_t_bytes_calldata_ptr_$dyn_calldata_ptr",
+                    "typeString": "bytes[]"
+                  },
+                  "typeName": {
+                    "baseType": {
+                      "id": 21064,
+                      "name": "bytes",
+                      "nodeType": "ElementaryTypeName",
+                      "src": "1278:5:64",
+                      "typeDescriptions": {
+                        "typeIdentifier": "t_bytes_storage_ptr",
+                        "typeString": "bytes"
+                      }
+                    },
+                    "id": 21065,
+                    "nodeType": "ArrayTypeName",
+                    "src": "1278:7:64",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_array$_t_bytes_storage_$dyn_storage_ptr",
+                      "typeString": "bytes[]"
+                    }
+                  },
+                  "visibility": "internal"
+                },
+                {
+                  "constant": false,
+                  "id": 21069,
+                  "mutability": "mutable",
+                  "name": "_signers",
+                  "nameLocation": "1330:8:64",
+                  "nodeType": "VariableDeclaration",
+                  "scope": 21075,
+                  "src": "1311:27:64",
+                  "stateVariable": false,
+                  "storageLocation": "calldata",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_array$_t_address_$dyn_calldata_ptr",
+                    "typeString": "address[]"
+                  },
+                  "typeName": {
+                    "baseType": {
+                      "id": 21067,
+                      "name": "address",
+                      "nodeType": "ElementaryTypeName",
+                      "src": "1311:7:64",
+                      "stateMutability": "nonpayable",
+                      "typeDescriptions": {
+                        "typeIdentifier": "t_address",
+                        "typeString": "address"
+                      }
+                    },
+                    "id": 21068,
+                    "nodeType": "ArrayTypeName",
+                    "src": "1311:9:64",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_array$_t_address_$dyn_storage_ptr",
+                      "typeString": "address[]"
+                    }
+                  },
+                  "visibility": "internal"
+                },
+                {
+                  "constant": false,
+                  "id": 21072,
+                  "mutability": "mutable",
+                  "name": "_powers",
+                  "nameLocation": "1368:7:64",
+                  "nodeType": "VariableDeclaration",
+                  "scope": 21075,
+                  "src": "1349:26:64",
+                  "stateVariable": false,
+                  "storageLocation": "calldata",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_array$_t_uint256_$dyn_calldata_ptr",
+                    "typeString": "uint256[]"
+                  },
+                  "typeName": {
+                    "baseType": {
+                      "id": 21070,
+                      "name": "uint256",
+                      "nodeType": "ElementaryTypeName",
+                      "src": "1349:7:64",
+                      "typeDescriptions": {
+                        "typeIdentifier": "t_uint256",
+                        "typeString": "uint256"
+                      }
+                    },
+                    "id": 21071,
+                    "nodeType": "ArrayTypeName",
+                    "src": "1349:9:64",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_array$_t_uint256_$dyn_storage_ptr",
+                      "typeString": "uint256[]"
+                    }
+                  },
+                  "visibility": "internal"
+                }
+              ],
+              "src": "1235:147:64"
+            },
+            "returnParameters": {
+              "id": 21074,
+              "nodeType": "ParameterList",
+              "parameters": [],
+              "src": "1391:0:64"
+            },
+            "scope": 21076,
+            "src": "1218:174:64",
+            "stateMutability": "nonpayable",
+            "virtual": false,
+            "visibility": "external"
+          }
+        ],
+        "scope": 21077,
+        "src": "1038:357:64",
+        "usedErrors": []
+      }
+    ],
+    "src": "44:1351:64"
+  },
+  "compiler": {
+    "name": "solc",
+    "version": "0.8.15+commit.e14f2714.Emscripten.clang"
+  },
+  "networks": {},
+  "schemaVersion": "3.4.8",
+  "updatedAt": "2022-09-08T16:23:09.172Z",
+  "devdoc": {
+    "kind": "dev",
+    "methods": {},
+    "version": 1
+  },
+  "userdoc": {
+    "kind": "user",
+    "methods": {},
+    "notice": "From your contract, call the withdraw function of WithdrawInbox. Some explanations of the parameters: _wdSeq is a unique identifier for each withdrawal. _receiver is the receiver address on _toChain. _toChain is the chain ID to receive the tokens withdrawn. _fromChains are a list of chain IDs to withdraw the tokens from. We support cross-chain withdrawals, that is to withdraw the liquidity from multiple chains to a single chain. _tokens are the token addresses on each chain. Make sure they refer to the same token symbol and they are supported by cBridge on all the chains involved. _ratios are the percentages of liquidity to be withdrawn from each chain. They should be all positive. The max ratio is 100000000, which means 100%. _slippages are the maximal allowed slippages for cross-chain withdrawals. Usually a small number such as 5000, which means 0.5%, should suffice. The max slippage is 1000000, which means 100%.",
+    "version": 1
+  }
+}

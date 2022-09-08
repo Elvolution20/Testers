@@ -1,0 +1,656 @@
+{
+  "contractName": "IExchangePlugin",
+  "abi": [
+    {
+      "inputs": [
+        {
+          "internalType": "uint256",
+          "name": "amountA",
+          "type": "uint256"
+        },
+        {
+          "internalType": "address",
+          "name": "tokenA",
+          "type": "address"
+        },
+        {
+          "internalType": "address",
+          "name": "tokenB",
+          "type": "address"
+        },
+        {
+          "internalType": "address",
+          "name": "to",
+          "type": "address"
+        }
+      ],
+      "name": "swap",
+      "outputs": [
+        {
+          "internalType": "uint256",
+          "name": "amountReceivedTokenB",
+          "type": "uint256"
+        }
+      ],
+      "stateMutability": "nonpayable",
+      "type": "function"
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "address",
+          "name": "tokenA",
+          "type": "address"
+        },
+        {
+          "internalType": "address",
+          "name": "tokenB",
+          "type": "address"
+        }
+      ],
+      "name": "getFee",
+      "outputs": [
+        {
+          "internalType": "uint256",
+          "name": "feePercent",
+          "type": "uint256"
+        }
+      ],
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "uint256",
+          "name": "amountA",
+          "type": "uint256"
+        },
+        {
+          "internalType": "address",
+          "name": "tokenA",
+          "type": "address"
+        },
+        {
+          "internalType": "address",
+          "name": "tokenB",
+          "type": "address"
+        }
+      ],
+      "name": "getAmountOut",
+      "outputs": [
+        {
+          "internalType": "uint256",
+          "name": "amountOut",
+          "type": "uint256"
+        }
+      ],
+      "stateMutability": "view",
+      "type": "function"
+    }
+  ],
+  "metadata": "{\"compiler\":{\"version\":\"0.8.15+commit.e14f2714\"},\"language\":\"Solidity\",\"output\":{\"abi\":[{\"inputs\":[{\"internalType\":\"uint256\",\"name\":\"amountA\",\"type\":\"uint256\"},{\"internalType\":\"address\",\"name\":\"tokenA\",\"type\":\"address\"},{\"internalType\":\"address\",\"name\":\"tokenB\",\"type\":\"address\"}],\"name\":\"getAmountOut\",\"outputs\":[{\"internalType\":\"uint256\",\"name\":\"amountOut\",\"type\":\"uint256\"}],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"address\",\"name\":\"tokenA\",\"type\":\"address\"},{\"internalType\":\"address\",\"name\":\"tokenB\",\"type\":\"address\"}],\"name\":\"getFee\",\"outputs\":[{\"internalType\":\"uint256\",\"name\":\"feePercent\",\"type\":\"uint256\"}],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"uint256\",\"name\":\"amountA\",\"type\":\"uint256\"},{\"internalType\":\"address\",\"name\":\"tokenA\",\"type\":\"address\"},{\"internalType\":\"address\",\"name\":\"tokenB\",\"type\":\"address\"},{\"internalType\":\"address\",\"name\":\"to\",\"type\":\"address\"}],\"name\":\"swap\",\"outputs\":[{\"internalType\":\"uint256\",\"name\":\"amountReceivedTokenB\",\"type\":\"uint256\"}],\"stateMutability\":\"nonpayable\",\"type\":\"function\"}],\"devdoc\":{\"kind\":\"dev\",\"methods\":{\"getFee(address,address)\":{\"details\":\"Fee percent has 18 decimals.\"}},\"version\":1},\"userdoc\":{\"kind\":\"user\",\"methods\":{\"getAmountOut(uint256,address,address)\":{\"notice\":\"Synonym of the uniswapV2's function, estimates amount you receive after swap.\"},\"getFee(address,address)\":{\"notice\":\"Returns percent taken by DEX on which we swap provided tokens.\"}},\"version\":1}},\"settings\":{\"compilationTarget\":{\"project:/contracts/interfaces/IExchangePlugin.sol\":\"IExchangePlugin\"},\"evmVersion\":\"london\",\"libraries\":{},\"metadata\":{\"bytecodeHash\":\"ipfs\"},\"optimizer\":{\"enabled\":false,\"runs\":200},\"remappings\":[]},\"sources\":{\"@openzeppelin/contracts/access/Ownable.sol\":{\"keccak256\":\"0xa94b34880e3c1b0b931662cb1c09e5dfa6662f31cba80e07c5ee71cd135c9673\",\"license\":\"MIT\",\"urls\":[\"bzz-raw://40fb1b5102468f783961d0af743f91b9980cf66b50d1d12009f6bb1869cea4d2\",\"dweb:/ipfs/QmYqEbJML4jB1GHbzD4cUZDtJg5wVwNm3vDJq1GbyDus8y\"]},\"@openzeppelin/contracts/token/ERC20/IERC20.sol\":{\"keccak256\":\"0x9750c6b834f7b43000631af5cc30001c5f547b3ceb3635488f140f60e897ea6b\",\"license\":\"MIT\",\"urls\":[\"bzz-raw://5a7d5b1ef5d8d5889ad2ed89d8619c09383b80b72ab226e0fe7bde1636481e34\",\"dweb:/ipfs/QmebXWgtEfumQGBdVeM6c71McLixYXQP5Bk6kKXuoY4Bmr\"]},\"@openzeppelin/contracts/utils/Context.sol\":{\"keccak256\":\"0xe2e337e6dde9ef6b680e07338c493ebea1b5fd09b43424112868e9cc1706bca7\",\"license\":\"MIT\",\"urls\":[\"bzz-raw://6df0ddf21ce9f58271bdfaa85cde98b200ef242a05a3f85c2bc10a8294800a92\",\"dweb:/ipfs/QmRK2Y5Yc6BK7tGKkgsgn3aJEQGi5aakeSPZvS65PV8Xp3\"]},\"@uniswap/v2-periphery/contracts/interfaces/IUniswapV2Router01.sol\":{\"keccak256\":\"0xba23699a773023d902d2b8ff5f76e3d8e17d1dedd9e3f27343f7583266855d07\",\"license\":\"Unlicense\",\"urls\":[\"bzz-raw://fb3ad44eb3f32f00fa7094ad7f53b86e74fdfe5470782f441798e843831c239f\",\"dweb:/ipfs/QmXkJha521WyMGBJ6pNDTL1XpEFukSDiLifju9vm5b23gc\"]},\"@uniswap/v2-periphery/contracts/interfaces/IUniswapV2Router02.sol\":{\"keccak256\":\"0x6e5fc45612098cf6f847905667558fb2524095d67d769c4dbdadea130fea3a58\",\"license\":\"Unlicense\",\"urls\":[\"bzz-raw://7c32842c476a6349562ee288bf190be9af001960ebc619a486a4c95a192f9552\",\"dweb:/ipfs/QmPKjWSUNUucHM6rG8FALRuQF7fJqRXAigJTbrqkWgZ3pP\"]},\"project:/contracts/interfaces/IExchangePlugin.sol\":{\"keccak256\":\"0x66913b968ed867be6d24704325f17e5d4670b1eca3d9ed125740d2aa40372dd5\",\"license\":\"Unlicense\",\"urls\":[\"bzz-raw://1c72c38973f2919ba3ac569129d5d3df099b9907a86154cdf7fc9375be5e7093\",\"dweb:/ipfs/QmbQ7S5VujCsCAKViqeBwxiQ8h6BZXbQvFhoFJ8KftZFrJ\"]}},\"version\":1}",
+  "bytecode": "0x",
+  "deployedBytecode": "0x",
+  "immutableReferences": {},
+  "generatedSources": [],
+  "deployedGeneratedSources": [],
+  "sourceMap": "",
+  "deployedSourceMap": "",
+  "source": "//SPDX-License-Identifier: Unlicense\r\npragma solidity ^0.8.0;\r\nimport \"@openzeppelin/contracts/token/ERC20/IERC20.sol\";\r\nimport \"@openzeppelin/contracts/access/Ownable.sol\";\r\nimport \"@uniswap/v2-periphery/contracts/interfaces/IUniswapV2Router02.sol\";\r\n\r\n// import \"hardhat/console.sol\";\r\n\r\ninterface IExchangePlugin {\r\n    \r\n    function swap(\r\n        uint256 amountA,\r\n        address tokenA,\r\n        address tokenB,\r\n        address to\r\n    ) external returns (uint256 amountReceivedTokenB);\r\n\r\n    /// @notice Returns percent taken by DEX on which we swap provided tokens.\r\n    /// @dev Fee percent has 18 decimals.\r\n    function getFee(address tokenA, address tokenB)\r\n        external\r\n        view\r\n        returns (uint256 feePercent);\r\n\r\n    /// @notice Synonym of the uniswapV2's function, estimates amount you receive after swap.\r\n    function getAmountOut(uint256 amountA, address tokenA, address tokenB)\r\n        external\r\n        view\r\n        returns (uint256 amountOut);\r\n}\r\n",
+  "sourcePath": "C:\\Users\\FVO_MMILLLER\\Desktop\\elvolution\\Testers\\contracts\\interfaces\\IExchangePlugin.sol",
+  "ast": {
+    "absolutePath": "project:/contracts/interfaces/IExchangePlugin.sol",
+    "exportedSymbols": {
+      "Context": [
+        4494
+      ],
+      "IERC20": [
+        3835
+      ],
+      "IExchangePlugin": [
+        20279
+      ],
+      "IUniswapV2Router01": [
+        6018
+      ],
+      "IUniswapV2Router02": [
+        6106
+      ],
+      "Ownable": [
+        3131
+      ]
+    },
+    "id": 20280,
+    "license": "Unlicense",
+    "nodeType": "SourceUnit",
+    "nodes": [
+      {
+        "id": 20240,
+        "literals": [
+          "solidity",
+          "^",
+          "0.8",
+          ".0"
+        ],
+        "nodeType": "PragmaDirective",
+        "src": "38:23:56"
+      },
+      {
+        "absolutePath": "@openzeppelin/contracts/token/ERC20/IERC20.sol",
+        "file": "@openzeppelin/contracts/token/ERC20/IERC20.sol",
+        "id": 20241,
+        "nameLocation": "-1:-1:-1",
+        "nodeType": "ImportDirective",
+        "scope": 20280,
+        "sourceUnit": 3836,
+        "src": "63:56:56",
+        "symbolAliases": [],
+        "unitAlias": ""
+      },
+      {
+        "absolutePath": "@openzeppelin/contracts/access/Ownable.sol",
+        "file": "@openzeppelin/contracts/access/Ownable.sol",
+        "id": 20242,
+        "nameLocation": "-1:-1:-1",
+        "nodeType": "ImportDirective",
+        "scope": 20280,
+        "sourceUnit": 3132,
+        "src": "121:52:56",
+        "symbolAliases": [],
+        "unitAlias": ""
+      },
+      {
+        "absolutePath": "@uniswap/v2-periphery/contracts/interfaces/IUniswapV2Router02.sol",
+        "file": "@uniswap/v2-periphery/contracts/interfaces/IUniswapV2Router02.sol",
+        "id": 20243,
+        "nameLocation": "-1:-1:-1",
+        "nodeType": "ImportDirective",
+        "scope": 20280,
+        "sourceUnit": 6107,
+        "src": "175:75:56",
+        "symbolAliases": [],
+        "unitAlias": ""
+      },
+      {
+        "abstract": false,
+        "baseContracts": [],
+        "canonicalName": "IExchangePlugin",
+        "contractDependencies": [],
+        "contractKind": "interface",
+        "fullyImplemented": false,
+        "id": 20279,
+        "linearizedBaseContracts": [
+          20279
+        ],
+        "name": "IExchangePlugin",
+        "nameLocation": "300:15:56",
+        "nodeType": "ContractDefinition",
+        "nodes": [
+          {
+            "functionSelector": "88156e65",
+            "id": 20256,
+            "implemented": false,
+            "kind": "function",
+            "modifiers": [],
+            "name": "swap",
+            "nameLocation": "338:4:56",
+            "nodeType": "FunctionDefinition",
+            "parameters": {
+              "id": 20252,
+              "nodeType": "ParameterList",
+              "parameters": [
+                {
+                  "constant": false,
+                  "id": 20245,
+                  "mutability": "mutable",
+                  "name": "amountA",
+                  "nameLocation": "361:7:56",
+                  "nodeType": "VariableDeclaration",
+                  "scope": 20256,
+                  "src": "353:15:56",
+                  "stateVariable": false,
+                  "storageLocation": "default",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_uint256",
+                    "typeString": "uint256"
+                  },
+                  "typeName": {
+                    "id": 20244,
+                    "name": "uint256",
+                    "nodeType": "ElementaryTypeName",
+                    "src": "353:7:56",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_uint256",
+                      "typeString": "uint256"
+                    }
+                  },
+                  "visibility": "internal"
+                },
+                {
+                  "constant": false,
+                  "id": 20247,
+                  "mutability": "mutable",
+                  "name": "tokenA",
+                  "nameLocation": "387:6:56",
+                  "nodeType": "VariableDeclaration",
+                  "scope": 20256,
+                  "src": "379:14:56",
+                  "stateVariable": false,
+                  "storageLocation": "default",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_address",
+                    "typeString": "address"
+                  },
+                  "typeName": {
+                    "id": 20246,
+                    "name": "address",
+                    "nodeType": "ElementaryTypeName",
+                    "src": "379:7:56",
+                    "stateMutability": "nonpayable",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_address",
+                      "typeString": "address"
+                    }
+                  },
+                  "visibility": "internal"
+                },
+                {
+                  "constant": false,
+                  "id": 20249,
+                  "mutability": "mutable",
+                  "name": "tokenB",
+                  "nameLocation": "412:6:56",
+                  "nodeType": "VariableDeclaration",
+                  "scope": 20256,
+                  "src": "404:14:56",
+                  "stateVariable": false,
+                  "storageLocation": "default",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_address",
+                    "typeString": "address"
+                  },
+                  "typeName": {
+                    "id": 20248,
+                    "name": "address",
+                    "nodeType": "ElementaryTypeName",
+                    "src": "404:7:56",
+                    "stateMutability": "nonpayable",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_address",
+                      "typeString": "address"
+                    }
+                  },
+                  "visibility": "internal"
+                },
+                {
+                  "constant": false,
+                  "id": 20251,
+                  "mutability": "mutable",
+                  "name": "to",
+                  "nameLocation": "437:2:56",
+                  "nodeType": "VariableDeclaration",
+                  "scope": 20256,
+                  "src": "429:10:56",
+                  "stateVariable": false,
+                  "storageLocation": "default",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_address",
+                    "typeString": "address"
+                  },
+                  "typeName": {
+                    "id": 20250,
+                    "name": "address",
+                    "nodeType": "ElementaryTypeName",
+                    "src": "429:7:56",
+                    "stateMutability": "nonpayable",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_address",
+                      "typeString": "address"
+                    }
+                  },
+                  "visibility": "internal"
+                }
+              ],
+              "src": "342:104:56"
+            },
+            "returnParameters": {
+              "id": 20255,
+              "nodeType": "ParameterList",
+              "parameters": [
+                {
+                  "constant": false,
+                  "id": 20254,
+                  "mutability": "mutable",
+                  "name": "amountReceivedTokenB",
+                  "nameLocation": "473:20:56",
+                  "nodeType": "VariableDeclaration",
+                  "scope": 20256,
+                  "src": "465:28:56",
+                  "stateVariable": false,
+                  "storageLocation": "default",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_uint256",
+                    "typeString": "uint256"
+                  },
+                  "typeName": {
+                    "id": 20253,
+                    "name": "uint256",
+                    "nodeType": "ElementaryTypeName",
+                    "src": "465:7:56",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_uint256",
+                      "typeString": "uint256"
+                    }
+                  },
+                  "visibility": "internal"
+                }
+              ],
+              "src": "464:30:56"
+            },
+            "scope": 20279,
+            "src": "329:166:56",
+            "stateMutability": "nonpayable",
+            "virtual": false,
+            "visibility": "external"
+          },
+          {
+            "documentation": {
+              "id": 20257,
+              "nodeType": "StructuredDocumentation",
+              "src": "503:117:56",
+              "text": "@notice Returns percent taken by DEX on which we swap provided tokens.\n @dev Fee percent has 18 decimals."
+            },
+            "functionSelector": "fee99898",
+            "id": 20266,
+            "implemented": false,
+            "kind": "function",
+            "modifiers": [],
+            "name": "getFee",
+            "nameLocation": "635:6:56",
+            "nodeType": "FunctionDefinition",
+            "parameters": {
+              "id": 20262,
+              "nodeType": "ParameterList",
+              "parameters": [
+                {
+                  "constant": false,
+                  "id": 20259,
+                  "mutability": "mutable",
+                  "name": "tokenA",
+                  "nameLocation": "650:6:56",
+                  "nodeType": "VariableDeclaration",
+                  "scope": 20266,
+                  "src": "642:14:56",
+                  "stateVariable": false,
+                  "storageLocation": "default",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_address",
+                    "typeString": "address"
+                  },
+                  "typeName": {
+                    "id": 20258,
+                    "name": "address",
+                    "nodeType": "ElementaryTypeName",
+                    "src": "642:7:56",
+                    "stateMutability": "nonpayable",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_address",
+                      "typeString": "address"
+                    }
+                  },
+                  "visibility": "internal"
+                },
+                {
+                  "constant": false,
+                  "id": 20261,
+                  "mutability": "mutable",
+                  "name": "tokenB",
+                  "nameLocation": "666:6:56",
+                  "nodeType": "VariableDeclaration",
+                  "scope": 20266,
+                  "src": "658:14:56",
+                  "stateVariable": false,
+                  "storageLocation": "default",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_address",
+                    "typeString": "address"
+                  },
+                  "typeName": {
+                    "id": 20260,
+                    "name": "address",
+                    "nodeType": "ElementaryTypeName",
+                    "src": "658:7:56",
+                    "stateMutability": "nonpayable",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_address",
+                      "typeString": "address"
+                    }
+                  },
+                  "visibility": "internal"
+                }
+              ],
+              "src": "641:32:56"
+            },
+            "returnParameters": {
+              "id": 20265,
+              "nodeType": "ParameterList",
+              "parameters": [
+                {
+                  "constant": false,
+                  "id": 20264,
+                  "mutability": "mutable",
+                  "name": "feePercent",
+                  "nameLocation": "732:10:56",
+                  "nodeType": "VariableDeclaration",
+                  "scope": 20266,
+                  "src": "724:18:56",
+                  "stateVariable": false,
+                  "storageLocation": "default",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_uint256",
+                    "typeString": "uint256"
+                  },
+                  "typeName": {
+                    "id": 20263,
+                    "name": "uint256",
+                    "nodeType": "ElementaryTypeName",
+                    "src": "724:7:56",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_uint256",
+                      "typeString": "uint256"
+                    }
+                  },
+                  "visibility": "internal"
+                }
+              ],
+              "src": "723:20:56"
+            },
+            "scope": 20279,
+            "src": "626:118:56",
+            "stateMutability": "view",
+            "virtual": false,
+            "visibility": "external"
+          },
+          {
+            "documentation": {
+              "id": 20267,
+              "nodeType": "StructuredDocumentation",
+              "src": "752:89:56",
+              "text": "@notice Synonym of the uniswapV2's function, estimates amount you receive after swap."
+            },
+            "functionSelector": "5e1e6325",
+            "id": 20278,
+            "implemented": false,
+            "kind": "function",
+            "modifiers": [],
+            "name": "getAmountOut",
+            "nameLocation": "856:12:56",
+            "nodeType": "FunctionDefinition",
+            "parameters": {
+              "id": 20274,
+              "nodeType": "ParameterList",
+              "parameters": [
+                {
+                  "constant": false,
+                  "id": 20269,
+                  "mutability": "mutable",
+                  "name": "amountA",
+                  "nameLocation": "877:7:56",
+                  "nodeType": "VariableDeclaration",
+                  "scope": 20278,
+                  "src": "869:15:56",
+                  "stateVariable": false,
+                  "storageLocation": "default",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_uint256",
+                    "typeString": "uint256"
+                  },
+                  "typeName": {
+                    "id": 20268,
+                    "name": "uint256",
+                    "nodeType": "ElementaryTypeName",
+                    "src": "869:7:56",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_uint256",
+                      "typeString": "uint256"
+                    }
+                  },
+                  "visibility": "internal"
+                },
+                {
+                  "constant": false,
+                  "id": 20271,
+                  "mutability": "mutable",
+                  "name": "tokenA",
+                  "nameLocation": "894:6:56",
+                  "nodeType": "VariableDeclaration",
+                  "scope": 20278,
+                  "src": "886:14:56",
+                  "stateVariable": false,
+                  "storageLocation": "default",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_address",
+                    "typeString": "address"
+                  },
+                  "typeName": {
+                    "id": 20270,
+                    "name": "address",
+                    "nodeType": "ElementaryTypeName",
+                    "src": "886:7:56",
+                    "stateMutability": "nonpayable",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_address",
+                      "typeString": "address"
+                    }
+                  },
+                  "visibility": "internal"
+                },
+                {
+                  "constant": false,
+                  "id": 20273,
+                  "mutability": "mutable",
+                  "name": "tokenB",
+                  "nameLocation": "910:6:56",
+                  "nodeType": "VariableDeclaration",
+                  "scope": 20278,
+                  "src": "902:14:56",
+                  "stateVariable": false,
+                  "storageLocation": "default",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_address",
+                    "typeString": "address"
+                  },
+                  "typeName": {
+                    "id": 20272,
+                    "name": "address",
+                    "nodeType": "ElementaryTypeName",
+                    "src": "902:7:56",
+                    "stateMutability": "nonpayable",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_address",
+                      "typeString": "address"
+                    }
+                  },
+                  "visibility": "internal"
+                }
+              ],
+              "src": "868:49:56"
+            },
+            "returnParameters": {
+              "id": 20277,
+              "nodeType": "ParameterList",
+              "parameters": [
+                {
+                  "constant": false,
+                  "id": 20276,
+                  "mutability": "mutable",
+                  "name": "amountOut",
+                  "nameLocation": "976:9:56",
+                  "nodeType": "VariableDeclaration",
+                  "scope": 20278,
+                  "src": "968:17:56",
+                  "stateVariable": false,
+                  "storageLocation": "default",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_uint256",
+                    "typeString": "uint256"
+                  },
+                  "typeName": {
+                    "id": 20275,
+                    "name": "uint256",
+                    "nodeType": "ElementaryTypeName",
+                    "src": "968:7:56",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_uint256",
+                      "typeString": "uint256"
+                    }
+                  },
+                  "visibility": "internal"
+                }
+              ],
+              "src": "967:19:56"
+            },
+            "scope": 20279,
+            "src": "847:140:56",
+            "stateMutability": "view",
+            "virtual": false,
+            "visibility": "external"
+          }
+        ],
+        "scope": 20280,
+        "src": "290:700:56",
+        "usedErrors": []
+      }
+    ],
+    "src": "38:954:56"
+  },
+  "compiler": {
+    "name": "solc",
+    "version": "0.8.15+commit.e14f2714.Emscripten.clang"
+  },
+  "networks": {},
+  "schemaVersion": "3.4.8",
+  "updatedAt": "2022-09-08T16:23:06.731Z",
+  "devdoc": {
+    "kind": "dev",
+    "methods": {
+      "getFee(address,address)": {
+        "details": "Fee percent has 18 decimals."
+      }
+    },
+    "version": 1
+  },
+  "userdoc": {
+    "kind": "user",
+    "methods": {
+      "getAmountOut(uint256,address,address)": {
+        "notice": "Synonym of the uniswapV2's function, estimates amount you receive after swap."
+      },
+      "getFee(address,address)": {
+        "notice": "Returns percent taken by DEX on which we swap provided tokens."
+      }
+    },
+    "version": 1
+  }
+}

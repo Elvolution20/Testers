@@ -1,0 +1,375 @@
+{
+  "contractName": "IWithdrawInbox",
+  "abi": [
+    {
+      "inputs": [
+        {
+          "internalType": "uint64",
+          "name": "_wdSeq",
+          "type": "uint64"
+        },
+        {
+          "internalType": "address",
+          "name": "_receiver",
+          "type": "address"
+        },
+        {
+          "internalType": "uint64",
+          "name": "_toChain",
+          "type": "uint64"
+        },
+        {
+          "internalType": "uint64[]",
+          "name": "_fromChains",
+          "type": "uint64[]"
+        },
+        {
+          "internalType": "address[]",
+          "name": "_tokens",
+          "type": "address[]"
+        },
+        {
+          "internalType": "uint32[]",
+          "name": "_ratios",
+          "type": "uint32[]"
+        },
+        {
+          "internalType": "uint32[]",
+          "name": "_slippages",
+          "type": "uint32[]"
+        }
+      ],
+      "name": "withdraw",
+      "outputs": [],
+      "stateMutability": "nonpayable",
+      "type": "function"
+    }
+  ],
+  "metadata": "{\"compiler\":{\"version\":\"0.8.15+commit.e14f2714\"},\"language\":\"Solidity\",\"output\":{\"abi\":[{\"inputs\":[{\"internalType\":\"uint64\",\"name\":\"_wdSeq\",\"type\":\"uint64\"},{\"internalType\":\"address\",\"name\":\"_receiver\",\"type\":\"address\"},{\"internalType\":\"uint64\",\"name\":\"_toChain\",\"type\":\"uint64\"},{\"internalType\":\"uint64[]\",\"name\":\"_fromChains\",\"type\":\"uint64[]\"},{\"internalType\":\"address[]\",\"name\":\"_tokens\",\"type\":\"address[]\"},{\"internalType\":\"uint32[]\",\"name\":\"_ratios\",\"type\":\"uint32[]\"},{\"internalType\":\"uint32[]\",\"name\":\"_slippages\",\"type\":\"uint32[]\"}],\"name\":\"withdraw\",\"outputs\":[],\"stateMutability\":\"nonpayable\",\"type\":\"function\"}],\"devdoc\":{\"kind\":\"dev\",\"methods\":{},\"version\":1},\"userdoc\":{\"kind\":\"user\",\"methods\":{},\"version\":1}},\"settings\":{\"compilationTarget\":{\"project:/contracts/interfaces/IWithdrawalBox.sol\":\"IWithdrawInbox\"},\"evmVersion\":\"london\",\"libraries\":{},\"metadata\":{\"bytecodeHash\":\"ipfs\"},\"optimizer\":{\"enabled\":false,\"runs\":200},\"remappings\":[]},\"sources\":{\"project:/contracts/interfaces/IWithdrawalBox.sol\":{\"keccak256\":\"0xb55c99eef298a295d0d84365cf672393fdf8c6f3edbef7806fd28cada7950097\",\"license\":\"GPL-3.0-only\",\"urls\":[\"bzz-raw://43f9d39edd9931af45f0f6410d65418f496f6d1f63a02476972b4eaad6eef3b9\",\"dweb:/ipfs/QmaNw4G7DDBEG4oCsUfHQjbdGgZ7NBX8cYWhfvzu1Yqgat\"]}},\"version\":1}",
+  "bytecode": "0x",
+  "deployedBytecode": "0x",
+  "immutableReferences": {},
+  "generatedSources": [],
+  "deployedGeneratedSources": [],
+  "sourceMap": "",
+  "deployedSourceMap": "",
+  "source": "// SPDX-License-Identifier: GPL-3.0-only\r\n\r\npragma solidity >=0.8.0;\r\n\r\ninterface IWithdrawInbox {\r\n    function withdraw(\r\n        uint64 _wdSeq,\r\n        address _receiver,\r\n        uint64 _toChain,\r\n        uint64[] calldata _fromChains,\r\n        address[] calldata _tokens,\r\n        uint32[] calldata _ratios,\r\n        uint32[] calldata _slippages\r\n    ) external;\r\n}",
+  "sourcePath": "C:\\Users\\FVO_MMILLLER\\Desktop\\elvolution\\Testers\\contracts\\interfaces\\IWithdrawalBox.sol",
+  "ast": {
+    "absolutePath": "project:/contracts/interfaces/IWithdrawalBox.sol",
+    "exportedSymbols": {
+      "IWithdrawInbox": [
+        20946
+      ]
+    },
+    "id": 20947,
+    "license": "GPL-3.0-only",
+    "nodeType": "SourceUnit",
+    "nodes": [
+      {
+        "id": 20924,
+        "literals": [
+          "solidity",
+          ">=",
+          "0.8",
+          ".0"
+        ],
+        "nodeType": "PragmaDirective",
+        "src": "44:24:62"
+      },
+      {
+        "abstract": false,
+        "baseContracts": [],
+        "canonicalName": "IWithdrawInbox",
+        "contractDependencies": [],
+        "contractKind": "interface",
+        "fullyImplemented": false,
+        "id": 20946,
+        "linearizedBaseContracts": [
+          20946
+        ],
+        "name": "IWithdrawInbox",
+        "nameLocation": "82:14:62",
+        "nodeType": "ContractDefinition",
+        "nodes": [
+          {
+            "functionSelector": "a4855296",
+            "id": 20945,
+            "implemented": false,
+            "kind": "function",
+            "modifiers": [],
+            "name": "withdraw",
+            "nameLocation": "113:8:62",
+            "nodeType": "FunctionDefinition",
+            "parameters": {
+              "id": 20943,
+              "nodeType": "ParameterList",
+              "parameters": [
+                {
+                  "constant": false,
+                  "id": 20926,
+                  "mutability": "mutable",
+                  "name": "_wdSeq",
+                  "nameLocation": "139:6:62",
+                  "nodeType": "VariableDeclaration",
+                  "scope": 20945,
+                  "src": "132:13:62",
+                  "stateVariable": false,
+                  "storageLocation": "default",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_uint64",
+                    "typeString": "uint64"
+                  },
+                  "typeName": {
+                    "id": 20925,
+                    "name": "uint64",
+                    "nodeType": "ElementaryTypeName",
+                    "src": "132:6:62",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_uint64",
+                      "typeString": "uint64"
+                    }
+                  },
+                  "visibility": "internal"
+                },
+                {
+                  "constant": false,
+                  "id": 20928,
+                  "mutability": "mutable",
+                  "name": "_receiver",
+                  "nameLocation": "164:9:62",
+                  "nodeType": "VariableDeclaration",
+                  "scope": 20945,
+                  "src": "156:17:62",
+                  "stateVariable": false,
+                  "storageLocation": "default",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_address",
+                    "typeString": "address"
+                  },
+                  "typeName": {
+                    "id": 20927,
+                    "name": "address",
+                    "nodeType": "ElementaryTypeName",
+                    "src": "156:7:62",
+                    "stateMutability": "nonpayable",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_address",
+                      "typeString": "address"
+                    }
+                  },
+                  "visibility": "internal"
+                },
+                {
+                  "constant": false,
+                  "id": 20930,
+                  "mutability": "mutable",
+                  "name": "_toChain",
+                  "nameLocation": "191:8:62",
+                  "nodeType": "VariableDeclaration",
+                  "scope": 20945,
+                  "src": "184:15:62",
+                  "stateVariable": false,
+                  "storageLocation": "default",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_uint64",
+                    "typeString": "uint64"
+                  },
+                  "typeName": {
+                    "id": 20929,
+                    "name": "uint64",
+                    "nodeType": "ElementaryTypeName",
+                    "src": "184:6:62",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_uint64",
+                      "typeString": "uint64"
+                    }
+                  },
+                  "visibility": "internal"
+                },
+                {
+                  "constant": false,
+                  "id": 20933,
+                  "mutability": "mutable",
+                  "name": "_fromChains",
+                  "nameLocation": "228:11:62",
+                  "nodeType": "VariableDeclaration",
+                  "scope": 20945,
+                  "src": "210:29:62",
+                  "stateVariable": false,
+                  "storageLocation": "calldata",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_array$_t_uint64_$dyn_calldata_ptr",
+                    "typeString": "uint64[]"
+                  },
+                  "typeName": {
+                    "baseType": {
+                      "id": 20931,
+                      "name": "uint64",
+                      "nodeType": "ElementaryTypeName",
+                      "src": "210:6:62",
+                      "typeDescriptions": {
+                        "typeIdentifier": "t_uint64",
+                        "typeString": "uint64"
+                      }
+                    },
+                    "id": 20932,
+                    "nodeType": "ArrayTypeName",
+                    "src": "210:8:62",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_array$_t_uint64_$dyn_storage_ptr",
+                      "typeString": "uint64[]"
+                    }
+                  },
+                  "visibility": "internal"
+                },
+                {
+                  "constant": false,
+                  "id": 20936,
+                  "mutability": "mutable",
+                  "name": "_tokens",
+                  "nameLocation": "269:7:62",
+                  "nodeType": "VariableDeclaration",
+                  "scope": 20945,
+                  "src": "250:26:62",
+                  "stateVariable": false,
+                  "storageLocation": "calldata",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_array$_t_address_$dyn_calldata_ptr",
+                    "typeString": "address[]"
+                  },
+                  "typeName": {
+                    "baseType": {
+                      "id": 20934,
+                      "name": "address",
+                      "nodeType": "ElementaryTypeName",
+                      "src": "250:7:62",
+                      "stateMutability": "nonpayable",
+                      "typeDescriptions": {
+                        "typeIdentifier": "t_address",
+                        "typeString": "address"
+                      }
+                    },
+                    "id": 20935,
+                    "nodeType": "ArrayTypeName",
+                    "src": "250:9:62",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_array$_t_address_$dyn_storage_ptr",
+                      "typeString": "address[]"
+                    }
+                  },
+                  "visibility": "internal"
+                },
+                {
+                  "constant": false,
+                  "id": 20939,
+                  "mutability": "mutable",
+                  "name": "_ratios",
+                  "nameLocation": "305:7:62",
+                  "nodeType": "VariableDeclaration",
+                  "scope": 20945,
+                  "src": "287:25:62",
+                  "stateVariable": false,
+                  "storageLocation": "calldata",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_array$_t_uint32_$dyn_calldata_ptr",
+                    "typeString": "uint32[]"
+                  },
+                  "typeName": {
+                    "baseType": {
+                      "id": 20937,
+                      "name": "uint32",
+                      "nodeType": "ElementaryTypeName",
+                      "src": "287:6:62",
+                      "typeDescriptions": {
+                        "typeIdentifier": "t_uint32",
+                        "typeString": "uint32"
+                      }
+                    },
+                    "id": 20938,
+                    "nodeType": "ArrayTypeName",
+                    "src": "287:8:62",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_array$_t_uint32_$dyn_storage_ptr",
+                      "typeString": "uint32[]"
+                    }
+                  },
+                  "visibility": "internal"
+                },
+                {
+                  "constant": false,
+                  "id": 20942,
+                  "mutability": "mutable",
+                  "name": "_slippages",
+                  "nameLocation": "341:10:62",
+                  "nodeType": "VariableDeclaration",
+                  "scope": 20945,
+                  "src": "323:28:62",
+                  "stateVariable": false,
+                  "storageLocation": "calldata",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_array$_t_uint32_$dyn_calldata_ptr",
+                    "typeString": "uint32[]"
+                  },
+                  "typeName": {
+                    "baseType": {
+                      "id": 20940,
+                      "name": "uint32",
+                      "nodeType": "ElementaryTypeName",
+                      "src": "323:6:62",
+                      "typeDescriptions": {
+                        "typeIdentifier": "t_uint32",
+                        "typeString": "uint32"
+                      }
+                    },
+                    "id": 20941,
+                    "nodeType": "ArrayTypeName",
+                    "src": "323:8:62",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_array$_t_uint32_$dyn_storage_ptr",
+                      "typeString": "uint32[]"
+                    }
+                  },
+                  "visibility": "internal"
+                }
+              ],
+              "src": "121:237:62"
+            },
+            "returnParameters": {
+              "id": 20944,
+              "nodeType": "ParameterList",
+              "parameters": [],
+              "src": "367:0:62"
+            },
+            "scope": 20946,
+            "src": "104:264:62",
+            "stateMutability": "nonpayable",
+            "virtual": false,
+            "visibility": "external"
+          }
+        ],
+        "scope": 20947,
+        "src": "72:299:62",
+        "usedErrors": []
+      }
+    ],
+    "src": "44:327:62"
+  },
+  "compiler": {
+    "name": "solc",
+    "version": "0.8.15+commit.e14f2714.Emscripten.clang"
+  },
+  "networks": {},
+  "schemaVersion": "3.4.8",
+  "updatedAt": "2022-09-08T16:23:07.849Z",
+  "devdoc": {
+    "kind": "dev",
+    "methods": {},
+    "version": 1
+  },
+  "userdoc": {
+    "kind": "user",
+    "methods": {},
+    "version": 1
+  }
+}

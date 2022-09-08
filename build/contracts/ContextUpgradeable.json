@@ -1,0 +1,490 @@
+{
+  "contractName": "ContextUpgradeable",
+  "abi": [
+    {
+      "inputs": [],
+      "name": "Initializable_ContractIsInitializing",
+      "type": "error"
+    },
+    {
+      "inputs": [],
+      "name": "Initializable__ContractIsAlreadyInitialized",
+      "type": "error"
+    },
+    {
+      "inputs": [],
+      "name": "Initializable__ContractIsNotInitializing",
+      "type": "error"
+    },
+    {
+      "anonymous": false,
+      "inputs": [
+        {
+          "indexed": false,
+          "internalType": "uint8",
+          "name": "version",
+          "type": "uint8"
+        }
+      ],
+      "name": "Initialized",
+      "type": "event"
+    }
+  ],
+  "metadata": "{\"compiler\":{\"version\":\"0.8.15+commit.e14f2714\"},\"language\":\"Solidity\",\"output\":{\"abi\":[{\"inputs\":[],\"name\":\"Initializable_ContractIsInitializing\",\"type\":\"error\"},{\"inputs\":[],\"name\":\"Initializable__ContractIsAlreadyInitialized\",\"type\":\"error\"},{\"inputs\":[],\"name\":\"Initializable__ContractIsNotInitializing\",\"type\":\"error\"},{\"anonymous\":false,\"inputs\":[{\"indexed\":false,\"internalType\":\"uint8\",\"name\":\"version\",\"type\":\"uint8\"}],\"name\":\"Initialized\",\"type\":\"event\"}],\"devdoc\":{\"details\":\"Provides information about the current execution context, including the sender of the transaction and its data. While these are generally available via msg.sender and msg.data, they should not be accessed in such a direct manner, since when dealing with meta-transactions the account sending and paying for execution may not be the actual sender (as far as an application is concerned). This contract is only required for intermediate, library-like contracts.\",\"kind\":\"dev\",\"methods\":{},\"stateVariables\":{\"__gap\":{\"details\":\"This empty reserved space is put in place to allow future versions to add new variables without shifting down storage in the inheritance chain. See https://docs.openzeppelin.com/contracts/4.x/upgradeable#storage_gaps\"}},\"version\":1},\"userdoc\":{\"kind\":\"user\",\"methods\":{},\"version\":1}},\"settings\":{\"compilationTarget\":{\"project:/contracts/deps/ContextUpgradeable.sol\":\"ContextUpgradeable\"},\"evmVersion\":\"london\",\"libraries\":{},\"metadata\":{\"bytecodeHash\":\"ipfs\"},\"optimizer\":{\"enabled\":false,\"runs\":200},\"remappings\":[]},\"sources\":{\"project:/contracts/deps/AddressUpgradeable.sol\":{\"keccak256\":\"0xe69030f7d5066392d6c1ea70c0b6a9688b534fc9e4aff580e72b9541d2a96bda\",\"license\":\"MIT\",\"urls\":[\"bzz-raw://3d17ca0644774ccabfc517c3f509815d71807e914b6dc42d360527d4d54d8d14\",\"dweb:/ipfs/QmTfgsiFmhFhr9JyWMvsGVLycj9b3ifE9TZMaa2D2dw2fN\"]},\"project:/contracts/deps/ContextUpgradeable.sol\":{\"keccak256\":\"0x92fac0e53317ff400da2c57fbeacf65664915a39803bb8df868dc2da4ca900c3\",\"license\":\"MIT\",\"urls\":[\"bzz-raw://2728259e929816bf46743774c4e60d51d214daf908c7e78329ca61725ac498b3\",\"dweb:/ipfs/QmTpP8U3hYorjnhA8KCoGbQ1Dn79xghNg7MhGZk7PvhsyV\"]},\"project:/contracts/deps/Initializable.sol\":{\"keccak256\":\"0x74973682bf87093e720b5c65cf7e7ee52fb1965a77539c0d5aedd4b69fc214f3\",\"license\":\"MIT\",\"urls\":[\"bzz-raw://0e40bc39e3ede75c0f4459576f79f45eea9fc8810c8f81bff456e1086249d8fb\",\"dweb:/ipfs/QmSBajVb4HWuZ9b3JafZDSX2mNKizkex8y2ueT3iF7Rw1p\"]}},\"version\":1}",
+  "bytecode": "0x",
+  "deployedBytecode": "0x",
+  "immutableReferences": {},
+  "generatedSources": [],
+  "deployedGeneratedSources": [],
+  "sourceMap": "",
+  "deployedSourceMap": "",
+  "source": "// SPDX-License-Identifier: MIT\r\n// OpenZeppelin Contracts v4.4.1 (utils/Context.sol)\r\n\r\npragma solidity ^0.8.0;\r\nimport \"./Initializable.sol\";\r\n\r\n/**\r\n * @dev Provides information about the current execution context, including the\r\n * sender of the transaction and its data. While these are generally available\r\n * via msg.sender and msg.data, they should not be accessed in such a direct\r\n * manner, since when dealing with meta-transactions the account sending and\r\n * paying for execution may not be the actual sender (as far as an application\r\n * is concerned).\r\n *\r\n * This contract is only required for intermediate, library-like contracts.\r\n */\r\nabstract contract ContextUpgradeable is Initializable {\r\n    function __Context_init() internal onlyInitializing {\r\n    }\r\n\r\n    function __Context_init_unchained() internal onlyInitializing {\r\n    }\r\n    function _msgSender() internal view virtual returns (address) {\r\n        return msg.sender;\r\n    }\r\n\r\n    function _msgData() internal view virtual returns (bytes calldata) {\r\n        return msg.data;\r\n    }\r\n\r\n    /**\r\n     * @dev This empty reserved space is put in place to allow future versions to add new\r\n     * variables without shifting down storage in the inheritance chain.\r\n     * See https://docs.openzeppelin.com/contracts/4.x/upgradeable#storage_gaps\r\n     */\r\n    uint256[50] private __gap;\r\n}\r\n",
+  "sourcePath": "C:\\Users\\FVO_MMILLLER\\Desktop\\elvolution\\Testers\\contracts\\deps\\ContextUpgradeable.sol",
+  "ast": {
+    "absolutePath": "project:/contracts/deps/ContextUpgradeable.sol",
+    "exportedSymbols": {
+      "AddressUpgradeable": [
+        17019
+      ],
+      "ContextUpgradeable": [
+        17061
+      ],
+      "Initializable": [
+        17658
+      ]
+    },
+    "id": 17062,
+    "license": "MIT",
+    "nodeType": "SourceUnit",
+    "nodes": [
+      {
+        "id": 17021,
+        "literals": [
+          "solidity",
+          "^",
+          "0.8",
+          ".0"
+        ],
+        "nodeType": "PragmaDirective",
+        "src": "89:23:41"
+      },
+      {
+        "absolutePath": "project:/contracts/deps/Initializable.sol",
+        "file": "./Initializable.sol",
+        "id": 17022,
+        "nameLocation": "-1:-1:-1",
+        "nodeType": "ImportDirective",
+        "scope": 17062,
+        "sourceUnit": 17659,
+        "src": "114:29:41",
+        "symbolAliases": [],
+        "unitAlias": ""
+      },
+      {
+        "abstract": true,
+        "baseContracts": [
+          {
+            "baseName": {
+              "id": 17024,
+              "name": "Initializable",
+              "nodeType": "IdentifierPath",
+              "referencedDeclaration": 17658,
+              "src": "694:13:41"
+            },
+            "id": 17025,
+            "nodeType": "InheritanceSpecifier",
+            "src": "694:13:41"
+          }
+        ],
+        "canonicalName": "ContextUpgradeable",
+        "contractDependencies": [],
+        "contractKind": "contract",
+        "documentation": {
+          "id": 17023,
+          "nodeType": "StructuredDocumentation",
+          "src": "147:505:41",
+          "text": " @dev Provides information about the current execution context, including the\n sender of the transaction and its data. While these are generally available\n via msg.sender and msg.data, they should not be accessed in such a direct\n manner, since when dealing with meta-transactions the account sending and\n paying for execution may not be the actual sender (as far as an application\n is concerned).\n This contract is only required for intermediate, library-like contracts."
+        },
+        "fullyImplemented": true,
+        "id": 17061,
+        "linearizedBaseContracts": [
+          17061,
+          17658
+        ],
+        "name": "ContextUpgradeable",
+        "nameLocation": "672:18:41",
+        "nodeType": "ContractDefinition",
+        "nodes": [
+          {
+            "body": {
+              "id": 17030,
+              "nodeType": "Block",
+              "src": "767:8:41",
+              "statements": []
+            },
+            "id": 17031,
+            "implemented": true,
+            "kind": "function",
+            "modifiers": [
+              {
+                "id": 17028,
+                "kind": "modifierInvocation",
+                "modifierName": {
+                  "id": 17027,
+                  "name": "onlyInitializing",
+                  "nodeType": "IdentifierPath",
+                  "referencedDeclaration": 17619,
+                  "src": "750:16:41"
+                },
+                "nodeType": "ModifierInvocation",
+                "src": "750:16:41"
+              }
+            ],
+            "name": "__Context_init",
+            "nameLocation": "724:14:41",
+            "nodeType": "FunctionDefinition",
+            "parameters": {
+              "id": 17026,
+              "nodeType": "ParameterList",
+              "parameters": [],
+              "src": "738:2:41"
+            },
+            "returnParameters": {
+              "id": 17029,
+              "nodeType": "ParameterList",
+              "parameters": [],
+              "src": "767:0:41"
+            },
+            "scope": 17061,
+            "src": "715:60:41",
+            "stateMutability": "nonpayable",
+            "virtual": false,
+            "visibility": "internal"
+          },
+          {
+            "body": {
+              "id": 17036,
+              "nodeType": "Block",
+              "src": "845:8:41",
+              "statements": []
+            },
+            "id": 17037,
+            "implemented": true,
+            "kind": "function",
+            "modifiers": [
+              {
+                "id": 17034,
+                "kind": "modifierInvocation",
+                "modifierName": {
+                  "id": 17033,
+                  "name": "onlyInitializing",
+                  "nodeType": "IdentifierPath",
+                  "referencedDeclaration": 17619,
+                  "src": "828:16:41"
+                },
+                "nodeType": "ModifierInvocation",
+                "src": "828:16:41"
+              }
+            ],
+            "name": "__Context_init_unchained",
+            "nameLocation": "792:24:41",
+            "nodeType": "FunctionDefinition",
+            "parameters": {
+              "id": 17032,
+              "nodeType": "ParameterList",
+              "parameters": [],
+              "src": "816:2:41"
+            },
+            "returnParameters": {
+              "id": 17035,
+              "nodeType": "ParameterList",
+              "parameters": [],
+              "src": "845:0:41"
+            },
+            "scope": 17061,
+            "src": "783:70:41",
+            "stateMutability": "nonpayable",
+            "virtual": false,
+            "visibility": "internal"
+          },
+          {
+            "body": {
+              "id": 17045,
+              "nodeType": "Block",
+              "src": "921:36:41",
+              "statements": [
+                {
+                  "expression": {
+                    "expression": {
+                      "id": 17042,
+                      "name": "msg",
+                      "nodeType": "Identifier",
+                      "overloadedDeclarations": [],
+                      "referencedDeclaration": 4294967281,
+                      "src": "939:3:41",
+                      "typeDescriptions": {
+                        "typeIdentifier": "t_magic_message",
+                        "typeString": "msg"
+                      }
+                    },
+                    "id": 17043,
+                    "isConstant": false,
+                    "isLValue": false,
+                    "isPure": false,
+                    "lValueRequested": false,
+                    "memberName": "sender",
+                    "nodeType": "MemberAccess",
+                    "src": "939:10:41",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_address",
+                      "typeString": "address"
+                    }
+                  },
+                  "functionReturnParameters": 17041,
+                  "id": 17044,
+                  "nodeType": "Return",
+                  "src": "932:17:41"
+                }
+              ]
+            },
+            "id": 17046,
+            "implemented": true,
+            "kind": "function",
+            "modifiers": [],
+            "name": "_msgSender",
+            "nameLocation": "868:10:41",
+            "nodeType": "FunctionDefinition",
+            "parameters": {
+              "id": 17038,
+              "nodeType": "ParameterList",
+              "parameters": [],
+              "src": "878:2:41"
+            },
+            "returnParameters": {
+              "id": 17041,
+              "nodeType": "ParameterList",
+              "parameters": [
+                {
+                  "constant": false,
+                  "id": 17040,
+                  "mutability": "mutable",
+                  "name": "",
+                  "nameLocation": "-1:-1:-1",
+                  "nodeType": "VariableDeclaration",
+                  "scope": 17046,
+                  "src": "912:7:41",
+                  "stateVariable": false,
+                  "storageLocation": "default",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_address",
+                    "typeString": "address"
+                  },
+                  "typeName": {
+                    "id": 17039,
+                    "name": "address",
+                    "nodeType": "ElementaryTypeName",
+                    "src": "912:7:41",
+                    "stateMutability": "nonpayable",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_address",
+                      "typeString": "address"
+                    }
+                  },
+                  "visibility": "internal"
+                }
+              ],
+              "src": "911:9:41"
+            },
+            "scope": 17061,
+            "src": "859:98:41",
+            "stateMutability": "view",
+            "virtual": true,
+            "visibility": "internal"
+          },
+          {
+            "body": {
+              "id": 17054,
+              "nodeType": "Block",
+              "src": "1032:34:41",
+              "statements": [
+                {
+                  "expression": {
+                    "expression": {
+                      "id": 17051,
+                      "name": "msg",
+                      "nodeType": "Identifier",
+                      "overloadedDeclarations": [],
+                      "referencedDeclaration": 4294967281,
+                      "src": "1050:3:41",
+                      "typeDescriptions": {
+                        "typeIdentifier": "t_magic_message",
+                        "typeString": "msg"
+                      }
+                    },
+                    "id": 17052,
+                    "isConstant": false,
+                    "isLValue": false,
+                    "isPure": false,
+                    "lValueRequested": false,
+                    "memberName": "data",
+                    "nodeType": "MemberAccess",
+                    "src": "1050:8:41",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_bytes_calldata_ptr",
+                      "typeString": "bytes calldata"
+                    }
+                  },
+                  "functionReturnParameters": 17050,
+                  "id": 17053,
+                  "nodeType": "Return",
+                  "src": "1043:15:41"
+                }
+              ]
+            },
+            "id": 17055,
+            "implemented": true,
+            "kind": "function",
+            "modifiers": [],
+            "name": "_msgData",
+            "nameLocation": "974:8:41",
+            "nodeType": "FunctionDefinition",
+            "parameters": {
+              "id": 17047,
+              "nodeType": "ParameterList",
+              "parameters": [],
+              "src": "982:2:41"
+            },
+            "returnParameters": {
+              "id": 17050,
+              "nodeType": "ParameterList",
+              "parameters": [
+                {
+                  "constant": false,
+                  "id": 17049,
+                  "mutability": "mutable",
+                  "name": "",
+                  "nameLocation": "-1:-1:-1",
+                  "nodeType": "VariableDeclaration",
+                  "scope": 17055,
+                  "src": "1016:14:41",
+                  "stateVariable": false,
+                  "storageLocation": "calldata",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_bytes_calldata_ptr",
+                    "typeString": "bytes"
+                  },
+                  "typeName": {
+                    "id": 17048,
+                    "name": "bytes",
+                    "nodeType": "ElementaryTypeName",
+                    "src": "1016:5:41",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_bytes_storage_ptr",
+                      "typeString": "bytes"
+                    }
+                  },
+                  "visibility": "internal"
+                }
+              ],
+              "src": "1015:16:41"
+            },
+            "scope": 17061,
+            "src": "965:101:41",
+            "stateMutability": "view",
+            "virtual": true,
+            "visibility": "internal"
+          },
+          {
+            "constant": false,
+            "documentation": {
+              "id": 17056,
+              "nodeType": "StructuredDocumentation",
+              "src": "1074:258:41",
+              "text": " @dev This empty reserved space is put in place to allow future versions to add new\n variables without shifting down storage in the inheritance chain.\n See https://docs.openzeppelin.com/contracts/4.x/upgradeable#storage_gaps"
+            },
+            "id": 17060,
+            "mutability": "mutable",
+            "name": "__gap",
+            "nameLocation": "1358:5:41",
+            "nodeType": "VariableDeclaration",
+            "scope": 17061,
+            "src": "1338:25:41",
+            "stateVariable": true,
+            "storageLocation": "default",
+            "typeDescriptions": {
+              "typeIdentifier": "t_array$_t_uint256_$50_storage",
+              "typeString": "uint256[50]"
+            },
+            "typeName": {
+              "baseType": {
+                "id": 17057,
+                "name": "uint256",
+                "nodeType": "ElementaryTypeName",
+                "src": "1338:7:41",
+                "typeDescriptions": {
+                  "typeIdentifier": "t_uint256",
+                  "typeString": "uint256"
+                }
+              },
+              "id": 17059,
+              "length": {
+                "hexValue": "3530",
+                "id": 17058,
+                "isConstant": false,
+                "isLValue": false,
+                "isPure": true,
+                "kind": "number",
+                "lValueRequested": false,
+                "nodeType": "Literal",
+                "src": "1346:2:41",
+                "typeDescriptions": {
+                  "typeIdentifier": "t_rational_50_by_1",
+                  "typeString": "int_const 50"
+                },
+                "value": "50"
+              },
+              "nodeType": "ArrayTypeName",
+              "src": "1338:11:41",
+              "typeDescriptions": {
+                "typeIdentifier": "t_array$_t_uint256_$50_storage_ptr",
+                "typeString": "uint256[50]"
+              }
+            },
+            "visibility": "private"
+          }
+        ],
+        "scope": 17062,
+        "src": "654:713:41",
+        "usedErrors": [
+          17499,
+          17501,
+          17503
+        ]
+      }
+    ],
+    "src": "89:1280:41"
+  },
+  "compiler": {
+    "name": "solc",
+    "version": "0.8.15+commit.e14f2714.Emscripten.clang"
+  },
+  "networks": {},
+  "schemaVersion": "3.4.8",
+  "updatedAt": "2022-09-08T16:23:04.454Z",
+  "devdoc": {
+    "details": "Provides information about the current execution context, including the sender of the transaction and its data. While these are generally available via msg.sender and msg.data, they should not be accessed in such a direct manner, since when dealing with meta-transactions the account sending and paying for execution may not be the actual sender (as far as an application is concerned). This contract is only required for intermediate, library-like contracts.",
+    "kind": "dev",
+    "methods": {},
+    "stateVariables": {
+      "__gap": {
+        "details": "This empty reserved space is put in place to allow future versions to add new variables without shifting down storage in the inheritance chain. See https://docs.openzeppelin.com/contracts/4.x/upgradeable#storage_gaps"
+      }
+    },
+    "version": 1
+  },
+  "userdoc": {
+    "kind": "user",
+    "methods": {},
+    "version": 1
+  }
+}

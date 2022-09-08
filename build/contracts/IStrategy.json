@@ -1,0 +1,2445 @@
+{
+  "contractName": "IStrategy",
+  "abi": [
+    {
+      "inputs": [],
+      "name": "AmountExceedTotalSupply",
+      "type": "error"
+    },
+    {
+      "inputs": [],
+      "name": "AmountNotSpecified",
+      "type": "error"
+    },
+    {
+      "inputs": [],
+      "name": "CantRemoveLastStrategy",
+      "type": "error"
+    },
+    {
+      "inputs": [],
+      "name": "CycleClosed",
+      "type": "error"
+    },
+    {
+      "inputs": [],
+      "name": "CycleNotClosableYet",
+      "type": "error"
+    },
+    {
+      "inputs": [],
+      "name": "CycleNotClosed",
+      "type": "error"
+    },
+    {
+      "inputs": [],
+      "name": "DuplicateStrategy",
+      "type": "error"
+    },
+    {
+      "inputs": [],
+      "name": "InsufficientShares",
+      "type": "error"
+    },
+    {
+      "inputs": [],
+      "name": "NodepositDetected",
+      "type": "error"
+    },
+    {
+      "inputs": [],
+      "name": "NotModerator",
+      "type": "error"
+    },
+    {
+      "inputs": [],
+      "name": "NotReceiptOwner",
+      "type": "error"
+    },
+    {
+      "inputs": [],
+      "name": "NothingToRebalance",
+      "type": "error"
+    },
+    {
+      "inputs": [],
+      "name": "UnsupportedToken",
+      "type": "error"
+    },
+    {
+      "anonymous": false,
+      "inputs": [
+        {
+          "indexed": true,
+          "internalType": "uint256",
+          "name": "closedCycleId",
+          "type": "uint256"
+        },
+        {
+          "indexed": false,
+          "internalType": "uint256",
+          "name": "amount",
+          "type": "uint256"
+        }
+      ],
+      "name": "AllocateToStrategies",
+      "type": "event"
+    },
+    {
+      "anonymous": false,
+      "inputs": [
+        {
+          "indexed": true,
+          "internalType": "address",
+          "name": "user",
+          "type": "address"
+        },
+        {
+          "indexed": false,
+          "internalType": "address",
+          "name": "token",
+          "type": "address"
+        },
+        {
+          "indexed": false,
+          "internalType": "uint256",
+          "name": "amount",
+          "type": "uint256"
+        }
+      ],
+      "name": "Deposit",
+      "type": "event"
+    },
+    {
+      "anonymous": false,
+      "inputs": [
+        {
+          "indexed": true,
+          "internalType": "address",
+          "name": "user",
+          "type": "address"
+        },
+        {
+          "indexed": false,
+          "internalType": "uint256",
+          "name": "shares",
+          "type": "uint256"
+        },
+        {
+          "indexed": false,
+          "internalType": "uint256[]",
+          "name": "receiptIds",
+          "type": "uint256[]"
+        }
+      ],
+      "name": "RedeemReceiptsToShares",
+      "type": "event"
+    },
+    {
+      "anonymous": false,
+      "inputs": [
+        {
+          "indexed": true,
+          "internalType": "address",
+          "name": "moderator",
+          "type": "address"
+        },
+        {
+          "indexed": false,
+          "internalType": "uint256[]",
+          "name": "receiptIds",
+          "type": "uint256[]"
+        }
+      ],
+      "name": "RedeemReceiptsToSharesByModerators",
+      "type": "event"
+    },
+    {
+      "anonymous": false,
+      "inputs": [
+        {
+          "indexed": false,
+          "internalType": "contract Exchange",
+          "name": "_exchange",
+          "type": "address"
+        },
+        {
+          "indexed": false,
+          "internalType": "contract IUsdOracle",
+          "name": "_oracle",
+          "type": "address"
+        },
+        {
+          "indexed": false,
+          "internalType": "contract SharesToken",
+          "name": "_sharesToken",
+          "type": "address"
+        },
+        {
+          "indexed": false,
+          "internalType": "contract Batch",
+          "name": "_batch",
+          "type": "address"
+        },
+        {
+          "indexed": false,
+          "internalType": "contract ReceiptNFT",
+          "name": "_receiptNft",
+          "type": "address"
+        }
+      ],
+      "name": "SetAddresses",
+      "type": "event"
+    },
+    {
+      "anonymous": false,
+      "inputs": [
+        {
+          "indexed": false,
+          "internalType": "uint256",
+          "name": "newDuration",
+          "type": "uint256"
+        }
+      ],
+      "name": "SetCycleDuration",
+      "type": "event"
+    },
+    {
+      "anonymous": false,
+      "inputs": [
+        {
+          "indexed": false,
+          "internalType": "address",
+          "name": "newAddress",
+          "type": "address"
+        }
+      ],
+      "name": "SetFeeAddress",
+      "type": "event"
+    },
+    {
+      "anonymous": false,
+      "inputs": [
+        {
+          "indexed": false,
+          "internalType": "uint256",
+          "name": "newPercent",
+          "type": "uint256"
+        }
+      ],
+      "name": "SetFeePercent",
+      "type": "event"
+    },
+    {
+      "anonymous": false,
+      "inputs": [
+        {
+          "indexed": false,
+          "internalType": "uint256",
+          "name": "newAmount",
+          "type": "uint256"
+        }
+      ],
+      "name": "SetMinDeposit",
+      "type": "event"
+    },
+    {
+      "anonymous": false,
+      "inputs": [
+        {
+          "indexed": false,
+          "internalType": "uint256",
+          "name": "newAmount",
+          "type": "uint256"
+        }
+      ],
+      "name": "SetMinUsdPerCycle",
+      "type": "event"
+    },
+    {
+      "anonymous": false,
+      "inputs": [
+        {
+          "indexed": true,
+          "internalType": "address",
+          "name": "user",
+          "type": "address"
+        },
+        {
+          "indexed": false,
+          "internalType": "address",
+          "name": "token",
+          "type": "address"
+        },
+        {
+          "indexed": false,
+          "internalType": "uint256",
+          "name": "amount",
+          "type": "uint256"
+        }
+      ],
+      "name": "WithdrawFromBatch",
+      "type": "event"
+    },
+    {
+      "anonymous": false,
+      "inputs": [
+        {
+          "indexed": true,
+          "internalType": "address",
+          "name": "user",
+          "type": "address"
+        },
+        {
+          "indexed": false,
+          "internalType": "address",
+          "name": "token",
+          "type": "address"
+        },
+        {
+          "indexed": false,
+          "internalType": "uint256",
+          "name": "amount",
+          "type": "uint256"
+        }
+      ],
+      "name": "WithdrawFromStrategies",
+      "type": "event"
+    },
+    {
+      "inputs": [],
+      "name": "depositToken",
+      "outputs": [
+        {
+          "internalType": "address",
+          "name": "",
+          "type": "address"
+        }
+      ],
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "uint256",
+          "name": "amount",
+          "type": "uint256"
+        }
+      ],
+      "name": "deposit",
+      "outputs": [],
+      "stateMutability": "nonpayable",
+      "type": "function"
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "uint256",
+          "name": "amount",
+          "type": "uint256"
+        }
+      ],
+      "name": "withdraw",
+      "outputs": [
+        {
+          "internalType": "uint256",
+          "name": "amountWithdrawn",
+          "type": "uint256"
+        }
+      ],
+      "stateMutability": "nonpayable",
+      "type": "function"
+    },
+    {
+      "inputs": [],
+      "name": "compound",
+      "outputs": [],
+      "stateMutability": "nonpayable",
+      "type": "function"
+    },
+    {
+      "inputs": [],
+      "name": "totalTokens",
+      "outputs": [
+        {
+          "internalType": "uint256",
+          "name": "",
+          "type": "uint256"
+        }
+      ],
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "inputs": [],
+      "name": "withdrawAll",
+      "outputs": [
+        {
+          "internalType": "uint256",
+          "name": "amountWithdrawn",
+          "type": "uint256"
+        }
+      ],
+      "stateMutability": "nonpayable",
+      "type": "function"
+    }
+  ],
+  "metadata": "{\"compiler\":{\"version\":\"0.8.15+commit.e14f2714\"},\"language\":\"Solidity\",\"output\":{\"abi\":[{\"inputs\":[],\"name\":\"AmountExceedTotalSupply\",\"type\":\"error\"},{\"inputs\":[],\"name\":\"AmountNotSpecified\",\"type\":\"error\"},{\"inputs\":[],\"name\":\"CantRemoveLastStrategy\",\"type\":\"error\"},{\"inputs\":[],\"name\":\"CycleClosed\",\"type\":\"error\"},{\"inputs\":[],\"name\":\"CycleNotClosableYet\",\"type\":\"error\"},{\"inputs\":[],\"name\":\"CycleNotClosed\",\"type\":\"error\"},{\"inputs\":[],\"name\":\"DuplicateStrategy\",\"type\":\"error\"},{\"inputs\":[],\"name\":\"InsufficientShares\",\"type\":\"error\"},{\"inputs\":[],\"name\":\"NodepositDetected\",\"type\":\"error\"},{\"inputs\":[],\"name\":\"NotModerator\",\"type\":\"error\"},{\"inputs\":[],\"name\":\"NotReceiptOwner\",\"type\":\"error\"},{\"inputs\":[],\"name\":\"NothingToRebalance\",\"type\":\"error\"},{\"inputs\":[],\"name\":\"UnsupportedToken\",\"type\":\"error\"},{\"anonymous\":false,\"inputs\":[{\"indexed\":true,\"internalType\":\"uint256\",\"name\":\"closedCycleId\",\"type\":\"uint256\"},{\"indexed\":false,\"internalType\":\"uint256\",\"name\":\"amount\",\"type\":\"uint256\"}],\"name\":\"AllocateToStrategies\",\"type\":\"event\"},{\"anonymous\":false,\"inputs\":[{\"indexed\":true,\"internalType\":\"address\",\"name\":\"user\",\"type\":\"address\"},{\"indexed\":false,\"internalType\":\"address\",\"name\":\"token\",\"type\":\"address\"},{\"indexed\":false,\"internalType\":\"uint256\",\"name\":\"amount\",\"type\":\"uint256\"}],\"name\":\"Deposit\",\"type\":\"event\"},{\"anonymous\":false,\"inputs\":[{\"indexed\":true,\"internalType\":\"address\",\"name\":\"user\",\"type\":\"address\"},{\"indexed\":false,\"internalType\":\"uint256\",\"name\":\"shares\",\"type\":\"uint256\"},{\"indexed\":false,\"internalType\":\"uint256[]\",\"name\":\"receiptIds\",\"type\":\"uint256[]\"}],\"name\":\"RedeemReceiptsToShares\",\"type\":\"event\"},{\"anonymous\":false,\"inputs\":[{\"indexed\":true,\"internalType\":\"address\",\"name\":\"moderator\",\"type\":\"address\"},{\"indexed\":false,\"internalType\":\"uint256[]\",\"name\":\"receiptIds\",\"type\":\"uint256[]\"}],\"name\":\"RedeemReceiptsToSharesByModerators\",\"type\":\"event\"},{\"anonymous\":false,\"inputs\":[{\"indexed\":false,\"internalType\":\"contract Exchange\",\"name\":\"_exchange\",\"type\":\"address\"},{\"indexed\":false,\"internalType\":\"contract IUsdOracle\",\"name\":\"_oracle\",\"type\":\"address\"},{\"indexed\":false,\"internalType\":\"contract SharesToken\",\"name\":\"_sharesToken\",\"type\":\"address\"},{\"indexed\":false,\"internalType\":\"contract Batch\",\"name\":\"_batch\",\"type\":\"address\"},{\"indexed\":false,\"internalType\":\"contract ReceiptNFT\",\"name\":\"_receiptNft\",\"type\":\"address\"}],\"name\":\"SetAddresses\",\"type\":\"event\"},{\"anonymous\":false,\"inputs\":[{\"indexed\":false,\"internalType\":\"uint256\",\"name\":\"newDuration\",\"type\":\"uint256\"}],\"name\":\"SetCycleDuration\",\"type\":\"event\"},{\"anonymous\":false,\"inputs\":[{\"indexed\":false,\"internalType\":\"address\",\"name\":\"newAddress\",\"type\":\"address\"}],\"name\":\"SetFeeAddress\",\"type\":\"event\"},{\"anonymous\":false,\"inputs\":[{\"indexed\":false,\"internalType\":\"uint256\",\"name\":\"newPercent\",\"type\":\"uint256\"}],\"name\":\"SetFeePercent\",\"type\":\"event\"},{\"anonymous\":false,\"inputs\":[{\"indexed\":false,\"internalType\":\"uint256\",\"name\":\"newAmount\",\"type\":\"uint256\"}],\"name\":\"SetMinDeposit\",\"type\":\"event\"},{\"anonymous\":false,\"inputs\":[{\"indexed\":false,\"internalType\":\"uint256\",\"name\":\"newAmount\",\"type\":\"uint256\"}],\"name\":\"SetMinUsdPerCycle\",\"type\":\"event\"},{\"anonymous\":false,\"inputs\":[{\"indexed\":true,\"internalType\":\"address\",\"name\":\"user\",\"type\":\"address\"},{\"indexed\":false,\"internalType\":\"address\",\"name\":\"token\",\"type\":\"address\"},{\"indexed\":false,\"internalType\":\"uint256\",\"name\":\"amount\",\"type\":\"uint256\"}],\"name\":\"WithdrawFromBatch\",\"type\":\"event\"},{\"anonymous\":false,\"inputs\":[{\"indexed\":true,\"internalType\":\"address\",\"name\":\"user\",\"type\":\"address\"},{\"indexed\":false,\"internalType\":\"address\",\"name\":\"token\",\"type\":\"address\"},{\"indexed\":false,\"internalType\":\"uint256\",\"name\":\"amount\",\"type\":\"uint256\"}],\"name\":\"WithdrawFromStrategies\",\"type\":\"event\"},{\"inputs\":[],\"name\":\"compound\",\"outputs\":[],\"stateMutability\":\"nonpayable\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"uint256\",\"name\":\"amount\",\"type\":\"uint256\"}],\"name\":\"deposit\",\"outputs\":[],\"stateMutability\":\"nonpayable\",\"type\":\"function\"},{\"inputs\":[],\"name\":\"depositToken\",\"outputs\":[{\"internalType\":\"address\",\"name\":\"\",\"type\":\"address\"}],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[],\"name\":\"totalTokens\",\"outputs\":[{\"internalType\":\"uint256\",\"name\":\"\",\"type\":\"uint256\"}],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"uint256\",\"name\":\"amount\",\"type\":\"uint256\"}],\"name\":\"withdraw\",\"outputs\":[{\"internalType\":\"uint256\",\"name\":\"amountWithdrawn\",\"type\":\"uint256\"}],\"stateMutability\":\"nonpayable\",\"type\":\"function\"},{\"inputs\":[],\"name\":\"withdrawAll\",\"outputs\":[{\"internalType\":\"uint256\",\"name\":\"amountWithdrawn\",\"type\":\"uint256\"}],\"stateMutability\":\"nonpayable\",\"type\":\"function\"}],\"devdoc\":{\"events\":{\"AllocateToStrategies(uint256,uint256)\":{\"params\":{\"amount\":\"Sum of different tokens deposited into strategies.\",\"closedCycleId\":\"Index of the cycle that is closed.\"}},\"Deposit(address,address,uint256)\":{\"params\":{\"amount\":\"Amount of `token` transferred from user.\",\"token\":\"Supported token that user want to deposit.\"}},\"RedeemReceiptsToShares(address,uint256,uint256[])\":{\"params\":{\"receiptIds\":\"Indexes of the receipts burned.\",\"shares\":\"Amount of shares received by user.\"}},\"RedeemReceiptsToSharesByModerators(address,uint256[])\":{\"params\":{\"receiptIds\":\"Indexes of the receipts burned.\"}},\"WithdrawFromBatch(address,address,uint256)\":{\"params\":{\"amount\":\"Amount of `token` received by user.\",\"token\":\"Supported token that user requested to receive after withdraw.\"}},\"WithdrawFromStrategies(address,address,uint256)\":{\"params\":{\"amount\":\"Amount of `token` received by user.\",\"token\":\"Supported token that user requested to receive after withdraw.\"}}},\"kind\":\"dev\",\"methods\":{\"withdraw(uint256)\":{\"details\":\"Max withdrawable amount is returned by totalTokens.\"}},\"version\":1},\"userdoc\":{\"events\":{\"AllocateToStrategies(uint256,uint256)\":{\"notice\":\"Fires when batch is deposited into strategies.\"},\"Deposit(address,address,uint256)\":{\"notice\":\"Fires when user deposits in batch.\"},\"RedeemReceiptsToShares(address,uint256,uint256[])\":{\"notice\":\"Fires when user converts his receipt into shares token.\"},\"RedeemReceiptsToSharesByModerators(address,uint256[])\":{\"notice\":\"Fires when moderator converts foreign receipts into shares token.\"},\"WithdrawFromBatch(address,address,uint256)\":{\"notice\":\"Fires when user withdraw from batch.\"},\"WithdrawFromStrategies(address,address,uint256)\":{\"notice\":\"Fires when user withdraw from strategies.\"}},\"kind\":\"user\",\"methods\":{\"compound()\":{\"notice\":\"Harvest rewards and reinvest them.\"},\"deposit(uint256)\":{\"notice\":\"Deposit token to strategy.\"},\"depositToken()\":{\"notice\":\"Token used to deposit to strategy.\"},\"totalTokens()\":{\"notice\":\"Approximated amount of token on the strategy.\"},\"withdraw(uint256)\":{\"notice\":\"Withdraw tokens from strategy.\"},\"withdrawAll()\":{\"notice\":\"Withdraw all tokens from strategy.\"}},\"version\":1}},\"settings\":{\"compilationTarget\":{\"project:/contracts/interfaces/IStrategy.sol\":\"IStrategy\"},\"evmVersion\":\"london\",\"libraries\":{},\"metadata\":{\"bytecodeHash\":\"ipfs\"},\"optimizer\":{\"enabled\":false,\"runs\":200},\"remappings\":[]},\"sources\":{\"@openzeppelin/contracts-upgradeable/access/OwnableUpgradeable.sol\":{\"keccak256\":\"0x247c62047745915c0af6b955470a72d1696ebad4352d7d3011aef1a2463cd888\",\"license\":\"MIT\",\"urls\":[\"bzz-raw://d7fc8396619de513c96b6e00301b88dd790e83542aab918425633a5f7297a15a\",\"dweb:/ipfs/QmXbP4kiZyp7guuS7xe8KaybnwkRPGrBc2Kbi3vhcTfpxb\"]},\"@openzeppelin/contracts-upgradeable/interfaces/draft-IERC1822Upgradeable.sol\":{\"keccak256\":\"0x77c89f893e403efc6929ba842b7ccf6534d4ffe03afe31670b4a528c0ad78c0f\",\"license\":\"MIT\",\"urls\":[\"bzz-raw://496bd9b3df2455d571018c09f0c6badd29713fdeb907c6aa09d8d28cb603f053\",\"dweb:/ipfs/QmXdJDyYs6WMwMh21dez2BYPxhSUaUYFMDtVNcn2cgFR79\"]},\"@openzeppelin/contracts-upgradeable/proxy/ERC1967/ERC1967UpgradeUpgradeable.sol\":{\"keccak256\":\"0x315887e846f1e5f8d8fa535a229d318bb9290aaa69485117f1ee8a9a6b3be823\",\"license\":\"MIT\",\"urls\":[\"bzz-raw://29dda00da6d269685b555e710e4abf1c3eb6d00c15b888a7880a2f8dd3c4fdc2\",\"dweb:/ipfs/QmSqcjtdECygtT1Gy7uEo42x8542srpgGEeKKHfcnQqXgn\"]},\"@openzeppelin/contracts-upgradeable/proxy/beacon/IBeaconUpgradeable.sol\":{\"keccak256\":\"0x24b86ac8c005b8c654fbf6ac34a5a4f61580d7273541e83e013e89d66fbf0908\",\"license\":\"MIT\",\"urls\":[\"bzz-raw://4dbfe1a3b3b3fb64294ce41fd2ad362e7b7012208117864f42c1a67620a6d5c1\",\"dweb:/ipfs/QmVMU5tWt7zBQMmf5cpMX8UMHV86T3kFeTxBTBjFqVWfoJ\"]},\"@openzeppelin/contracts-upgradeable/proxy/utils/Initializable.sol\":{\"keccak256\":\"0x0203dcadc5737d9ef2c211d6fa15d18ebc3b30dfa51903b64870b01a062b0b4e\",\"license\":\"MIT\",\"urls\":[\"bzz-raw://6eb2fd1e9894dbe778f4b8131adecebe570689e63cf892f4e21257bfe1252497\",\"dweb:/ipfs/QmXgUGNfZvrn6N2miv3nooSs7Jm34A41qz94fu2GtDFcx8\"]},\"@openzeppelin/contracts-upgradeable/proxy/utils/UUPSUpgradeable.sol\":{\"keccak256\":\"0x6e36e9b4b71de699c2f3f0d4e4d1aa0b35da99a26e8d5b91ef09ba234b4ef270\",\"license\":\"MIT\",\"urls\":[\"bzz-raw://abfa467c53a0d60b4d09bf04aa952b1d1d44e5766fcc053aace078d7859b8419\",\"dweb:/ipfs/QmebVTZpyNxYfKYTuLMywzEJTdc1Ca8ME4xm3kR9gQgToG\"]},\"@openzeppelin/contracts-upgradeable/token/ERC721/ERC721Upgradeable.sol\":{\"keccak256\":\"0x5331c8909221d9f9f3851cfadd5959d0873413a2c27e30e0f2fa234158c1c6cf\",\"license\":\"MIT\",\"urls\":[\"bzz-raw://31c7d52f47a9174e236c0402654f42c16516c58c6851862f3bcb1b440b873498\",\"dweb:/ipfs/QmZQqiofa8jPJCCAfWyjNnBuoGXrR56Ct4HyW4ugRWfvCb\"]},\"@openzeppelin/contracts-upgradeable/token/ERC721/IERC721ReceiverUpgradeable.sol\":{\"keccak256\":\"0xbb2ed8106d94aeae6858e2551a1e7174df73994b77b13ebd120ccaaef80155f5\",\"license\":\"MIT\",\"urls\":[\"bzz-raw://8bc3c6a456dba727d8dd9fd33420febede490abb49a07469f61d2a3ace66a95a\",\"dweb:/ipfs/QmVAWtEVj7K5AbvgJa9Dz22KiDq9eoptCjnVZqsTMtKXyd\"]},\"@openzeppelin/contracts-upgradeable/token/ERC721/IERC721Upgradeable.sol\":{\"keccak256\":\"0x016298e66a5810253c6c905e61966bb31c8775c3f3517bf946ff56ee31d6c005\",\"license\":\"MIT\",\"urls\":[\"bzz-raw://1723de5ae414f210db039b19e6487c19c2d643483c9be7c445cf481a80c199d2\",\"dweb:/ipfs/QmcBLbmPdZsNngYhA1KDadNUqQZoGACytFWuUH74RC4AXC\"]},\"@openzeppelin/contracts-upgradeable/token/ERC721/extensions/IERC721MetadataUpgradeable.sol\":{\"keccak256\":\"0x95a471796eb5f030fdc438660bebec121ad5d063763e64d92376ffb4b5ce8b70\",\"license\":\"MIT\",\"urls\":[\"bzz-raw://4ffbd627e6958983d288801acdedbf3491ee0ebf1a430338bce47c96481ce9e3\",\"dweb:/ipfs/QmUM1vpmNgBV34sYf946SthDJNGhwwqjoRggmj4TUUQmdB\"]},\"@openzeppelin/contracts-upgradeable/utils/AddressUpgradeable.sol\":{\"keccak256\":\"0x611aa3f23e59cfdd1863c536776407b3e33d695152a266fa7cfb34440a29a8a3\",\"license\":\"MIT\",\"urls\":[\"bzz-raw://9b4b2110b7f2b3eb32951bc08046fa90feccffa594e1176cb91cdfb0e94726b4\",\"dweb:/ipfs/QmSxLwYjicf9zWFuieRc8WQwE4FisA1Um5jp1iSa731TGt\"]},\"@openzeppelin/contracts-upgradeable/utils/ContextUpgradeable.sol\":{\"keccak256\":\"0x963ea7f0b48b032eef72fe3a7582edf78408d6f834115b9feadd673a4d5bd149\",\"license\":\"MIT\",\"urls\":[\"bzz-raw://d6520943ea55fdf5f0bafb39ed909f64de17051bc954ff3e88c9e5621412c79c\",\"dweb:/ipfs/QmWZ4rAKTQbNG2HxGs46AcTXShsVytKeLs7CUCdCSv5N7a\"]},\"@openzeppelin/contracts-upgradeable/utils/StorageSlotUpgradeable.sol\":{\"keccak256\":\"0x09864aea84f01e39313375b5610c73a3c1c68abbdc51e5ccdd25ff977fdadf9a\",\"license\":\"MIT\",\"urls\":[\"bzz-raw://aedb48081190fa828d243529ce25c708202c7d4ccfe99f0e4ecd6bc0cfcd03f3\",\"dweb:/ipfs/QmWyiDQHPZA56iqsAwTmiJoxvNeRQLUVr4gTfzpdpXivpo\"]},\"@openzeppelin/contracts-upgradeable/utils/StringsUpgradeable.sol\":{\"keccak256\":\"0xea5339a7fff0ed42b45be56a88efdd0b2ddde9fa480dc99fef9a6a4c5b776863\",\"license\":\"MIT\",\"urls\":[\"bzz-raw://841619682637df5579b4c396d281d6c55b26f1b1acce1d0ab67bead5e39cf60c\",\"dweb:/ipfs/QmNRtuKp43ZHJwswdyT3GivY4fDMvz3cxBe1FfDthG1JGj\"]},\"@openzeppelin/contracts-upgradeable/utils/introspection/ERC165Upgradeable.sol\":{\"keccak256\":\"0x9a3b990bd56d139df3e454a9edf1c64668530b5a77fc32eb063bc206f958274a\",\"license\":\"MIT\",\"urls\":[\"bzz-raw://0895399d170daab2d69b4c43a0202e5a07f2e67a93b26e3354dcbedb062232f7\",\"dweb:/ipfs/QmUM1VH3XDk559Dsgh4QPvupr3YVKjz87HrSyYzzVFZbxw\"]},\"@openzeppelin/contracts-upgradeable/utils/introspection/IERC165Upgradeable.sol\":{\"keccak256\":\"0xc6cef87559d0aeffdf0a99803de655938a7779ec0a3cd5d4383483ad85565a09\",\"license\":\"MIT\",\"urls\":[\"bzz-raw://92ad7e572cf44e6b4b37631b44b62f9eb9fb1cf14d9ce51c1504d5dc7ccaf758\",\"dweb:/ipfs/QmcnbqX85tsWnUXPmtuPLE4SczME2sJaTfmqEFkuAJvWhy\"]},\"@openzeppelin/contracts/access/Ownable.sol\":{\"keccak256\":\"0xa94b34880e3c1b0b931662cb1c09e5dfa6662f31cba80e07c5ee71cd135c9673\",\"license\":\"MIT\",\"urls\":[\"bzz-raw://40fb1b5102468f783961d0af743f91b9980cf66b50d1d12009f6bb1869cea4d2\",\"dweb:/ipfs/QmYqEbJML4jB1GHbzD4cUZDtJg5wVwNm3vDJq1GbyDus8y\"]},\"@openzeppelin/contracts/token/ERC20/ERC20.sol\":{\"keccak256\":\"0x24b04b8aacaaf1a4a0719117b29c9c3647b1f479c5ac2a60f5ff1bb6d839c238\",\"license\":\"MIT\",\"urls\":[\"bzz-raw://43e46da9d9f49741ecd876a269e71bc7494058d7a8e9478429998adb5bc3eaa0\",\"dweb:/ipfs/QmUtp4cqzf22C5rJ76AabKADquGWcjsc33yjYXxXC4sDvy\"]},\"@openzeppelin/contracts/token/ERC20/IERC20.sol\":{\"keccak256\":\"0x9750c6b834f7b43000631af5cc30001c5f547b3ceb3635488f140f60e897ea6b\",\"license\":\"MIT\",\"urls\":[\"bzz-raw://5a7d5b1ef5d8d5889ad2ed89d8619c09383b80b72ab226e0fe7bde1636481e34\",\"dweb:/ipfs/QmebXWgtEfumQGBdVeM6c71McLixYXQP5Bk6kKXuoY4Bmr\"]},\"@openzeppelin/contracts/token/ERC20/extensions/IERC20Metadata.sol\":{\"keccak256\":\"0x8de418a5503946cabe331f35fe242d3201a73f67f77aaeb7110acb1f30423aca\",\"license\":\"MIT\",\"urls\":[\"bzz-raw://5a376d3dda2cb70536c0a45c208b29b34ac560c4cb4f513a42079f96ba47d2dd\",\"dweb:/ipfs/QmZQg6gn1sUpM8wHzwNvSnihumUCAhxD119MpXeKp8B9s8\"]},\"@openzeppelin/contracts/utils/Context.sol\":{\"keccak256\":\"0xe2e337e6dde9ef6b680e07338c493ebea1b5fd09b43424112868e9cc1706bca7\",\"license\":\"MIT\",\"urls\":[\"bzz-raw://6df0ddf21ce9f58271bdfaa85cde98b200ef242a05a3f85c2bc10a8294800a92\",\"dweb:/ipfs/QmRK2Y5Yc6BK7tGKkgsgn3aJEQGi5aakeSPZvS65PV8Xp3\"]},\"@openzeppelin/contracts/utils/structs/EnumerableSet.sol\":{\"keccak256\":\"0x5050943b32b6a8f282573d166b2e9d87ab7eb4dbba4ab6acf36ecb54fe6995e4\",\"license\":\"MIT\",\"urls\":[\"bzz-raw://d4831d777a29ebdf9f2caecd70e74b97bff1b70e53622fd0a02aed01e21c8271\",\"dweb:/ipfs/QmUqurVVnCc7XkMxb2k23TVQUtuhHZduJ3hTZarTJrqU24\"]},\"@uniswap/v2-periphery/contracts/interfaces/IUniswapV2Router01.sol\":{\"keccak256\":\"0xba23699a773023d902d2b8ff5f76e3d8e17d1dedd9e3f27343f7583266855d07\",\"license\":\"Unlicense\",\"urls\":[\"bzz-raw://fb3ad44eb3f32f00fa7094ad7f53b86e74fdfe5470782f441798e843831c239f\",\"dweb:/ipfs/QmXkJha521WyMGBJ6pNDTL1XpEFukSDiLifju9vm5b23gc\"]},\"@uniswap/v2-periphery/contracts/interfaces/IUniswapV2Router02.sol\":{\"keccak256\":\"0x6e5fc45612098cf6f847905667558fb2524095d67d769c4dbdadea130fea3a58\",\"license\":\"Unlicense\",\"urls\":[\"bzz-raw://7c32842c476a6349562ee288bf190be9af001960ebc619a486a4c95a192f9552\",\"dweb:/ipfs/QmPKjWSUNUucHM6rG8FALRuQF7fJqRXAigJTbrqkWgZ3pP\"]},\"project:/contracts/deps/EnumerableSetExtension.sol\":{\"keccak256\":\"0xc09b6f66a4027ee76d75936a7abf127e1dcc41921a2433098991c3d643af8f10\",\"urls\":[\"bzz-raw://0775192a24cd6f64cacc9995de4562848140f3d20bad0631b52573780329a8a0\",\"dweb:/ipfs/Qmd4UWLzosUqs5VSWV48wPRMbt3RymB8DLYvHD56MpnZRt\"]},\"project:/contracts/exchange/Exchange.sol\":{\"keccak256\":\"0x4ea622b5db6786c70eb3b99b9a49ded6921b64e5b1fa3e57d98f12f80d1983d6\",\"license\":\"Unlicense\",\"urls\":[\"bzz-raw://6aacccfb699a9330133e3a343611698a3d034335213d15c1e1f54768e6bdb219\",\"dweb:/ipfs/QmfEZV1UREZzNtn9vvwDAQZKrsBJY6hp2KZu76se9rVJwM\"]},\"project:/contracts/interfaces/ICurvePool.sol\":{\"keccak256\":\"0x968971f626a70525e025b2ec5433f7e8d50713fe1048a107b8c7288877cb56e2\",\"license\":\"Unlicense\",\"urls\":[\"bzz-raw://21fcd1c45424083ac3c8a6369e6d28c7ad0b33be04633b6619cf1ac084c375a3\",\"dweb:/ipfs/QmQ8McchbfWXHv8LiS9FoGq4KT75jXD4T56au6snqRZVzX\"]},\"project:/contracts/interfaces/IExchangePlugin.sol\":{\"keccak256\":\"0x66913b968ed867be6d24704325f17e5d4670b1eca3d9ed125740d2aa40372dd5\",\"license\":\"Unlicense\",\"urls\":[\"bzz-raw://1c72c38973f2919ba3ac569129d5d3df099b9907a86154cdf7fc9375be5e7093\",\"dweb:/ipfs/QmbQ7S5VujCsCAKViqeBwxiQ8h6BZXbQvFhoFJ8KftZFrJ\"]},\"project:/contracts/interfaces/IStrategy.sol\":{\"keccak256\":\"0x5cb0189b225e6d4075337cd96d8c6f9262418c95cbb65ca56fdd23e371317100\",\"license\":\"Unlicense\",\"urls\":[\"bzz-raw://cdaad3588c049888f4677d391bb0ca71ec75a4f6d6344f6186706cbb7c131409\",\"dweb:/ipfs/QmRrLBUhm3JXqZGVP5JSksfojZHi8m6zjfYcpJQC8ec54v\"]},\"project:/contracts/interfaces/IUsdOracle.sol\":{\"keccak256\":\"0xe93076c75786c51180946175e7257eb4126c53645f110fc3a47d0639a653928a\",\"license\":\"Unlicense\",\"urls\":[\"bzz-raw://38ef90584e16b61575c1ef658fb3252c40355fdb0eb733d6a91a85d6a21aedec\",\"dweb:/ipfs/QmRzHnmYsUNXjWQHVGsSHrMRPf6Wku2cfPM6otQXEGt2ek\"]},\"project:/contracts/main/Batch.sol\":{\"keccak256\":\"0xb39df36817092a3d23cb60aa1d06ee8bd0fc344936802e1e13f537d4528c0261\",\"license\":\"Unlicense\",\"urls\":[\"bzz-raw://0c585deaefa27dcc80e61bb2f0390d4e98c3aade2471296f97124af8f1da5fce\",\"dweb:/ipfs/QmbM8UYmoWE3vbBwqqWwYD8VCsMtXgajpJ516sk1ugHx3u\"]},\"project:/contracts/main/Moderator.sol\":{\"keccak256\":\"0x3d2917fae9d060553bd929b9877150fef8897b838e03529e9a0f1031f13549e0\",\"license\":\"Unlicense\",\"urls\":[\"bzz-raw://b7d95c18db39e21d96e7114eff2bbd87e241ce0db1d9f888e5a5f8b4b22287b5\",\"dweb:/ipfs/QmWWJVryBwEMPHPeUvwpSQZjEQ9uiMspGh4EXkYtC4Musz\"]},\"project:/contracts/main/ReceiptNFT.sol\":{\"keccak256\":\"0xc280fb683738ab61f1c160dae1162ccff099d163c9e15f1c0e17a3b795d163ac\",\"license\":\"Unlicense\",\"urls\":[\"bzz-raw://12176fb9c0138ec99753b3b5a47d96fddfe4ad1367dc89765a48f29f98c01500\",\"dweb:/ipfs/QmY9Yk84o3vZE3MmkrBBHygDZy5fNC8bn7zxnsi7DWNFjZ\"]},\"project:/contracts/main/SharesToken.sol\":{\"keccak256\":\"0x7f5c62c43f4716083b7b8c25864ca3fa3a4d197100121f477bf1a76f652077d6\",\"license\":\"Unlicense\",\"urls\":[\"bzz-raw://9a82592452b3e055588fadd0345c01393e3e8884a6aa3da3bccd1c7e87830ed0\",\"dweb:/ipfs/QmZ2Favck6GEdV1pKuwX65rgTx9zgUKQtHxpCYnATefMDy\"]},\"project:/contracts/main/StrategyRouter.sol\":{\"keccak256\":\"0x561010964cc4452e8ec6579693106e6406305aa41abe1ddbb444a1eac1348f5d\",\"license\":\"Unlicense\",\"urls\":[\"bzz-raw://4fa13fe563469602d0e674e6aad44e4f64c27ab3309facc15ea9941410f4d091\",\"dweb:/ipfs/QmPHEKK58xrraq1izyvA97VMMnPb7tRnapLD5cAboY4abj\"]},\"project:/contracts/main/StrategyRouterLib.sol\":{\"keccak256\":\"0xa78515ae7ec2c354a400307e4e6f72304370a74018f240cd6a43e8c1ab814e62\",\"license\":\"Unlicense\",\"urls\":[\"bzz-raw://ffd95c3b1ef6a0c1395486f14c78acdc00a6fda61de6f3aa32bb1aa81ce56e04\",\"dweb:/ipfs/QmQtVvvSpVuMYqRfdgixsbcGL1o5mwFPTG5YU6FBtp9Y62\"]}},\"version\":1}",
+  "bytecode": "0x",
+  "deployedBytecode": "0x",
+  "immutableReferences": {},
+  "generatedSources": [],
+  "deployedGeneratedSources": [],
+  "sourceMap": "",
+  "deployedSourceMap": "",
+  "source": "//SPDX-License-Identifier: Unlicense\r\npragma solidity ^0.8.0;\r\n\r\nimport \"../main/StrategyRouter.sol\";\r\n\r\ninterface IStrategy {\r\n     /* EVENTS */\r\n\r\n    /// @notice Fires when user deposits in batch.\r\n    /// @param token Supported token that user want to deposit.\r\n    /// @param amount Amount of `token` transferred from user.\r\n    event Deposit(address indexed user, address token, uint256 amount);\r\n    /// @notice Fires when batch is deposited into strategies.\r\n    /// @param closedCycleId Index of the cycle that is closed.\r\n    /// @param amount Sum of different tokens deposited into strategies.\r\n    event AllocateToStrategies(uint256 indexed closedCycleId, uint256 amount);\r\n    /// @notice Fires when user withdraw from batch.\r\n    /// @param token Supported token that user requested to receive after withdraw.\r\n    /// @param amount Amount of `token` received by user.\r\n    event WithdrawFromBatch(address indexed user, address token, uint256 amount);\r\n    /// @notice Fires when user withdraw from strategies.\r\n    /// @param token Supported token that user requested to receive after withdraw.\r\n    /// @param amount Amount of `token` received by user.\r\n    event WithdrawFromStrategies(address indexed user, address token, uint256 amount);\r\n    /// @notice Fires when user converts his receipt into shares token.\r\n    /// @param shares Amount of shares received by user.\r\n    /// @param receiptIds Indexes of the receipts burned.\r\n    event RedeemReceiptsToShares(address indexed user, uint256 shares, uint256[] receiptIds);\r\n    /// @notice Fires when moderator converts foreign receipts into shares token.\r\n    /// @param receiptIds Indexes of the receipts burned.\r\n    event RedeemReceiptsToSharesByModerators(address indexed moderator, uint256[] receiptIds);\r\n\r\n    // Events for setters.\r\n    event SetMinDeposit(uint256 newAmount);\r\n    event SetCycleDuration(uint256 newDuration);\r\n    event SetMinUsdPerCycle(uint256 newAmount);\r\n    event SetFeeAddress(address newAddress);\r\n    event SetFeePercent(uint256 newPercent);\r\n    event SetAddresses(\r\n        Exchange _exchange,\r\n        IUsdOracle _oracle,\r\n        SharesToken _sharesToken,\r\n        Batch _batch,\r\n        ReceiptNFT _receiptNft\r\n    );\r\n\r\n    /* ERRORS */\r\n    error AmountExceedTotalSupply();\r\n    error UnsupportedToken();\r\n    error NotReceiptOwner();\r\n    error CycleNotClosed();\r\n    error CycleClosed();\r\n    error InsufficientShares();\r\n    error DuplicateStrategy();\r\n    error CycleNotClosableYet();\r\n    error AmountNotSpecified();\r\n    error CantRemoveLastStrategy();\r\n    error NothingToRebalance();\r\n    error NotModerator();\r\n    error NodepositDetected();\r\n\r\n    struct StrategyInfo {\r\n        address strategyAddress;\r\n        address depositToken;\r\n        uint256 weight;\r\n    }\r\n\r\n    struct Cycle {\r\n        // block.timestamp at which cycle started\r\n        uint256 startAt;\r\n        // batch USD value before deposited into strategies\r\n        uint256 totalDepositedInUsd;\r\n        // price per share in USD\r\n        uint256 pricePerShare;\r\n        // USD value received by strategies\r\n        uint256 receivedByStrategiesInUsd;\r\n        // tokens price at time of the deposit to strategies\r\n        mapping(address => uint256) prices;\r\n    }\r\n\r\n    /// @notice Token used to deposit to strategy.\r\n    function depositToken() external view returns (address);\r\n\r\n    /// @notice Deposit token to strategy.\r\n    function deposit(uint256 amount) external;\r\n\r\n    /// @notice Withdraw tokens from strategy.\r\n    /// @dev Max withdrawable amount is returned by totalTokens.\r\n    function withdraw(uint256 amount) external returns (uint256 amountWithdrawn);\r\n\r\n    /// @notice Harvest rewards and reinvest them.\r\n    function compound() external;\r\n\r\n    /// @notice Approximated amount of token on the strategy.\r\n    function totalTokens() external view returns (uint256);\r\n\r\n    /// @notice Withdraw all tokens from strategy.\r\n    function withdrawAll() external returns (uint256 amountWithdrawn);\r\n}",
+  "sourcePath": "C:\\Users\\FVO_MMILLLER\\Desktop\\elvolution\\Testers\\contracts\\interfaces\\IStrategy.sol",
+  "ast": {
+    "absolutePath": "project:/contracts/interfaces/IStrategy.sol",
+    "exportedSymbols": {
+      "Batch": [
+        22277
+      ],
+      "Context": [
+        4494
+      ],
+      "ERC20": [
+        3757
+      ],
+      "EnumerableSet": [
+        5405
+      ],
+      "EnumerableSetExtension": [
+        17493
+      ],
+      "Exchange": [
+        18733
+      ],
+      "IERC20": [
+        3835
+      ],
+      "IERC20Metadata": [
+        3860
+      ],
+      "IStrategy": [
+        20909
+      ],
+      "IUniswapV2Router01": [
+        6018
+      ],
+      "IUniswapV2Router02": [
+        6106
+      ],
+      "IUsdOracle": [
+        20922
+      ],
+      "Moderator": [
+        22356
+      ],
+      "Ownable": [
+        3131
+      ],
+      "ReceiptNFT": [
+        22753
+      ],
+      "SharesToken": [
+        22848
+      ],
+      "StrategyRouter": [
+        24656
+      ],
+      "StrategyRouterLib": [
+        25706
+      ]
+    },
+    "id": 20910,
+    "license": "Unlicense",
+    "nodeType": "SourceUnit",
+    "nodes": [
+      {
+        "id": 20736,
+        "literals": [
+          "solidity",
+          "^",
+          "0.8",
+          ".0"
+        ],
+        "nodeType": "PragmaDirective",
+        "src": "38:23:60"
+      },
+      {
+        "absolutePath": "project:/contracts/main/StrategyRouter.sol",
+        "file": "../main/StrategyRouter.sol",
+        "id": 20737,
+        "nameLocation": "-1:-1:-1",
+        "nodeType": "ImportDirective",
+        "scope": 20910,
+        "sourceUnit": 24657,
+        "src": "65:36:60",
+        "symbolAliases": [],
+        "unitAlias": ""
+      },
+      {
+        "abstract": false,
+        "baseContracts": [],
+        "canonicalName": "IStrategy",
+        "contractDependencies": [],
+        "contractKind": "interface",
+        "fullyImplemented": false,
+        "id": 20909,
+        "linearizedBaseContracts": [
+          20909
+        ],
+        "name": "IStrategy",
+        "nameLocation": "115:9:60",
+        "nodeType": "ContractDefinition",
+        "nodes": [
+          {
+            "anonymous": false,
+            "documentation": {
+              "id": 20738,
+              "nodeType": "StructuredDocumentation",
+              "src": "153:175:60",
+              "text": "@notice Fires when user deposits in batch.\n @param token Supported token that user want to deposit.\n @param amount Amount of `token` transferred from user."
+            },
+            "eventSelector": "5548c837ab068cf56a2c2479df0882a4922fd203edb7517321831d95078c5f62",
+            "id": 20746,
+            "name": "Deposit",
+            "nameLocation": "340:7:60",
+            "nodeType": "EventDefinition",
+            "parameters": {
+              "id": 20745,
+              "nodeType": "ParameterList",
+              "parameters": [
+                {
+                  "constant": false,
+                  "id": 20740,
+                  "indexed": true,
+                  "mutability": "mutable",
+                  "name": "user",
+                  "nameLocation": "364:4:60",
+                  "nodeType": "VariableDeclaration",
+                  "scope": 20746,
+                  "src": "348:20:60",
+                  "stateVariable": false,
+                  "storageLocation": "default",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_address",
+                    "typeString": "address"
+                  },
+                  "typeName": {
+                    "id": 20739,
+                    "name": "address",
+                    "nodeType": "ElementaryTypeName",
+                    "src": "348:7:60",
+                    "stateMutability": "nonpayable",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_address",
+                      "typeString": "address"
+                    }
+                  },
+                  "visibility": "internal"
+                },
+                {
+                  "constant": false,
+                  "id": 20742,
+                  "indexed": false,
+                  "mutability": "mutable",
+                  "name": "token",
+                  "nameLocation": "378:5:60",
+                  "nodeType": "VariableDeclaration",
+                  "scope": 20746,
+                  "src": "370:13:60",
+                  "stateVariable": false,
+                  "storageLocation": "default",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_address",
+                    "typeString": "address"
+                  },
+                  "typeName": {
+                    "id": 20741,
+                    "name": "address",
+                    "nodeType": "ElementaryTypeName",
+                    "src": "370:7:60",
+                    "stateMutability": "nonpayable",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_address",
+                      "typeString": "address"
+                    }
+                  },
+                  "visibility": "internal"
+                },
+                {
+                  "constant": false,
+                  "id": 20744,
+                  "indexed": false,
+                  "mutability": "mutable",
+                  "name": "amount",
+                  "nameLocation": "393:6:60",
+                  "nodeType": "VariableDeclaration",
+                  "scope": 20746,
+                  "src": "385:14:60",
+                  "stateVariable": false,
+                  "storageLocation": "default",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_uint256",
+                    "typeString": "uint256"
+                  },
+                  "typeName": {
+                    "id": 20743,
+                    "name": "uint256",
+                    "nodeType": "ElementaryTypeName",
+                    "src": "385:7:60",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_uint256",
+                      "typeString": "uint256"
+                    }
+                  },
+                  "visibility": "internal"
+                }
+              ],
+              "src": "347:53:60"
+            },
+            "src": "334:67:60"
+          },
+          {
+            "anonymous": false,
+            "documentation": {
+              "id": 20747,
+              "nodeType": "StructuredDocumentation",
+              "src": "407:197:60",
+              "text": "@notice Fires when batch is deposited into strategies.\n @param closedCycleId Index of the cycle that is closed.\n @param amount Sum of different tokens deposited into strategies."
+            },
+            "eventSelector": "9050602c4afcf506208e847e2ba8e1c935dba51897ee6f3aac4cd84f832b7c24",
+            "id": 20753,
+            "name": "AllocateToStrategies",
+            "nameLocation": "616:20:60",
+            "nodeType": "EventDefinition",
+            "parameters": {
+              "id": 20752,
+              "nodeType": "ParameterList",
+              "parameters": [
+                {
+                  "constant": false,
+                  "id": 20749,
+                  "indexed": true,
+                  "mutability": "mutable",
+                  "name": "closedCycleId",
+                  "nameLocation": "653:13:60",
+                  "nodeType": "VariableDeclaration",
+                  "scope": 20753,
+                  "src": "637:29:60",
+                  "stateVariable": false,
+                  "storageLocation": "default",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_uint256",
+                    "typeString": "uint256"
+                  },
+                  "typeName": {
+                    "id": 20748,
+                    "name": "uint256",
+                    "nodeType": "ElementaryTypeName",
+                    "src": "637:7:60",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_uint256",
+                      "typeString": "uint256"
+                    }
+                  },
+                  "visibility": "internal"
+                },
+                {
+                  "constant": false,
+                  "id": 20751,
+                  "indexed": false,
+                  "mutability": "mutable",
+                  "name": "amount",
+                  "nameLocation": "676:6:60",
+                  "nodeType": "VariableDeclaration",
+                  "scope": 20753,
+                  "src": "668:14:60",
+                  "stateVariable": false,
+                  "storageLocation": "default",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_uint256",
+                    "typeString": "uint256"
+                  },
+                  "typeName": {
+                    "id": 20750,
+                    "name": "uint256",
+                    "nodeType": "ElementaryTypeName",
+                    "src": "668:7:60",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_uint256",
+                      "typeString": "uint256"
+                    }
+                  },
+                  "visibility": "internal"
+                }
+              ],
+              "src": "636:47:60"
+            },
+            "src": "610:74:60"
+          },
+          {
+            "anonymous": false,
+            "documentation": {
+              "id": 20754,
+              "nodeType": "StructuredDocumentation",
+              "src": "690:192:60",
+              "text": "@notice Fires when user withdraw from batch.\n @param token Supported token that user requested to receive after withdraw.\n @param amount Amount of `token` received by user."
+            },
+            "eventSelector": "b1599cb702c470f03d1927e1905cbcc743c28ba815828b7ee4eb51f84af52099",
+            "id": 20762,
+            "name": "WithdrawFromBatch",
+            "nameLocation": "894:17:60",
+            "nodeType": "EventDefinition",
+            "parameters": {
+              "id": 20761,
+              "nodeType": "ParameterList",
+              "parameters": [
+                {
+                  "constant": false,
+                  "id": 20756,
+                  "indexed": true,
+                  "mutability": "mutable",
+                  "name": "user",
+                  "nameLocation": "928:4:60",
+                  "nodeType": "VariableDeclaration",
+                  "scope": 20762,
+                  "src": "912:20:60",
+                  "stateVariable": false,
+                  "storageLocation": "default",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_address",
+                    "typeString": "address"
+                  },
+                  "typeName": {
+                    "id": 20755,
+                    "name": "address",
+                    "nodeType": "ElementaryTypeName",
+                    "src": "912:7:60",
+                    "stateMutability": "nonpayable",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_address",
+                      "typeString": "address"
+                    }
+                  },
+                  "visibility": "internal"
+                },
+                {
+                  "constant": false,
+                  "id": 20758,
+                  "indexed": false,
+                  "mutability": "mutable",
+                  "name": "token",
+                  "nameLocation": "942:5:60",
+                  "nodeType": "VariableDeclaration",
+                  "scope": 20762,
+                  "src": "934:13:60",
+                  "stateVariable": false,
+                  "storageLocation": "default",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_address",
+                    "typeString": "address"
+                  },
+                  "typeName": {
+                    "id": 20757,
+                    "name": "address",
+                    "nodeType": "ElementaryTypeName",
+                    "src": "934:7:60",
+                    "stateMutability": "nonpayable",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_address",
+                      "typeString": "address"
+                    }
+                  },
+                  "visibility": "internal"
+                },
+                {
+                  "constant": false,
+                  "id": 20760,
+                  "indexed": false,
+                  "mutability": "mutable",
+                  "name": "amount",
+                  "nameLocation": "957:6:60",
+                  "nodeType": "VariableDeclaration",
+                  "scope": 20762,
+                  "src": "949:14:60",
+                  "stateVariable": false,
+                  "storageLocation": "default",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_uint256",
+                    "typeString": "uint256"
+                  },
+                  "typeName": {
+                    "id": 20759,
+                    "name": "uint256",
+                    "nodeType": "ElementaryTypeName",
+                    "src": "949:7:60",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_uint256",
+                      "typeString": "uint256"
+                    }
+                  },
+                  "visibility": "internal"
+                }
+              ],
+              "src": "911:53:60"
+            },
+            "src": "888:77:60"
+          },
+          {
+            "anonymous": false,
+            "documentation": {
+              "id": 20763,
+              "nodeType": "StructuredDocumentation",
+              "src": "971:197:60",
+              "text": "@notice Fires when user withdraw from strategies.\n @param token Supported token that user requested to receive after withdraw.\n @param amount Amount of `token` received by user."
+            },
+            "eventSelector": "c024f8f3e7b557f9f59d1cd7148d83fb9d36683f4058cc1f3ee7c59c95b0d67a",
+            "id": 20771,
+            "name": "WithdrawFromStrategies",
+            "nameLocation": "1180:22:60",
+            "nodeType": "EventDefinition",
+            "parameters": {
+              "id": 20770,
+              "nodeType": "ParameterList",
+              "parameters": [
+                {
+                  "constant": false,
+                  "id": 20765,
+                  "indexed": true,
+                  "mutability": "mutable",
+                  "name": "user",
+                  "nameLocation": "1219:4:60",
+                  "nodeType": "VariableDeclaration",
+                  "scope": 20771,
+                  "src": "1203:20:60",
+                  "stateVariable": false,
+                  "storageLocation": "default",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_address",
+                    "typeString": "address"
+                  },
+                  "typeName": {
+                    "id": 20764,
+                    "name": "address",
+                    "nodeType": "ElementaryTypeName",
+                    "src": "1203:7:60",
+                    "stateMutability": "nonpayable",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_address",
+                      "typeString": "address"
+                    }
+                  },
+                  "visibility": "internal"
+                },
+                {
+                  "constant": false,
+                  "id": 20767,
+                  "indexed": false,
+                  "mutability": "mutable",
+                  "name": "token",
+                  "nameLocation": "1233:5:60",
+                  "nodeType": "VariableDeclaration",
+                  "scope": 20771,
+                  "src": "1225:13:60",
+                  "stateVariable": false,
+                  "storageLocation": "default",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_address",
+                    "typeString": "address"
+                  },
+                  "typeName": {
+                    "id": 20766,
+                    "name": "address",
+                    "nodeType": "ElementaryTypeName",
+                    "src": "1225:7:60",
+                    "stateMutability": "nonpayable",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_address",
+                      "typeString": "address"
+                    }
+                  },
+                  "visibility": "internal"
+                },
+                {
+                  "constant": false,
+                  "id": 20769,
+                  "indexed": false,
+                  "mutability": "mutable",
+                  "name": "amount",
+                  "nameLocation": "1248:6:60",
+                  "nodeType": "VariableDeclaration",
+                  "scope": 20771,
+                  "src": "1240:14:60",
+                  "stateVariable": false,
+                  "storageLocation": "default",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_uint256",
+                    "typeString": "uint256"
+                  },
+                  "typeName": {
+                    "id": 20768,
+                    "name": "uint256",
+                    "nodeType": "ElementaryTypeName",
+                    "src": "1240:7:60",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_uint256",
+                      "typeString": "uint256"
+                    }
+                  },
+                  "visibility": "internal"
+                }
+              ],
+              "src": "1202:53:60"
+            },
+            "src": "1174:82:60"
+          },
+          {
+            "anonymous": false,
+            "documentation": {
+              "id": 20772,
+              "nodeType": "StructuredDocumentation",
+              "src": "1262:184:60",
+              "text": "@notice Fires when user converts his receipt into shares token.\n @param shares Amount of shares received by user.\n @param receiptIds Indexes of the receipts burned."
+            },
+            "eventSelector": "e0b02703cefb9a8f9de0632e77e258c217e450c01adf4d1d1a4a0da289cbb3e2",
+            "id": 20781,
+            "name": "RedeemReceiptsToShares",
+            "nameLocation": "1458:22:60",
+            "nodeType": "EventDefinition",
+            "parameters": {
+              "id": 20780,
+              "nodeType": "ParameterList",
+              "parameters": [
+                {
+                  "constant": false,
+                  "id": 20774,
+                  "indexed": true,
+                  "mutability": "mutable",
+                  "name": "user",
+                  "nameLocation": "1497:4:60",
+                  "nodeType": "VariableDeclaration",
+                  "scope": 20781,
+                  "src": "1481:20:60",
+                  "stateVariable": false,
+                  "storageLocation": "default",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_address",
+                    "typeString": "address"
+                  },
+                  "typeName": {
+                    "id": 20773,
+                    "name": "address",
+                    "nodeType": "ElementaryTypeName",
+                    "src": "1481:7:60",
+                    "stateMutability": "nonpayable",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_address",
+                      "typeString": "address"
+                    }
+                  },
+                  "visibility": "internal"
+                },
+                {
+                  "constant": false,
+                  "id": 20776,
+                  "indexed": false,
+                  "mutability": "mutable",
+                  "name": "shares",
+                  "nameLocation": "1511:6:60",
+                  "nodeType": "VariableDeclaration",
+                  "scope": 20781,
+                  "src": "1503:14:60",
+                  "stateVariable": false,
+                  "storageLocation": "default",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_uint256",
+                    "typeString": "uint256"
+                  },
+                  "typeName": {
+                    "id": 20775,
+                    "name": "uint256",
+                    "nodeType": "ElementaryTypeName",
+                    "src": "1503:7:60",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_uint256",
+                      "typeString": "uint256"
+                    }
+                  },
+                  "visibility": "internal"
+                },
+                {
+                  "constant": false,
+                  "id": 20779,
+                  "indexed": false,
+                  "mutability": "mutable",
+                  "name": "receiptIds",
+                  "nameLocation": "1529:10:60",
+                  "nodeType": "VariableDeclaration",
+                  "scope": 20781,
+                  "src": "1519:20:60",
+                  "stateVariable": false,
+                  "storageLocation": "default",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_array$_t_uint256_$dyn_memory_ptr",
+                    "typeString": "uint256[]"
+                  },
+                  "typeName": {
+                    "baseType": {
+                      "id": 20777,
+                      "name": "uint256",
+                      "nodeType": "ElementaryTypeName",
+                      "src": "1519:7:60",
+                      "typeDescriptions": {
+                        "typeIdentifier": "t_uint256",
+                        "typeString": "uint256"
+                      }
+                    },
+                    "id": 20778,
+                    "nodeType": "ArrayTypeName",
+                    "src": "1519:9:60",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_array$_t_uint256_$dyn_storage_ptr",
+                      "typeString": "uint256[]"
+                    }
+                  },
+                  "visibility": "internal"
+                }
+              ],
+              "src": "1480:60:60"
+            },
+            "src": "1452:89:60"
+          },
+          {
+            "anonymous": false,
+            "documentation": {
+              "id": 20782,
+              "nodeType": "StructuredDocumentation",
+              "src": "1547:136:60",
+              "text": "@notice Fires when moderator converts foreign receipts into shares token.\n @param receiptIds Indexes of the receipts burned."
+            },
+            "eventSelector": "1ea9832714787d86443a74dc04c6faae554c37128086e2942302cce7d9e81932",
+            "id": 20789,
+            "name": "RedeemReceiptsToSharesByModerators",
+            "nameLocation": "1695:34:60",
+            "nodeType": "EventDefinition",
+            "parameters": {
+              "id": 20788,
+              "nodeType": "ParameterList",
+              "parameters": [
+                {
+                  "constant": false,
+                  "id": 20784,
+                  "indexed": true,
+                  "mutability": "mutable",
+                  "name": "moderator",
+                  "nameLocation": "1746:9:60",
+                  "nodeType": "VariableDeclaration",
+                  "scope": 20789,
+                  "src": "1730:25:60",
+                  "stateVariable": false,
+                  "storageLocation": "default",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_address",
+                    "typeString": "address"
+                  },
+                  "typeName": {
+                    "id": 20783,
+                    "name": "address",
+                    "nodeType": "ElementaryTypeName",
+                    "src": "1730:7:60",
+                    "stateMutability": "nonpayable",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_address",
+                      "typeString": "address"
+                    }
+                  },
+                  "visibility": "internal"
+                },
+                {
+                  "constant": false,
+                  "id": 20787,
+                  "indexed": false,
+                  "mutability": "mutable",
+                  "name": "receiptIds",
+                  "nameLocation": "1767:10:60",
+                  "nodeType": "VariableDeclaration",
+                  "scope": 20789,
+                  "src": "1757:20:60",
+                  "stateVariable": false,
+                  "storageLocation": "default",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_array$_t_uint256_$dyn_memory_ptr",
+                    "typeString": "uint256[]"
+                  },
+                  "typeName": {
+                    "baseType": {
+                      "id": 20785,
+                      "name": "uint256",
+                      "nodeType": "ElementaryTypeName",
+                      "src": "1757:7:60",
+                      "typeDescriptions": {
+                        "typeIdentifier": "t_uint256",
+                        "typeString": "uint256"
+                      }
+                    },
+                    "id": 20786,
+                    "nodeType": "ArrayTypeName",
+                    "src": "1757:9:60",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_array$_t_uint256_$dyn_storage_ptr",
+                      "typeString": "uint256[]"
+                    }
+                  },
+                  "visibility": "internal"
+                }
+              ],
+              "src": "1729:49:60"
+            },
+            "src": "1689:90:60"
+          },
+          {
+            "anonymous": false,
+            "eventSelector": "8335b9d95c5f85895bf6ed3f9d159211b514ab77f7e20509e553c657cfa39b4e",
+            "id": 20793,
+            "name": "SetMinDeposit",
+            "nameLocation": "1821:13:60",
+            "nodeType": "EventDefinition",
+            "parameters": {
+              "id": 20792,
+              "nodeType": "ParameterList",
+              "parameters": [
+                {
+                  "constant": false,
+                  "id": 20791,
+                  "indexed": false,
+                  "mutability": "mutable",
+                  "name": "newAmount",
+                  "nameLocation": "1843:9:60",
+                  "nodeType": "VariableDeclaration",
+                  "scope": 20793,
+                  "src": "1835:17:60",
+                  "stateVariable": false,
+                  "storageLocation": "default",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_uint256",
+                    "typeString": "uint256"
+                  },
+                  "typeName": {
+                    "id": 20790,
+                    "name": "uint256",
+                    "nodeType": "ElementaryTypeName",
+                    "src": "1835:7:60",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_uint256",
+                      "typeString": "uint256"
+                    }
+                  },
+                  "visibility": "internal"
+                }
+              ],
+              "src": "1834:19:60"
+            },
+            "src": "1815:39:60"
+          },
+          {
+            "anonymous": false,
+            "eventSelector": "48836419bf4e636fd244cf85ef6507ed459662fcf36bd040775e5fb746455f66",
+            "id": 20797,
+            "name": "SetCycleDuration",
+            "nameLocation": "1866:16:60",
+            "nodeType": "EventDefinition",
+            "parameters": {
+              "id": 20796,
+              "nodeType": "ParameterList",
+              "parameters": [
+                {
+                  "constant": false,
+                  "id": 20795,
+                  "indexed": false,
+                  "mutability": "mutable",
+                  "name": "newDuration",
+                  "nameLocation": "1891:11:60",
+                  "nodeType": "VariableDeclaration",
+                  "scope": 20797,
+                  "src": "1883:19:60",
+                  "stateVariable": false,
+                  "storageLocation": "default",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_uint256",
+                    "typeString": "uint256"
+                  },
+                  "typeName": {
+                    "id": 20794,
+                    "name": "uint256",
+                    "nodeType": "ElementaryTypeName",
+                    "src": "1883:7:60",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_uint256",
+                      "typeString": "uint256"
+                    }
+                  },
+                  "visibility": "internal"
+                }
+              ],
+              "src": "1882:21:60"
+            },
+            "src": "1860:44:60"
+          },
+          {
+            "anonymous": false,
+            "eventSelector": "c2a104c90d506191cfd8880d5f25e266372dc979de6702e8528115e94302b4ea",
+            "id": 20801,
+            "name": "SetMinUsdPerCycle",
+            "nameLocation": "1916:17:60",
+            "nodeType": "EventDefinition",
+            "parameters": {
+              "id": 20800,
+              "nodeType": "ParameterList",
+              "parameters": [
+                {
+                  "constant": false,
+                  "id": 20799,
+                  "indexed": false,
+                  "mutability": "mutable",
+                  "name": "newAmount",
+                  "nameLocation": "1942:9:60",
+                  "nodeType": "VariableDeclaration",
+                  "scope": 20801,
+                  "src": "1934:17:60",
+                  "stateVariable": false,
+                  "storageLocation": "default",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_uint256",
+                    "typeString": "uint256"
+                  },
+                  "typeName": {
+                    "id": 20798,
+                    "name": "uint256",
+                    "nodeType": "ElementaryTypeName",
+                    "src": "1934:7:60",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_uint256",
+                      "typeString": "uint256"
+                    }
+                  },
+                  "visibility": "internal"
+                }
+              ],
+              "src": "1933:19:60"
+            },
+            "src": "1910:43:60"
+          },
+          {
+            "anonymous": false,
+            "eventSelector": "fcb8a963756b148f85a52537b63147b6c4b40af694099c901ac3b99d317a2db8",
+            "id": 20805,
+            "name": "SetFeeAddress",
+            "nameLocation": "1965:13:60",
+            "nodeType": "EventDefinition",
+            "parameters": {
+              "id": 20804,
+              "nodeType": "ParameterList",
+              "parameters": [
+                {
+                  "constant": false,
+                  "id": 20803,
+                  "indexed": false,
+                  "mutability": "mutable",
+                  "name": "newAddress",
+                  "nameLocation": "1987:10:60",
+                  "nodeType": "VariableDeclaration",
+                  "scope": 20805,
+                  "src": "1979:18:60",
+                  "stateVariable": false,
+                  "storageLocation": "default",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_address",
+                    "typeString": "address"
+                  },
+                  "typeName": {
+                    "id": 20802,
+                    "name": "address",
+                    "nodeType": "ElementaryTypeName",
+                    "src": "1979:7:60",
+                    "stateMutability": "nonpayable",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_address",
+                      "typeString": "address"
+                    }
+                  },
+                  "visibility": "internal"
+                }
+              ],
+              "src": "1978:20:60"
+            },
+            "src": "1959:40:60"
+          },
+          {
+            "anonymous": false,
+            "eventSelector": "54b9dbb1167ce9a1e141b9c71f73394e64bf53da85077b4bcdcff626ba943f58",
+            "id": 20809,
+            "name": "SetFeePercent",
+            "nameLocation": "2011:13:60",
+            "nodeType": "EventDefinition",
+            "parameters": {
+              "id": 20808,
+              "nodeType": "ParameterList",
+              "parameters": [
+                {
+                  "constant": false,
+                  "id": 20807,
+                  "indexed": false,
+                  "mutability": "mutable",
+                  "name": "newPercent",
+                  "nameLocation": "2033:10:60",
+                  "nodeType": "VariableDeclaration",
+                  "scope": 20809,
+                  "src": "2025:18:60",
+                  "stateVariable": false,
+                  "storageLocation": "default",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_uint256",
+                    "typeString": "uint256"
+                  },
+                  "typeName": {
+                    "id": 20806,
+                    "name": "uint256",
+                    "nodeType": "ElementaryTypeName",
+                    "src": "2025:7:60",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_uint256",
+                      "typeString": "uint256"
+                    }
+                  },
+                  "visibility": "internal"
+                }
+              ],
+              "src": "2024:20:60"
+            },
+            "src": "2005:40:60"
+          },
+          {
+            "anonymous": false,
+            "eventSelector": "a10c70a2559ee9a0e78e9836ab24a7ae0783080a0489eb6885aab330c8935dff",
+            "id": 20826,
+            "name": "SetAddresses",
+            "nameLocation": "2057:12:60",
+            "nodeType": "EventDefinition",
+            "parameters": {
+              "id": 20825,
+              "nodeType": "ParameterList",
+              "parameters": [
+                {
+                  "constant": false,
+                  "id": 20812,
+                  "indexed": false,
+                  "mutability": "mutable",
+                  "name": "_exchange",
+                  "nameLocation": "2089:9:60",
+                  "nodeType": "VariableDeclaration",
+                  "scope": 20826,
+                  "src": "2080:18:60",
+                  "stateVariable": false,
+                  "storageLocation": "default",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_contract$_Exchange_$18733",
+                    "typeString": "contract Exchange"
+                  },
+                  "typeName": {
+                    "id": 20811,
+                    "nodeType": "UserDefinedTypeName",
+                    "pathNode": {
+                      "id": 20810,
+                      "name": "Exchange",
+                      "nodeType": "IdentifierPath",
+                      "referencedDeclaration": 18733,
+                      "src": "2080:8:60"
+                    },
+                    "referencedDeclaration": 18733,
+                    "src": "2080:8:60",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_contract$_Exchange_$18733",
+                      "typeString": "contract Exchange"
+                    }
+                  },
+                  "visibility": "internal"
+                },
+                {
+                  "constant": false,
+                  "id": 20815,
+                  "indexed": false,
+                  "mutability": "mutable",
+                  "name": "_oracle",
+                  "nameLocation": "2120:7:60",
+                  "nodeType": "VariableDeclaration",
+                  "scope": 20826,
+                  "src": "2109:18:60",
+                  "stateVariable": false,
+                  "storageLocation": "default",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_contract$_IUsdOracle_$20922",
+                    "typeString": "contract IUsdOracle"
+                  },
+                  "typeName": {
+                    "id": 20814,
+                    "nodeType": "UserDefinedTypeName",
+                    "pathNode": {
+                      "id": 20813,
+                      "name": "IUsdOracle",
+                      "nodeType": "IdentifierPath",
+                      "referencedDeclaration": 20922,
+                      "src": "2109:10:60"
+                    },
+                    "referencedDeclaration": 20922,
+                    "src": "2109:10:60",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_contract$_IUsdOracle_$20922",
+                      "typeString": "contract IUsdOracle"
+                    }
+                  },
+                  "visibility": "internal"
+                },
+                {
+                  "constant": false,
+                  "id": 20818,
+                  "indexed": false,
+                  "mutability": "mutable",
+                  "name": "_sharesToken",
+                  "nameLocation": "2150:12:60",
+                  "nodeType": "VariableDeclaration",
+                  "scope": 20826,
+                  "src": "2138:24:60",
+                  "stateVariable": false,
+                  "storageLocation": "default",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_contract$_SharesToken_$22848",
+                    "typeString": "contract SharesToken"
+                  },
+                  "typeName": {
+                    "id": 20817,
+                    "nodeType": "UserDefinedTypeName",
+                    "pathNode": {
+                      "id": 20816,
+                      "name": "SharesToken",
+                      "nodeType": "IdentifierPath",
+                      "referencedDeclaration": 22848,
+                      "src": "2138:11:60"
+                    },
+                    "referencedDeclaration": 22848,
+                    "src": "2138:11:60",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_contract$_SharesToken_$22848",
+                      "typeString": "contract SharesToken"
+                    }
+                  },
+                  "visibility": "internal"
+                },
+                {
+                  "constant": false,
+                  "id": 20821,
+                  "indexed": false,
+                  "mutability": "mutable",
+                  "name": "_batch",
+                  "nameLocation": "2179:6:60",
+                  "nodeType": "VariableDeclaration",
+                  "scope": 20826,
+                  "src": "2173:12:60",
+                  "stateVariable": false,
+                  "storageLocation": "default",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_contract$_Batch_$22277",
+                    "typeString": "contract Batch"
+                  },
+                  "typeName": {
+                    "id": 20820,
+                    "nodeType": "UserDefinedTypeName",
+                    "pathNode": {
+                      "id": 20819,
+                      "name": "Batch",
+                      "nodeType": "IdentifierPath",
+                      "referencedDeclaration": 22277,
+                      "src": "2173:5:60"
+                    },
+                    "referencedDeclaration": 22277,
+                    "src": "2173:5:60",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_contract$_Batch_$22277",
+                      "typeString": "contract Batch"
+                    }
+                  },
+                  "visibility": "internal"
+                },
+                {
+                  "constant": false,
+                  "id": 20824,
+                  "indexed": false,
+                  "mutability": "mutable",
+                  "name": "_receiptNft",
+                  "nameLocation": "2207:11:60",
+                  "nodeType": "VariableDeclaration",
+                  "scope": 20826,
+                  "src": "2196:22:60",
+                  "stateVariable": false,
+                  "storageLocation": "default",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_contract$_ReceiptNFT_$22753",
+                    "typeString": "contract ReceiptNFT"
+                  },
+                  "typeName": {
+                    "id": 20823,
+                    "nodeType": "UserDefinedTypeName",
+                    "pathNode": {
+                      "id": 20822,
+                      "name": "ReceiptNFT",
+                      "nodeType": "IdentifierPath",
+                      "referencedDeclaration": 22753,
+                      "src": "2196:10:60"
+                    },
+                    "referencedDeclaration": 22753,
+                    "src": "2196:10:60",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_contract$_ReceiptNFT_$22753",
+                      "typeString": "contract ReceiptNFT"
+                    }
+                  },
+                  "visibility": "internal"
+                }
+              ],
+              "src": "2069:156:60"
+            },
+            "src": "2051:175:60"
+          },
+          {
+            "errorSelector": "41d97ee7",
+            "id": 20828,
+            "name": "AmountExceedTotalSupply",
+            "nameLocation": "2258:23:60",
+            "nodeType": "ErrorDefinition",
+            "parameters": {
+              "id": 20827,
+              "nodeType": "ParameterList",
+              "parameters": [],
+              "src": "2281:2:60"
+            },
+            "src": "2252:32:60"
+          },
+          {
+            "errorSelector": "6a172882",
+            "id": 20830,
+            "name": "UnsupportedToken",
+            "nameLocation": "2296:16:60",
+            "nodeType": "ErrorDefinition",
+            "parameters": {
+              "id": 20829,
+              "nodeType": "ParameterList",
+              "parameters": [],
+              "src": "2312:2:60"
+            },
+            "src": "2290:25:60"
+          },
+          {
+            "errorSelector": "aef2965e",
+            "id": 20832,
+            "name": "NotReceiptOwner",
+            "nameLocation": "2327:15:60",
+            "nodeType": "ErrorDefinition",
+            "parameters": {
+              "id": 20831,
+              "nodeType": "ParameterList",
+              "parameters": [],
+              "src": "2342:2:60"
+            },
+            "src": "2321:24:60"
+          },
+          {
+            "errorSelector": "ba5dcb1e",
+            "id": 20834,
+            "name": "CycleNotClosed",
+            "nameLocation": "2357:14:60",
+            "nodeType": "ErrorDefinition",
+            "parameters": {
+              "id": 20833,
+              "nodeType": "ParameterList",
+              "parameters": [],
+              "src": "2371:2:60"
+            },
+            "src": "2351:23:60"
+          },
+          {
+            "errorSelector": "7937f72b",
+            "id": 20836,
+            "name": "CycleClosed",
+            "nameLocation": "2386:11:60",
+            "nodeType": "ErrorDefinition",
+            "parameters": {
+              "id": 20835,
+              "nodeType": "ParameterList",
+              "parameters": [],
+              "src": "2397:2:60"
+            },
+            "src": "2380:20:60"
+          },
+          {
+            "errorSelector": "39996567",
+            "id": 20838,
+            "name": "InsufficientShares",
+            "nameLocation": "2412:18:60",
+            "nodeType": "ErrorDefinition",
+            "parameters": {
+              "id": 20837,
+              "nodeType": "ParameterList",
+              "parameters": [],
+              "src": "2430:2:60"
+            },
+            "src": "2406:27:60"
+          },
+          {
+            "errorSelector": "cc5fde69",
+            "id": 20840,
+            "name": "DuplicateStrategy",
+            "nameLocation": "2445:17:60",
+            "nodeType": "ErrorDefinition",
+            "parameters": {
+              "id": 20839,
+              "nodeType": "ParameterList",
+              "parameters": [],
+              "src": "2462:2:60"
+            },
+            "src": "2439:26:60"
+          },
+          {
+            "errorSelector": "4b1e4806",
+            "id": 20842,
+            "name": "CycleNotClosableYet",
+            "nameLocation": "2477:19:60",
+            "nodeType": "ErrorDefinition",
+            "parameters": {
+              "id": 20841,
+              "nodeType": "ParameterList",
+              "parameters": [],
+              "src": "2496:2:60"
+            },
+            "src": "2471:28:60"
+          },
+          {
+            "errorSelector": "f9acdc61",
+            "id": 20844,
+            "name": "AmountNotSpecified",
+            "nameLocation": "2511:18:60",
+            "nodeType": "ErrorDefinition",
+            "parameters": {
+              "id": 20843,
+              "nodeType": "ParameterList",
+              "parameters": [],
+              "src": "2529:2:60"
+            },
+            "src": "2505:27:60"
+          },
+          {
+            "errorSelector": "39911ef3",
+            "id": 20846,
+            "name": "CantRemoveLastStrategy",
+            "nameLocation": "2544:22:60",
+            "nodeType": "ErrorDefinition",
+            "parameters": {
+              "id": 20845,
+              "nodeType": "ParameterList",
+              "parameters": [],
+              "src": "2566:2:60"
+            },
+            "src": "2538:31:60"
+          },
+          {
+            "errorSelector": "71645d0b",
+            "id": 20848,
+            "name": "NothingToRebalance",
+            "nameLocation": "2581:18:60",
+            "nodeType": "ErrorDefinition",
+            "parameters": {
+              "id": 20847,
+              "nodeType": "ParameterList",
+              "parameters": [],
+              "src": "2599:2:60"
+            },
+            "src": "2575:27:60"
+          },
+          {
+            "errorSelector": "eaa45d6a",
+            "id": 20850,
+            "name": "NotModerator",
+            "nameLocation": "2614:12:60",
+            "nodeType": "ErrorDefinition",
+            "parameters": {
+              "id": 20849,
+              "nodeType": "ParameterList",
+              "parameters": [],
+              "src": "2626:2:60"
+            },
+            "src": "2608:21:60"
+          },
+          {
+            "errorSelector": "259dfdd2",
+            "id": 20852,
+            "name": "NodepositDetected",
+            "nameLocation": "2641:17:60",
+            "nodeType": "ErrorDefinition",
+            "parameters": {
+              "id": 20851,
+              "nodeType": "ParameterList",
+              "parameters": [],
+              "src": "2658:2:60"
+            },
+            "src": "2635:26:60"
+          },
+          {
+            "canonicalName": "IStrategy.StrategyInfo",
+            "id": 20859,
+            "members": [
+              {
+                "constant": false,
+                "id": 20854,
+                "mutability": "mutable",
+                "name": "strategyAddress",
+                "nameLocation": "2708:15:60",
+                "nodeType": "VariableDeclaration",
+                "scope": 20859,
+                "src": "2700:23:60",
+                "stateVariable": false,
+                "storageLocation": "default",
+                "typeDescriptions": {
+                  "typeIdentifier": "t_address",
+                  "typeString": "address"
+                },
+                "typeName": {
+                  "id": 20853,
+                  "name": "address",
+                  "nodeType": "ElementaryTypeName",
+                  "src": "2700:7:60",
+                  "stateMutability": "nonpayable",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_address",
+                    "typeString": "address"
+                  }
+                },
+                "visibility": "internal"
+              },
+              {
+                "constant": false,
+                "id": 20856,
+                "mutability": "mutable",
+                "name": "depositToken",
+                "nameLocation": "2742:12:60",
+                "nodeType": "VariableDeclaration",
+                "scope": 20859,
+                "src": "2734:20:60",
+                "stateVariable": false,
+                "storageLocation": "default",
+                "typeDescriptions": {
+                  "typeIdentifier": "t_address",
+                  "typeString": "address"
+                },
+                "typeName": {
+                  "id": 20855,
+                  "name": "address",
+                  "nodeType": "ElementaryTypeName",
+                  "src": "2734:7:60",
+                  "stateMutability": "nonpayable",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_address",
+                    "typeString": "address"
+                  }
+                },
+                "visibility": "internal"
+              },
+              {
+                "constant": false,
+                "id": 20858,
+                "mutability": "mutable",
+                "name": "weight",
+                "nameLocation": "2773:6:60",
+                "nodeType": "VariableDeclaration",
+                "scope": 20859,
+                "src": "2765:14:60",
+                "stateVariable": false,
+                "storageLocation": "default",
+                "typeDescriptions": {
+                  "typeIdentifier": "t_uint256",
+                  "typeString": "uint256"
+                },
+                "typeName": {
+                  "id": 20857,
+                  "name": "uint256",
+                  "nodeType": "ElementaryTypeName",
+                  "src": "2765:7:60",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_uint256",
+                    "typeString": "uint256"
+                  }
+                },
+                "visibility": "internal"
+              }
+            ],
+            "name": "StrategyInfo",
+            "nameLocation": "2676:12:60",
+            "nodeType": "StructDefinition",
+            "scope": 20909,
+            "src": "2669:118:60",
+            "visibility": "public"
+          },
+          {
+            "canonicalName": "IStrategy.Cycle",
+            "id": 20872,
+            "members": [
+              {
+                "constant": false,
+                "id": 20861,
+                "mutability": "mutable",
+                "name": "startAt",
+                "nameLocation": "2878:7:60",
+                "nodeType": "VariableDeclaration",
+                "scope": 20872,
+                "src": "2870:15:60",
+                "stateVariable": false,
+                "storageLocation": "default",
+                "typeDescriptions": {
+                  "typeIdentifier": "t_uint256",
+                  "typeString": "uint256"
+                },
+                "typeName": {
+                  "id": 20860,
+                  "name": "uint256",
+                  "nodeType": "ElementaryTypeName",
+                  "src": "2870:7:60",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_uint256",
+                    "typeString": "uint256"
+                  }
+                },
+                "visibility": "internal"
+              },
+              {
+                "constant": false,
+                "id": 20863,
+                "mutability": "mutable",
+                "name": "totalDepositedInUsd",
+                "nameLocation": "2965:19:60",
+                "nodeType": "VariableDeclaration",
+                "scope": 20872,
+                "src": "2957:27:60",
+                "stateVariable": false,
+                "storageLocation": "default",
+                "typeDescriptions": {
+                  "typeIdentifier": "t_uint256",
+                  "typeString": "uint256"
+                },
+                "typeName": {
+                  "id": 20862,
+                  "name": "uint256",
+                  "nodeType": "ElementaryTypeName",
+                  "src": "2957:7:60",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_uint256",
+                    "typeString": "uint256"
+                  }
+                },
+                "visibility": "internal"
+              },
+              {
+                "constant": false,
+                "id": 20865,
+                "mutability": "mutable",
+                "name": "pricePerShare",
+                "nameLocation": "3038:13:60",
+                "nodeType": "VariableDeclaration",
+                "scope": 20872,
+                "src": "3030:21:60",
+                "stateVariable": false,
+                "storageLocation": "default",
+                "typeDescriptions": {
+                  "typeIdentifier": "t_uint256",
+                  "typeString": "uint256"
+                },
+                "typeName": {
+                  "id": 20864,
+                  "name": "uint256",
+                  "nodeType": "ElementaryTypeName",
+                  "src": "3030:7:60",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_uint256",
+                    "typeString": "uint256"
+                  }
+                },
+                "visibility": "internal"
+              },
+              {
+                "constant": false,
+                "id": 20867,
+                "mutability": "mutable",
+                "name": "receivedByStrategiesInUsd",
+                "nameLocation": "3115:25:60",
+                "nodeType": "VariableDeclaration",
+                "scope": 20872,
+                "src": "3107:33:60",
+                "stateVariable": false,
+                "storageLocation": "default",
+                "typeDescriptions": {
+                  "typeIdentifier": "t_uint256",
+                  "typeString": "uint256"
+                },
+                "typeName": {
+                  "id": 20866,
+                  "name": "uint256",
+                  "nodeType": "ElementaryTypeName",
+                  "src": "3107:7:60",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_uint256",
+                    "typeString": "uint256"
+                  }
+                },
+                "visibility": "internal"
+              },
+              {
+                "constant": false,
+                "id": 20871,
+                "mutability": "mutable",
+                "name": "prices",
+                "nameLocation": "3241:6:60",
+                "nodeType": "VariableDeclaration",
+                "scope": 20872,
+                "src": "3213:34:60",
+                "stateVariable": false,
+                "storageLocation": "default",
+                "typeDescriptions": {
+                  "typeIdentifier": "t_mapping$_t_address_$_t_uint256_$",
+                  "typeString": "mapping(address => uint256)"
+                },
+                "typeName": {
+                  "id": 20870,
+                  "keyType": {
+                    "id": 20868,
+                    "name": "address",
+                    "nodeType": "ElementaryTypeName",
+                    "src": "3221:7:60",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_address",
+                      "typeString": "address"
+                    }
+                  },
+                  "nodeType": "Mapping",
+                  "src": "3213:27:60",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_mapping$_t_address_$_t_uint256_$",
+                    "typeString": "mapping(address => uint256)"
+                  },
+                  "valueType": {
+                    "id": 20869,
+                    "name": "uint256",
+                    "nodeType": "ElementaryTypeName",
+                    "src": "3232:7:60",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_uint256",
+                      "typeString": "uint256"
+                    }
+                  }
+                },
+                "visibility": "internal"
+              }
+            ],
+            "name": "Cycle",
+            "nameLocation": "2802:5:60",
+            "nodeType": "StructDefinition",
+            "scope": 20909,
+            "src": "2795:460:60",
+            "visibility": "public"
+          },
+          {
+            "documentation": {
+              "id": 20873,
+              "nodeType": "StructuredDocumentation",
+              "src": "3263:46:60",
+              "text": "@notice Token used to deposit to strategy."
+            },
+            "functionSelector": "c89039c5",
+            "id": 20878,
+            "implemented": false,
+            "kind": "function",
+            "modifiers": [],
+            "name": "depositToken",
+            "nameLocation": "3324:12:60",
+            "nodeType": "FunctionDefinition",
+            "parameters": {
+              "id": 20874,
+              "nodeType": "ParameterList",
+              "parameters": [],
+              "src": "3336:2:60"
+            },
+            "returnParameters": {
+              "id": 20877,
+              "nodeType": "ParameterList",
+              "parameters": [
+                {
+                  "constant": false,
+                  "id": 20876,
+                  "mutability": "mutable",
+                  "name": "",
+                  "nameLocation": "-1:-1:-1",
+                  "nodeType": "VariableDeclaration",
+                  "scope": 20878,
+                  "src": "3362:7:60",
+                  "stateVariable": false,
+                  "storageLocation": "default",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_address",
+                    "typeString": "address"
+                  },
+                  "typeName": {
+                    "id": 20875,
+                    "name": "address",
+                    "nodeType": "ElementaryTypeName",
+                    "src": "3362:7:60",
+                    "stateMutability": "nonpayable",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_address",
+                      "typeString": "address"
+                    }
+                  },
+                  "visibility": "internal"
+                }
+              ],
+              "src": "3361:9:60"
+            },
+            "scope": 20909,
+            "src": "3315:56:60",
+            "stateMutability": "view",
+            "virtual": false,
+            "visibility": "external"
+          },
+          {
+            "documentation": {
+              "id": 20879,
+              "nodeType": "StructuredDocumentation",
+              "src": "3379:38:60",
+              "text": "@notice Deposit token to strategy."
+            },
+            "functionSelector": "b6b55f25",
+            "id": 20884,
+            "implemented": false,
+            "kind": "function",
+            "modifiers": [],
+            "name": "deposit",
+            "nameLocation": "3432:7:60",
+            "nodeType": "FunctionDefinition",
+            "parameters": {
+              "id": 20882,
+              "nodeType": "ParameterList",
+              "parameters": [
+                {
+                  "constant": false,
+                  "id": 20881,
+                  "mutability": "mutable",
+                  "name": "amount",
+                  "nameLocation": "3448:6:60",
+                  "nodeType": "VariableDeclaration",
+                  "scope": 20884,
+                  "src": "3440:14:60",
+                  "stateVariable": false,
+                  "storageLocation": "default",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_uint256",
+                    "typeString": "uint256"
+                  },
+                  "typeName": {
+                    "id": 20880,
+                    "name": "uint256",
+                    "nodeType": "ElementaryTypeName",
+                    "src": "3440:7:60",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_uint256",
+                      "typeString": "uint256"
+                    }
+                  },
+                  "visibility": "internal"
+                }
+              ],
+              "src": "3439:16:60"
+            },
+            "returnParameters": {
+              "id": 20883,
+              "nodeType": "ParameterList",
+              "parameters": [],
+              "src": "3464:0:60"
+            },
+            "scope": 20909,
+            "src": "3423:42:60",
+            "stateMutability": "nonpayable",
+            "virtual": false,
+            "visibility": "external"
+          },
+          {
+            "documentation": {
+              "id": 20885,
+              "nodeType": "StructuredDocumentation",
+              "src": "3473:108:60",
+              "text": "@notice Withdraw tokens from strategy.\n @dev Max withdrawable amount is returned by totalTokens."
+            },
+            "functionSelector": "2e1a7d4d",
+            "id": 20892,
+            "implemented": false,
+            "kind": "function",
+            "modifiers": [],
+            "name": "withdraw",
+            "nameLocation": "3596:8:60",
+            "nodeType": "FunctionDefinition",
+            "parameters": {
+              "id": 20888,
+              "nodeType": "ParameterList",
+              "parameters": [
+                {
+                  "constant": false,
+                  "id": 20887,
+                  "mutability": "mutable",
+                  "name": "amount",
+                  "nameLocation": "3613:6:60",
+                  "nodeType": "VariableDeclaration",
+                  "scope": 20892,
+                  "src": "3605:14:60",
+                  "stateVariable": false,
+                  "storageLocation": "default",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_uint256",
+                    "typeString": "uint256"
+                  },
+                  "typeName": {
+                    "id": 20886,
+                    "name": "uint256",
+                    "nodeType": "ElementaryTypeName",
+                    "src": "3605:7:60",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_uint256",
+                      "typeString": "uint256"
+                    }
+                  },
+                  "visibility": "internal"
+                }
+              ],
+              "src": "3604:16:60"
+            },
+            "returnParameters": {
+              "id": 20891,
+              "nodeType": "ParameterList",
+              "parameters": [
+                {
+                  "constant": false,
+                  "id": 20890,
+                  "mutability": "mutable",
+                  "name": "amountWithdrawn",
+                  "nameLocation": "3647:15:60",
+                  "nodeType": "VariableDeclaration",
+                  "scope": 20892,
+                  "src": "3639:23:60",
+                  "stateVariable": false,
+                  "storageLocation": "default",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_uint256",
+                    "typeString": "uint256"
+                  },
+                  "typeName": {
+                    "id": 20889,
+                    "name": "uint256",
+                    "nodeType": "ElementaryTypeName",
+                    "src": "3639:7:60",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_uint256",
+                      "typeString": "uint256"
+                    }
+                  },
+                  "visibility": "internal"
+                }
+              ],
+              "src": "3638:25:60"
+            },
+            "scope": 20909,
+            "src": "3587:77:60",
+            "stateMutability": "nonpayable",
+            "virtual": false,
+            "visibility": "external"
+          },
+          {
+            "documentation": {
+              "id": 20893,
+              "nodeType": "StructuredDocumentation",
+              "src": "3672:46:60",
+              "text": "@notice Harvest rewards and reinvest them."
+            },
+            "functionSelector": "f69e2046",
+            "id": 20896,
+            "implemented": false,
+            "kind": "function",
+            "modifiers": [],
+            "name": "compound",
+            "nameLocation": "3733:8:60",
+            "nodeType": "FunctionDefinition",
+            "parameters": {
+              "id": 20894,
+              "nodeType": "ParameterList",
+              "parameters": [],
+              "src": "3741:2:60"
+            },
+            "returnParameters": {
+              "id": 20895,
+              "nodeType": "ParameterList",
+              "parameters": [],
+              "src": "3752:0:60"
+            },
+            "scope": 20909,
+            "src": "3724:29:60",
+            "stateMutability": "nonpayable",
+            "virtual": false,
+            "visibility": "external"
+          },
+          {
+            "documentation": {
+              "id": 20897,
+              "nodeType": "StructuredDocumentation",
+              "src": "3761:57:60",
+              "text": "@notice Approximated amount of token on the strategy."
+            },
+            "functionSelector": "7e1c0c09",
+            "id": 20902,
+            "implemented": false,
+            "kind": "function",
+            "modifiers": [],
+            "name": "totalTokens",
+            "nameLocation": "3833:11:60",
+            "nodeType": "FunctionDefinition",
+            "parameters": {
+              "id": 20898,
+              "nodeType": "ParameterList",
+              "parameters": [],
+              "src": "3844:2:60"
+            },
+            "returnParameters": {
+              "id": 20901,
+              "nodeType": "ParameterList",
+              "parameters": [
+                {
+                  "constant": false,
+                  "id": 20900,
+                  "mutability": "mutable",
+                  "name": "",
+                  "nameLocation": "-1:-1:-1",
+                  "nodeType": "VariableDeclaration",
+                  "scope": 20902,
+                  "src": "3870:7:60",
+                  "stateVariable": false,
+                  "storageLocation": "default",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_uint256",
+                    "typeString": "uint256"
+                  },
+                  "typeName": {
+                    "id": 20899,
+                    "name": "uint256",
+                    "nodeType": "ElementaryTypeName",
+                    "src": "3870:7:60",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_uint256",
+                      "typeString": "uint256"
+                    }
+                  },
+                  "visibility": "internal"
+                }
+              ],
+              "src": "3869:9:60"
+            },
+            "scope": 20909,
+            "src": "3824:55:60",
+            "stateMutability": "view",
+            "virtual": false,
+            "visibility": "external"
+          },
+          {
+            "documentation": {
+              "id": 20903,
+              "nodeType": "StructuredDocumentation",
+              "src": "3887:46:60",
+              "text": "@notice Withdraw all tokens from strategy."
+            },
+            "functionSelector": "853828b6",
+            "id": 20908,
+            "implemented": false,
+            "kind": "function",
+            "modifiers": [],
+            "name": "withdrawAll",
+            "nameLocation": "3948:11:60",
+            "nodeType": "FunctionDefinition",
+            "parameters": {
+              "id": 20904,
+              "nodeType": "ParameterList",
+              "parameters": [],
+              "src": "3959:2:60"
+            },
+            "returnParameters": {
+              "id": 20907,
+              "nodeType": "ParameterList",
+              "parameters": [
+                {
+                  "constant": false,
+                  "id": 20906,
+                  "mutability": "mutable",
+                  "name": "amountWithdrawn",
+                  "nameLocation": "3988:15:60",
+                  "nodeType": "VariableDeclaration",
+                  "scope": 20908,
+                  "src": "3980:23:60",
+                  "stateVariable": false,
+                  "storageLocation": "default",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_uint256",
+                    "typeString": "uint256"
+                  },
+                  "typeName": {
+                    "id": 20905,
+                    "name": "uint256",
+                    "nodeType": "ElementaryTypeName",
+                    "src": "3980:7:60",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_uint256",
+                      "typeString": "uint256"
+                    }
+                  },
+                  "visibility": "internal"
+                }
+              ],
+              "src": "3979:25:60"
+            },
+            "scope": 20909,
+            "src": "3939:66:60",
+            "stateMutability": "nonpayable",
+            "virtual": false,
+            "visibility": "external"
+          }
+        ],
+        "scope": 20910,
+        "src": "105:3903:60",
+        "usedErrors": [
+          20828,
+          20830,
+          20832,
+          20834,
+          20836,
+          20838,
+          20840,
+          20842,
+          20844,
+          20846,
+          20848,
+          20850,
+          20852
+        ]
+      }
+    ],
+    "src": "38:3970:60"
+  },
+  "compiler": {
+    "name": "solc",
+    "version": "0.8.15+commit.e14f2714.Emscripten.clang"
+  },
+  "networks": {},
+  "schemaVersion": "3.4.8",
+  "updatedAt": "2022-09-08T16:23:07.837Z",
+  "devdoc": {
+    "events": {
+      "AllocateToStrategies(uint256,uint256)": {
+        "params": {
+          "amount": "Sum of different tokens deposited into strategies.",
+          "closedCycleId": "Index of the cycle that is closed."
+        }
+      },
+      "Deposit(address,address,uint256)": {
+        "params": {
+          "amount": "Amount of `token` transferred from user.",
+          "token": "Supported token that user want to deposit."
+        }
+      },
+      "RedeemReceiptsToShares(address,uint256,uint256[])": {
+        "params": {
+          "receiptIds": "Indexes of the receipts burned.",
+          "shares": "Amount of shares received by user."
+        }
+      },
+      "RedeemReceiptsToSharesByModerators(address,uint256[])": {
+        "params": {
+          "receiptIds": "Indexes of the receipts burned."
+        }
+      },
+      "WithdrawFromBatch(address,address,uint256)": {
+        "params": {
+          "amount": "Amount of `token` received by user.",
+          "token": "Supported token that user requested to receive after withdraw."
+        }
+      },
+      "WithdrawFromStrategies(address,address,uint256)": {
+        "params": {
+          "amount": "Amount of `token` received by user.",
+          "token": "Supported token that user requested to receive after withdraw."
+        }
+      }
+    },
+    "kind": "dev",
+    "methods": {
+      "withdraw(uint256)": {
+        "details": "Max withdrawable amount is returned by totalTokens."
+      }
+    },
+    "version": 1
+  },
+  "userdoc": {
+    "events": {
+      "AllocateToStrategies(uint256,uint256)": {
+        "notice": "Fires when batch is deposited into strategies."
+      },
+      "Deposit(address,address,uint256)": {
+        "notice": "Fires when user deposits in batch."
+      },
+      "RedeemReceiptsToShares(address,uint256,uint256[])": {
+        "notice": "Fires when user converts his receipt into shares token."
+      },
+      "RedeemReceiptsToSharesByModerators(address,uint256[])": {
+        "notice": "Fires when moderator converts foreign receipts into shares token."
+      },
+      "WithdrawFromBatch(address,address,uint256)": {
+        "notice": "Fires when user withdraw from batch."
+      },
+      "WithdrawFromStrategies(address,address,uint256)": {
+        "notice": "Fires when user withdraw from strategies."
+      }
+    },
+    "kind": "user",
+    "methods": {
+      "compound()": {
+        "notice": "Harvest rewards and reinvest them."
+      },
+      "deposit(uint256)": {
+        "notice": "Deposit token to strategy."
+      },
+      "depositToken()": {
+        "notice": "Token used to deposit to strategy."
+      },
+      "totalTokens()": {
+        "notice": "Approximated amount of token on the strategy."
+      },
+      "withdraw(uint256)": {
+        "notice": "Withdraw tokens from strategy."
+      },
+      "withdrawAll()": {
+        "notice": "Withdraw all tokens from strategy."
+      }
+    },
+    "version": 1
+  }
+}

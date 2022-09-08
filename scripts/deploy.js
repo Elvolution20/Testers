@@ -15,21 +15,21 @@ async function main() {
     const [deployer] = await hre.ethers.getSigners();
     console.log(`Deploying with the account:`, deployer.address);
     console.log("Account balance:", (await deployer.getBalance()).toString());
-    const StrategyRouterLib =await ethers.getContractFactory("StrategyRouterLib");
-    const strategyRouterLib = await StrategyRouterLib.deploy();
-    strategyRouterLib.deployed();
-    const libAddress = strategyRouterLib.address;
+    // const StrategyRouterLib =await ethers.getContractFactory("StrategyRouterLib");
+    // const strategyRouterLib = await StrategyRouterLib.deploy();
+    // strategyRouterLib.deployed();
+    // const libAddress = strategyRouterLib.address;
 
-    const StrategyRouter =await ethers.getContractFactory(
-      "StrategyRouter",
-      {
-        libraries: {
-          StrategyRouterLib: libAddress,
-        },
-      }
-    );
-    const DodoStrategy =await ethers.getContractFactory("DodoStrategy");
-    const StargateStrategy =await ethers.getContractFactory("StargateStrategy");
+    // const StrategyRouter =await ethers.getContractFactory(
+    //   "StrategyRouter",
+    //   {
+    //     libraries: {
+    //       StrategyRouterLib: libAddress,
+    //     },
+    //   }
+    // );
+    const DodoStrategy =await ethers.getContractFactory("DodoStrategyOnefile");
+    const StargateStrategy =await ethers.getContractFactory("StargateStrategyOnefile");
 
     // let artifact;
     // if(contractArtifact === "CBridgeUSDT") {
@@ -74,21 +74,21 @@ async function main() {
     //   artifact = await Artifact?.deploy();
     // }
    
-    const strategyRouter = await StrategyRouter.deploy();
+    // const strategyRouter = await StrategyRouter.deploy();
     const dodoStrategy = await DodoStrategy.deploy();
     const stargateStrategy = await StargateStrategy.deploy();
 
-    await strategyRouter.deployed();
+    // await strategyRouter.deployed();
     await dodoStrategy.deployed();
     await stargateStrategy.deployed();
 
-    const address = strategyRouter.address;
+    // const address = strategyRouter.address;
     const address2 = dodoStrategy.address;
     const address3 = stargateStrategy.address;
 
-    console.log("strategyRouter : deployed to", address ); 
+    // console.log("strategyRouter : deployed to", address ); 
     console.log("dodoStrategy : deployed to", address2 ); 
-    console.log("cBridgeStrategy : deployed to", address3 ); 
+    console.log("StargateStrategy : deployed to", address3 ); 
   // deploy("StrategyRouter")
   // deploy("DodoStrategy");
   // deploy("StargateStrategy");

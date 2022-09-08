@@ -1,0 +1,826 @@
+{
+  "contractName": "CBridgeStrategy",
+  "abi": [
+    {
+      "inputs": [],
+      "name": "AmountExceedTotalSupply",
+      "type": "error"
+    },
+    {
+      "inputs": [],
+      "name": "AmountNotSpecified",
+      "type": "error"
+    },
+    {
+      "inputs": [],
+      "name": "CantRemoveLastStrategy",
+      "type": "error"
+    },
+    {
+      "inputs": [],
+      "name": "CycleClosed",
+      "type": "error"
+    },
+    {
+      "inputs": [],
+      "name": "CycleNotClosableYet",
+      "type": "error"
+    },
+    {
+      "inputs": [],
+      "name": "CycleNotClosed",
+      "type": "error"
+    },
+    {
+      "inputs": [],
+      "name": "DuplicateStrategy",
+      "type": "error"
+    },
+    {
+      "inputs": [],
+      "name": "InsufficientShares",
+      "type": "error"
+    },
+    {
+      "inputs": [],
+      "name": "NodepositDetected",
+      "type": "error"
+    },
+    {
+      "inputs": [],
+      "name": "NotModerator",
+      "type": "error"
+    },
+    {
+      "inputs": [],
+      "name": "NotReceiptOwner",
+      "type": "error"
+    },
+    {
+      "inputs": [],
+      "name": "NothingToRebalance",
+      "type": "error"
+    },
+    {
+      "inputs": [],
+      "name": "UnsupportedToken",
+      "type": "error"
+    },
+    {
+      "anonymous": false,
+      "inputs": [
+        {
+          "indexed": true,
+          "internalType": "uint256",
+          "name": "closedCycleId",
+          "type": "uint256"
+        },
+        {
+          "indexed": false,
+          "internalType": "uint256",
+          "name": "amount",
+          "type": "uint256"
+        }
+      ],
+      "name": "AllocateToStrategies",
+      "type": "event"
+    },
+    {
+      "anonymous": false,
+      "inputs": [
+        {
+          "indexed": true,
+          "internalType": "address",
+          "name": "user",
+          "type": "address"
+        },
+        {
+          "indexed": false,
+          "internalType": "address",
+          "name": "token",
+          "type": "address"
+        },
+        {
+          "indexed": false,
+          "internalType": "uint256",
+          "name": "amount",
+          "type": "uint256"
+        }
+      ],
+      "name": "Deposit",
+      "type": "event"
+    },
+    {
+      "anonymous": false,
+      "inputs": [
+        {
+          "indexed": true,
+          "internalType": "address",
+          "name": "previousOwner",
+          "type": "address"
+        },
+        {
+          "indexed": true,
+          "internalType": "address",
+          "name": "newOwner",
+          "type": "address"
+        }
+      ],
+      "name": "OwnershipTransferred",
+      "type": "event"
+    },
+    {
+      "anonymous": false,
+      "inputs": [
+        {
+          "indexed": true,
+          "internalType": "address",
+          "name": "user",
+          "type": "address"
+        },
+        {
+          "indexed": false,
+          "internalType": "uint256",
+          "name": "shares",
+          "type": "uint256"
+        },
+        {
+          "indexed": false,
+          "internalType": "uint256[]",
+          "name": "receiptIds",
+          "type": "uint256[]"
+        }
+      ],
+      "name": "RedeemReceiptsToShares",
+      "type": "event"
+    },
+    {
+      "anonymous": false,
+      "inputs": [
+        {
+          "indexed": true,
+          "internalType": "address",
+          "name": "moderator",
+          "type": "address"
+        },
+        {
+          "indexed": false,
+          "internalType": "uint256[]",
+          "name": "receiptIds",
+          "type": "uint256[]"
+        }
+      ],
+      "name": "RedeemReceiptsToSharesByModerators",
+      "type": "event"
+    },
+    {
+      "anonymous": false,
+      "inputs": [
+        {
+          "indexed": false,
+          "internalType": "contract Exchange",
+          "name": "_exchange",
+          "type": "address"
+        },
+        {
+          "indexed": false,
+          "internalType": "contract IUsdOracle",
+          "name": "_oracle",
+          "type": "address"
+        },
+        {
+          "indexed": false,
+          "internalType": "contract SharesToken",
+          "name": "_sharesToken",
+          "type": "address"
+        },
+        {
+          "indexed": false,
+          "internalType": "contract Batch",
+          "name": "_batch",
+          "type": "address"
+        },
+        {
+          "indexed": false,
+          "internalType": "contract ReceiptNFT",
+          "name": "_receiptNft",
+          "type": "address"
+        }
+      ],
+      "name": "SetAddresses",
+      "type": "event"
+    },
+    {
+      "anonymous": false,
+      "inputs": [
+        {
+          "indexed": false,
+          "internalType": "uint256",
+          "name": "newDuration",
+          "type": "uint256"
+        }
+      ],
+      "name": "SetCycleDuration",
+      "type": "event"
+    },
+    {
+      "anonymous": false,
+      "inputs": [
+        {
+          "indexed": false,
+          "internalType": "address",
+          "name": "newAddress",
+          "type": "address"
+        }
+      ],
+      "name": "SetFeeAddress",
+      "type": "event"
+    },
+    {
+      "anonymous": false,
+      "inputs": [
+        {
+          "indexed": false,
+          "internalType": "uint256",
+          "name": "newPercent",
+          "type": "uint256"
+        }
+      ],
+      "name": "SetFeePercent",
+      "type": "event"
+    },
+    {
+      "anonymous": false,
+      "inputs": [
+        {
+          "indexed": false,
+          "internalType": "uint256",
+          "name": "newAmount",
+          "type": "uint256"
+        }
+      ],
+      "name": "SetMinDeposit",
+      "type": "event"
+    },
+    {
+      "anonymous": false,
+      "inputs": [
+        {
+          "indexed": false,
+          "internalType": "uint256",
+          "name": "newAmount",
+          "type": "uint256"
+        }
+      ],
+      "name": "SetMinUsdPerCycle",
+      "type": "event"
+    },
+    {
+      "anonymous": false,
+      "inputs": [
+        {
+          "indexed": true,
+          "internalType": "address",
+          "name": "user",
+          "type": "address"
+        },
+        {
+          "indexed": false,
+          "internalType": "address",
+          "name": "token",
+          "type": "address"
+        },
+        {
+          "indexed": false,
+          "internalType": "uint256",
+          "name": "amount",
+          "type": "uint256"
+        }
+      ],
+      "name": "WithdrawFromBatch",
+      "type": "event"
+    },
+    {
+      "anonymous": false,
+      "inputs": [
+        {
+          "indexed": true,
+          "internalType": "address",
+          "name": "user",
+          "type": "address"
+        },
+        {
+          "indexed": false,
+          "internalType": "address",
+          "name": "token",
+          "type": "address"
+        },
+        {
+          "indexed": false,
+          "internalType": "uint256",
+          "name": "amount",
+          "type": "uint256"
+        }
+      ],
+      "name": "WithdrawFromStrategies",
+      "type": "event"
+    },
+    {
+      "inputs": [],
+      "name": "compound",
+      "outputs": [],
+      "stateMutability": "nonpayable",
+      "type": "function"
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "uint256",
+          "name": "amount",
+          "type": "uint256"
+        }
+      ],
+      "name": "deposit",
+      "outputs": [],
+      "stateMutability": "nonpayable",
+      "type": "function"
+    },
+    {
+      "inputs": [],
+      "name": "depositToken",
+      "outputs": [
+        {
+          "internalType": "address",
+          "name": "",
+          "type": "address"
+        }
+      ],
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "inputs": [],
+      "name": "owner",
+      "outputs": [
+        {
+          "internalType": "address",
+          "name": "",
+          "type": "address"
+        }
+      ],
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "inputs": [],
+      "name": "renounceOwnership",
+      "outputs": [],
+      "stateMutability": "nonpayable",
+      "type": "function"
+    },
+    {
+      "inputs": [],
+      "name": "totalTokens",
+      "outputs": [
+        {
+          "internalType": "uint256",
+          "name": "",
+          "type": "uint256"
+        }
+      ],
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "address",
+          "name": "newOwner",
+          "type": "address"
+        }
+      ],
+      "name": "transferOwnership",
+      "outputs": [],
+      "stateMutability": "nonpayable",
+      "type": "function"
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "uint256",
+          "name": "amount",
+          "type": "uint256"
+        }
+      ],
+      "name": "withdraw",
+      "outputs": [
+        {
+          "internalType": "uint256",
+          "name": "amountWithdrawn",
+          "type": "uint256"
+        }
+      ],
+      "stateMutability": "nonpayable",
+      "type": "function"
+    },
+    {
+      "inputs": [],
+      "name": "withdrawAll",
+      "outputs": [
+        {
+          "internalType": "uint256",
+          "name": "amountWithdrawn",
+          "type": "uint256"
+        }
+      ],
+      "stateMutability": "nonpayable",
+      "type": "function"
+    }
+  ],
+  "metadata": "{\"compiler\":{\"version\":\"0.8.15+commit.e14f2714\"},\"language\":\"Solidity\",\"output\":{\"abi\":[{\"inputs\":[],\"name\":\"AmountExceedTotalSupply\",\"type\":\"error\"},{\"inputs\":[],\"name\":\"AmountNotSpecified\",\"type\":\"error\"},{\"inputs\":[],\"name\":\"CantRemoveLastStrategy\",\"type\":\"error\"},{\"inputs\":[],\"name\":\"CycleClosed\",\"type\":\"error\"},{\"inputs\":[],\"name\":\"CycleNotClosableYet\",\"type\":\"error\"},{\"inputs\":[],\"name\":\"CycleNotClosed\",\"type\":\"error\"},{\"inputs\":[],\"name\":\"DuplicateStrategy\",\"type\":\"error\"},{\"inputs\":[],\"name\":\"InsufficientShares\",\"type\":\"error\"},{\"inputs\":[],\"name\":\"NodepositDetected\",\"type\":\"error\"},{\"inputs\":[],\"name\":\"NotModerator\",\"type\":\"error\"},{\"inputs\":[],\"name\":\"NotReceiptOwner\",\"type\":\"error\"},{\"inputs\":[],\"name\":\"NothingToRebalance\",\"type\":\"error\"},{\"inputs\":[],\"name\":\"UnsupportedToken\",\"type\":\"error\"},{\"anonymous\":false,\"inputs\":[{\"indexed\":true,\"internalType\":\"uint256\",\"name\":\"closedCycleId\",\"type\":\"uint256\"},{\"indexed\":false,\"internalType\":\"uint256\",\"name\":\"amount\",\"type\":\"uint256\"}],\"name\":\"AllocateToStrategies\",\"type\":\"event\"},{\"anonymous\":false,\"inputs\":[{\"indexed\":true,\"internalType\":\"address\",\"name\":\"user\",\"type\":\"address\"},{\"indexed\":false,\"internalType\":\"address\",\"name\":\"token\",\"type\":\"address\"},{\"indexed\":false,\"internalType\":\"uint256\",\"name\":\"amount\",\"type\":\"uint256\"}],\"name\":\"Deposit\",\"type\":\"event\"},{\"anonymous\":false,\"inputs\":[{\"indexed\":true,\"internalType\":\"address\",\"name\":\"previousOwner\",\"type\":\"address\"},{\"indexed\":true,\"internalType\":\"address\",\"name\":\"newOwner\",\"type\":\"address\"}],\"name\":\"OwnershipTransferred\",\"type\":\"event\"},{\"anonymous\":false,\"inputs\":[{\"indexed\":true,\"internalType\":\"address\",\"name\":\"user\",\"type\":\"address\"},{\"indexed\":false,\"internalType\":\"uint256\",\"name\":\"shares\",\"type\":\"uint256\"},{\"indexed\":false,\"internalType\":\"uint256[]\",\"name\":\"receiptIds\",\"type\":\"uint256[]\"}],\"name\":\"RedeemReceiptsToShares\",\"type\":\"event\"},{\"anonymous\":false,\"inputs\":[{\"indexed\":true,\"internalType\":\"address\",\"name\":\"moderator\",\"type\":\"address\"},{\"indexed\":false,\"internalType\":\"uint256[]\",\"name\":\"receiptIds\",\"type\":\"uint256[]\"}],\"name\":\"RedeemReceiptsToSharesByModerators\",\"type\":\"event\"},{\"anonymous\":false,\"inputs\":[{\"indexed\":false,\"internalType\":\"contract Exchange\",\"name\":\"_exchange\",\"type\":\"address\"},{\"indexed\":false,\"internalType\":\"contract IUsdOracle\",\"name\":\"_oracle\",\"type\":\"address\"},{\"indexed\":false,\"internalType\":\"contract SharesToken\",\"name\":\"_sharesToken\",\"type\":\"address\"},{\"indexed\":false,\"internalType\":\"contract Batch\",\"name\":\"_batch\",\"type\":\"address\"},{\"indexed\":false,\"internalType\":\"contract ReceiptNFT\",\"name\":\"_receiptNft\",\"type\":\"address\"}],\"name\":\"SetAddresses\",\"type\":\"event\"},{\"anonymous\":false,\"inputs\":[{\"indexed\":false,\"internalType\":\"uint256\",\"name\":\"newDuration\",\"type\":\"uint256\"}],\"name\":\"SetCycleDuration\",\"type\":\"event\"},{\"anonymous\":false,\"inputs\":[{\"indexed\":false,\"internalType\":\"address\",\"name\":\"newAddress\",\"type\":\"address\"}],\"name\":\"SetFeeAddress\",\"type\":\"event\"},{\"anonymous\":false,\"inputs\":[{\"indexed\":false,\"internalType\":\"uint256\",\"name\":\"newPercent\",\"type\":\"uint256\"}],\"name\":\"SetFeePercent\",\"type\":\"event\"},{\"anonymous\":false,\"inputs\":[{\"indexed\":false,\"internalType\":\"uint256\",\"name\":\"newAmount\",\"type\":\"uint256\"}],\"name\":\"SetMinDeposit\",\"type\":\"event\"},{\"anonymous\":false,\"inputs\":[{\"indexed\":false,\"internalType\":\"uint256\",\"name\":\"newAmount\",\"type\":\"uint256\"}],\"name\":\"SetMinUsdPerCycle\",\"type\":\"event\"},{\"anonymous\":false,\"inputs\":[{\"indexed\":true,\"internalType\":\"address\",\"name\":\"user\",\"type\":\"address\"},{\"indexed\":false,\"internalType\":\"address\",\"name\":\"token\",\"type\":\"address\"},{\"indexed\":false,\"internalType\":\"uint256\",\"name\":\"amount\",\"type\":\"uint256\"}],\"name\":\"WithdrawFromBatch\",\"type\":\"event\"},{\"anonymous\":false,\"inputs\":[{\"indexed\":true,\"internalType\":\"address\",\"name\":\"user\",\"type\":\"address\"},{\"indexed\":false,\"internalType\":\"address\",\"name\":\"token\",\"type\":\"address\"},{\"indexed\":false,\"internalType\":\"uint256\",\"name\":\"amount\",\"type\":\"uint256\"}],\"name\":\"WithdrawFromStrategies\",\"type\":\"event\"},{\"inputs\":[],\"name\":\"compound\",\"outputs\":[],\"stateMutability\":\"nonpayable\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"uint256\",\"name\":\"amount\",\"type\":\"uint256\"}],\"name\":\"deposit\",\"outputs\":[],\"stateMutability\":\"nonpayable\",\"type\":\"function\"},{\"inputs\":[],\"name\":\"depositToken\",\"outputs\":[{\"internalType\":\"address\",\"name\":\"\",\"type\":\"address\"}],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[],\"name\":\"owner\",\"outputs\":[{\"internalType\":\"address\",\"name\":\"\",\"type\":\"address\"}],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[],\"name\":\"renounceOwnership\",\"outputs\":[],\"stateMutability\":\"nonpayable\",\"type\":\"function\"},{\"inputs\":[],\"name\":\"totalTokens\",\"outputs\":[{\"internalType\":\"uint256\",\"name\":\"\",\"type\":\"uint256\"}],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"address\",\"name\":\"newOwner\",\"type\":\"address\"}],\"name\":\"transferOwnership\",\"outputs\":[],\"stateMutability\":\"nonpayable\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"uint256\",\"name\":\"amount\",\"type\":\"uint256\"}],\"name\":\"withdraw\",\"outputs\":[{\"internalType\":\"uint256\",\"name\":\"amountWithdrawn\",\"type\":\"uint256\"}],\"stateMutability\":\"nonpayable\",\"type\":\"function\"},{\"inputs\":[],\"name\":\"withdrawAll\",\"outputs\":[{\"internalType\":\"uint256\",\"name\":\"amountWithdrawn\",\"type\":\"uint256\"}],\"stateMutability\":\"nonpayable\",\"type\":\"function\"}],\"devdoc\":{\"custom:oz-upgrades-unsafe-allow\":\"constructor state-variable-immutable\",\"kind\":\"dev\",\"methods\":{\"owner()\":{\"details\":\"Returns the address of the current owner.\"},\"renounceOwnership()\":{\"details\":\"Leaves the contract without owner. It will not be possible to call `onlyOwner` functions anymore. Can only be called by the current owner. NOTE: Renouncing ownership will leave the contract without an owner, thereby removing any functionality that is only available to the owner.\"},\"transferOwnership(address)\":{\"details\":\"Transfers ownership of the contract to a new account (`newOwner`). Can only be called by the current owner.\"},\"withdraw(uint256)\":{\"details\":\"Max withdrawable amount is returned by totalTokens.\"}},\"version\":1},\"userdoc\":{\"events\":{\"AllocateToStrategies(uint256,uint256)\":{\"notice\":\"Fires when batch is deposited into strategies.\"},\"Deposit(address,address,uint256)\":{\"notice\":\"Fires when user deposits in batch.\"},\"RedeemReceiptsToShares(address,uint256,uint256[])\":{\"notice\":\"Fires when user converts his receipt into shares token.\"},\"RedeemReceiptsToSharesByModerators(address,uint256[])\":{\"notice\":\"Fires when moderator converts foreign receipts into shares token.\"},\"WithdrawFromBatch(address,address,uint256)\":{\"notice\":\"Fires when user withdraw from batch.\"},\"WithdrawFromStrategies(address,address,uint256)\":{\"notice\":\"Fires when user withdraw from strategies.\"}},\"kind\":\"user\",\"methods\":{\"compound()\":{\"notice\":\"Harvest rewards and reinvest them.\"},\"deposit(uint256)\":{\"notice\":\"Deposit token to strategy.\"},\"depositToken()\":{\"notice\":\"Token used to deposit to strategy.\"},\"totalTokens()\":{\"notice\":\"Approximated amount of token on the strategy.\"},\"withdraw(uint256)\":{\"notice\":\"Withdraw tokens from strategy.\"},\"withdrawAll()\":{\"notice\":\"Withdraw all tokens from strategy.\"}},\"notice\":\"CBridge USDT Liquidity pool. Chain: BSC - https://bscscan.com/address/0xf0FF9888A70f44eb12223A6a55C65976BA7bf854 Pool: USDT Yield Source: Bridge fees and token rewards Yield Token: CELR Link: https://cbridge.celer.network/liquidity Strategy Description: USDT is provided as liquidity to the Celer cBridge. This USDT is used as liquidity by people moving between chains. Most rewards are received as CELR tokens. Some rewards, which come from bridge fees, are compounded directly into the pool. CELR rewards are sold for USDT and USDT is redeposited to strategy to earn fees. Functions:  o deposit() o withdraw() o withdrawall() o compound()\",\"version\":1}},\"settings\":{\"compilationTarget\":{\"project:/contracts/clipStrategies/CBridgeStrategy.sol\":\"CBridgeStrategy\"},\"evmVersion\":\"london\",\"libraries\":{},\"metadata\":{\"bytecodeHash\":\"ipfs\"},\"optimizer\":{\"enabled\":false,\"runs\":200},\"remappings\":[]},\"sources\":{\"@openzeppelin/contracts-upgradeable/access/OwnableUpgradeable.sol\":{\"keccak256\":\"0x247c62047745915c0af6b955470a72d1696ebad4352d7d3011aef1a2463cd888\",\"license\":\"MIT\",\"urls\":[\"bzz-raw://d7fc8396619de513c96b6e00301b88dd790e83542aab918425633a5f7297a15a\",\"dweb:/ipfs/QmXbP4kiZyp7guuS7xe8KaybnwkRPGrBc2Kbi3vhcTfpxb\"]},\"@openzeppelin/contracts-upgradeable/interfaces/draft-IERC1822Upgradeable.sol\":{\"keccak256\":\"0x77c89f893e403efc6929ba842b7ccf6534d4ffe03afe31670b4a528c0ad78c0f\",\"license\":\"MIT\",\"urls\":[\"bzz-raw://496bd9b3df2455d571018c09f0c6badd29713fdeb907c6aa09d8d28cb603f053\",\"dweb:/ipfs/QmXdJDyYs6WMwMh21dez2BYPxhSUaUYFMDtVNcn2cgFR79\"]},\"@openzeppelin/contracts-upgradeable/proxy/ERC1967/ERC1967UpgradeUpgradeable.sol\":{\"keccak256\":\"0x315887e846f1e5f8d8fa535a229d318bb9290aaa69485117f1ee8a9a6b3be823\",\"license\":\"MIT\",\"urls\":[\"bzz-raw://29dda00da6d269685b555e710e4abf1c3eb6d00c15b888a7880a2f8dd3c4fdc2\",\"dweb:/ipfs/QmSqcjtdECygtT1Gy7uEo42x8542srpgGEeKKHfcnQqXgn\"]},\"@openzeppelin/contracts-upgradeable/proxy/beacon/IBeaconUpgradeable.sol\":{\"keccak256\":\"0x24b86ac8c005b8c654fbf6ac34a5a4f61580d7273541e83e013e89d66fbf0908\",\"license\":\"MIT\",\"urls\":[\"bzz-raw://4dbfe1a3b3b3fb64294ce41fd2ad362e7b7012208117864f42c1a67620a6d5c1\",\"dweb:/ipfs/QmVMU5tWt7zBQMmf5cpMX8UMHV86T3kFeTxBTBjFqVWfoJ\"]},\"@openzeppelin/contracts-upgradeable/proxy/utils/Initializable.sol\":{\"keccak256\":\"0x0203dcadc5737d9ef2c211d6fa15d18ebc3b30dfa51903b64870b01a062b0b4e\",\"license\":\"MIT\",\"urls\":[\"bzz-raw://6eb2fd1e9894dbe778f4b8131adecebe570689e63cf892f4e21257bfe1252497\",\"dweb:/ipfs/QmXgUGNfZvrn6N2miv3nooSs7Jm34A41qz94fu2GtDFcx8\"]},\"@openzeppelin/contracts-upgradeable/proxy/utils/UUPSUpgradeable.sol\":{\"keccak256\":\"0x6e36e9b4b71de699c2f3f0d4e4d1aa0b35da99a26e8d5b91ef09ba234b4ef270\",\"license\":\"MIT\",\"urls\":[\"bzz-raw://abfa467c53a0d60b4d09bf04aa952b1d1d44e5766fcc053aace078d7859b8419\",\"dweb:/ipfs/QmebVTZpyNxYfKYTuLMywzEJTdc1Ca8ME4xm3kR9gQgToG\"]},\"@openzeppelin/contracts-upgradeable/token/ERC721/ERC721Upgradeable.sol\":{\"keccak256\":\"0x5331c8909221d9f9f3851cfadd5959d0873413a2c27e30e0f2fa234158c1c6cf\",\"license\":\"MIT\",\"urls\":[\"bzz-raw://31c7d52f47a9174e236c0402654f42c16516c58c6851862f3bcb1b440b873498\",\"dweb:/ipfs/QmZQqiofa8jPJCCAfWyjNnBuoGXrR56Ct4HyW4ugRWfvCb\"]},\"@openzeppelin/contracts-upgradeable/token/ERC721/IERC721ReceiverUpgradeable.sol\":{\"keccak256\":\"0xbb2ed8106d94aeae6858e2551a1e7174df73994b77b13ebd120ccaaef80155f5\",\"license\":\"MIT\",\"urls\":[\"bzz-raw://8bc3c6a456dba727d8dd9fd33420febede490abb49a07469f61d2a3ace66a95a\",\"dweb:/ipfs/QmVAWtEVj7K5AbvgJa9Dz22KiDq9eoptCjnVZqsTMtKXyd\"]},\"@openzeppelin/contracts-upgradeable/token/ERC721/IERC721Upgradeable.sol\":{\"keccak256\":\"0x016298e66a5810253c6c905e61966bb31c8775c3f3517bf946ff56ee31d6c005\",\"license\":\"MIT\",\"urls\":[\"bzz-raw://1723de5ae414f210db039b19e6487c19c2d643483c9be7c445cf481a80c199d2\",\"dweb:/ipfs/QmcBLbmPdZsNngYhA1KDadNUqQZoGACytFWuUH74RC4AXC\"]},\"@openzeppelin/contracts-upgradeable/token/ERC721/extensions/IERC721MetadataUpgradeable.sol\":{\"keccak256\":\"0x95a471796eb5f030fdc438660bebec121ad5d063763e64d92376ffb4b5ce8b70\",\"license\":\"MIT\",\"urls\":[\"bzz-raw://4ffbd627e6958983d288801acdedbf3491ee0ebf1a430338bce47c96481ce9e3\",\"dweb:/ipfs/QmUM1vpmNgBV34sYf946SthDJNGhwwqjoRggmj4TUUQmdB\"]},\"@openzeppelin/contracts-upgradeable/utils/AddressUpgradeable.sol\":{\"keccak256\":\"0x611aa3f23e59cfdd1863c536776407b3e33d695152a266fa7cfb34440a29a8a3\",\"license\":\"MIT\",\"urls\":[\"bzz-raw://9b4b2110b7f2b3eb32951bc08046fa90feccffa594e1176cb91cdfb0e94726b4\",\"dweb:/ipfs/QmSxLwYjicf9zWFuieRc8WQwE4FisA1Um5jp1iSa731TGt\"]},\"@openzeppelin/contracts-upgradeable/utils/ContextUpgradeable.sol\":{\"keccak256\":\"0x963ea7f0b48b032eef72fe3a7582edf78408d6f834115b9feadd673a4d5bd149\",\"license\":\"MIT\",\"urls\":[\"bzz-raw://d6520943ea55fdf5f0bafb39ed909f64de17051bc954ff3e88c9e5621412c79c\",\"dweb:/ipfs/QmWZ4rAKTQbNG2HxGs46AcTXShsVytKeLs7CUCdCSv5N7a\"]},\"@openzeppelin/contracts-upgradeable/utils/StorageSlotUpgradeable.sol\":{\"keccak256\":\"0x09864aea84f01e39313375b5610c73a3c1c68abbdc51e5ccdd25ff977fdadf9a\",\"license\":\"MIT\",\"urls\":[\"bzz-raw://aedb48081190fa828d243529ce25c708202c7d4ccfe99f0e4ecd6bc0cfcd03f3\",\"dweb:/ipfs/QmWyiDQHPZA56iqsAwTmiJoxvNeRQLUVr4gTfzpdpXivpo\"]},\"@openzeppelin/contracts-upgradeable/utils/StringsUpgradeable.sol\":{\"keccak256\":\"0xea5339a7fff0ed42b45be56a88efdd0b2ddde9fa480dc99fef9a6a4c5b776863\",\"license\":\"MIT\",\"urls\":[\"bzz-raw://841619682637df5579b4c396d281d6c55b26f1b1acce1d0ab67bead5e39cf60c\",\"dweb:/ipfs/QmNRtuKp43ZHJwswdyT3GivY4fDMvz3cxBe1FfDthG1JGj\"]},\"@openzeppelin/contracts-upgradeable/utils/introspection/ERC165Upgradeable.sol\":{\"keccak256\":\"0x9a3b990bd56d139df3e454a9edf1c64668530b5a77fc32eb063bc206f958274a\",\"license\":\"MIT\",\"urls\":[\"bzz-raw://0895399d170daab2d69b4c43a0202e5a07f2e67a93b26e3354dcbedb062232f7\",\"dweb:/ipfs/QmUM1VH3XDk559Dsgh4QPvupr3YVKjz87HrSyYzzVFZbxw\"]},\"@openzeppelin/contracts-upgradeable/utils/introspection/IERC165Upgradeable.sol\":{\"keccak256\":\"0xc6cef87559d0aeffdf0a99803de655938a7779ec0a3cd5d4383483ad85565a09\",\"license\":\"MIT\",\"urls\":[\"bzz-raw://92ad7e572cf44e6b4b37631b44b62f9eb9fb1cf14d9ce51c1504d5dc7ccaf758\",\"dweb:/ipfs/QmcnbqX85tsWnUXPmtuPLE4SczME2sJaTfmqEFkuAJvWhy\"]},\"@openzeppelin/contracts/access/Ownable.sol\":{\"keccak256\":\"0xa94b34880e3c1b0b931662cb1c09e5dfa6662f31cba80e07c5ee71cd135c9673\",\"license\":\"MIT\",\"urls\":[\"bzz-raw://40fb1b5102468f783961d0af743f91b9980cf66b50d1d12009f6bb1869cea4d2\",\"dweb:/ipfs/QmYqEbJML4jB1GHbzD4cUZDtJg5wVwNm3vDJq1GbyDus8y\"]},\"@openzeppelin/contracts/security/ReentrancyGuard.sol\":{\"keccak256\":\"0x0e9621f60b2faabe65549f7ed0f24e8853a45c1b7990d47e8160e523683f3935\",\"license\":\"MIT\",\"urls\":[\"bzz-raw://287a2f8d5814dd0f05f22b740f18ca8321acc21c9bd03a6cb2203ea626e2f3f2\",\"dweb:/ipfs/QmZRQv9iuwU817VuqkA2WweiaibKii69x9QxYBBEfbNEud\"]},\"@openzeppelin/contracts/token/ERC20/ERC20.sol\":{\"keccak256\":\"0x24b04b8aacaaf1a4a0719117b29c9c3647b1f479c5ac2a60f5ff1bb6d839c238\",\"license\":\"MIT\",\"urls\":[\"bzz-raw://43e46da9d9f49741ecd876a269e71bc7494058d7a8e9478429998adb5bc3eaa0\",\"dweb:/ipfs/QmUtp4cqzf22C5rJ76AabKADquGWcjsc33yjYXxXC4sDvy\"]},\"@openzeppelin/contracts/token/ERC20/IERC20.sol\":{\"keccak256\":\"0x9750c6b834f7b43000631af5cc30001c5f547b3ceb3635488f140f60e897ea6b\",\"license\":\"MIT\",\"urls\":[\"bzz-raw://5a7d5b1ef5d8d5889ad2ed89d8619c09383b80b72ab226e0fe7bde1636481e34\",\"dweb:/ipfs/QmebXWgtEfumQGBdVeM6c71McLixYXQP5Bk6kKXuoY4Bmr\"]},\"@openzeppelin/contracts/token/ERC20/extensions/IERC20Metadata.sol\":{\"keccak256\":\"0x8de418a5503946cabe331f35fe242d3201a73f67f77aaeb7110acb1f30423aca\",\"license\":\"MIT\",\"urls\":[\"bzz-raw://5a376d3dda2cb70536c0a45c208b29b34ac560c4cb4f513a42079f96ba47d2dd\",\"dweb:/ipfs/QmZQg6gn1sUpM8wHzwNvSnihumUCAhxD119MpXeKp8B9s8\"]},\"@openzeppelin/contracts/token/ERC20/extensions/draft-IERC20Permit.sol\":{\"keccak256\":\"0xf41ca991f30855bf80ffd11e9347856a517b977f0a6c2d52e6421a99b7840329\",\"license\":\"MIT\",\"urls\":[\"bzz-raw://b2717fd2bdac99daa960a6de500754ea1b932093c946388c381da48658234b95\",\"dweb:/ipfs/QmP6QVMn6UeA3ByahyJbYQr5M6coHKBKsf3ySZSfbyA8R7\"]},\"@openzeppelin/contracts/token/ERC20/utils/SafeERC20.sol\":{\"keccak256\":\"0x032807210d1d7d218963d7355d62e021a84bf1b3339f4f50be2f63b53cccaf29\",\"license\":\"MIT\",\"urls\":[\"bzz-raw://11756f42121f6541a35a8339ea899ee7514cfaa2e6d740625fcc844419296aa6\",\"dweb:/ipfs/QmekMuk6BY4DAjzeXr4MSbKdgoqqsZnA8JPtuyWc6CwXHf\"]},\"@openzeppelin/contracts/utils/Address.sol\":{\"keccak256\":\"0xd6153ce99bcdcce22b124f755e72553295be6abcd63804cfdffceb188b8bef10\",\"license\":\"MIT\",\"urls\":[\"bzz-raw://35c47bece3c03caaa07fab37dd2bb3413bfbca20db7bd9895024390e0a469487\",\"dweb:/ipfs/QmPGWT2x3QHcKxqe6gRmAkdakhbaRgx3DLzcakHz5M4eXG\"]},\"@openzeppelin/contracts/utils/Context.sol\":{\"keccak256\":\"0xe2e337e6dde9ef6b680e07338c493ebea1b5fd09b43424112868e9cc1706bca7\",\"license\":\"MIT\",\"urls\":[\"bzz-raw://6df0ddf21ce9f58271bdfaa85cde98b200ef242a05a3f85c2bc10a8294800a92\",\"dweb:/ipfs/QmRK2Y5Yc6BK7tGKkgsgn3aJEQGi5aakeSPZvS65PV8Xp3\"]},\"@openzeppelin/contracts/utils/structs/EnumerableSet.sol\":{\"keccak256\":\"0x5050943b32b6a8f282573d166b2e9d87ab7eb4dbba4ab6acf36ecb54fe6995e4\",\"license\":\"MIT\",\"urls\":[\"bzz-raw://d4831d777a29ebdf9f2caecd70e74b97bff1b70e53622fd0a02aed01e21c8271\",\"dweb:/ipfs/QmUqurVVnCc7XkMxb2k23TVQUtuhHZduJ3hTZarTJrqU24\"]},\"@uniswap/v2-core/contracts/interfaces/IUniswapV2Factory.sol\":{\"keccak256\":\"0xe5905c0989cf5a865ed9bb7b9252536ca011c5b744017a82a7d4443b9c00a891\",\"urls\":[\"bzz-raw://5d2a90a0a796491507462a3da18c3f8819721d571572d765a2207c35bf0a0389\",\"dweb:/ipfs/Qmf9ACYiT3qzjgsYuhm866FBdiBpRMXAPpQhSFbgqcyhHt\"]},\"@uniswap/v2-core/contracts/interfaces/IUniswapV2Pair.sol\":{\"keccak256\":\"0x81470de481db378adba9437da8ae3d67d1e60300135ee3e70c6ecdf3ea9b1ed7\",\"license\":\"Unlicense\",\"urls\":[\"bzz-raw://adc8439df06f8510384348cb034fc80d549fd46a85e13f20261658a9dfa86d6b\",\"dweb:/ipfs/QmZrAkuc3tru7UwQR8UsKEt1tshxGLEpT5qJ97atwNu8ja\"]},\"@uniswap/v2-periphery/contracts/interfaces/IUniswapV2Router01.sol\":{\"keccak256\":\"0xba23699a773023d902d2b8ff5f76e3d8e17d1dedd9e3f27343f7583266855d07\",\"license\":\"Unlicense\",\"urls\":[\"bzz-raw://fb3ad44eb3f32f00fa7094ad7f53b86e74fdfe5470782f441798e843831c239f\",\"dweb:/ipfs/QmXkJha521WyMGBJ6pNDTL1XpEFukSDiLifju9vm5b23gc\"]},\"@uniswap/v2-periphery/contracts/interfaces/IUniswapV2Router02.sol\":{\"keccak256\":\"0x6e5fc45612098cf6f847905667558fb2524095d67d769c4dbdadea130fea3a58\",\"license\":\"Unlicense\",\"urls\":[\"bzz-raw://7c32842c476a6349562ee288bf190be9af001960ebc619a486a4c95a192f9552\",\"dweb:/ipfs/QmPKjWSUNUucHM6rG8FALRuQF7fJqRXAigJTbrqkWgZ3pP\"]},\"project:/contracts/clipStrategies/CBridgeStrategy.sol\":{\"keccak256\":\"0x9ae717e36ccec158697da1140a765f2a6def5624ddaec9b828420cddfeac7bab\",\"license\":\"Unlicense\",\"urls\":[\"bzz-raw://82d9c3ff824c24f85f6d82c8af087ecf86f0d90eb0cca917fa475be1ea6d2394\",\"dweb:/ipfs/QmQenE16TbpekCeEAqWkNCAAXJm2mw4EzzeH5Ac3krvC9A\"]},\"project:/contracts/deps/EnumerableSetExtension.sol\":{\"keccak256\":\"0xc09b6f66a4027ee76d75936a7abf127e1dcc41921a2433098991c3d643af8f10\",\"urls\":[\"bzz-raw://0775192a24cd6f64cacc9995de4562848140f3d20bad0631b52573780329a8a0\",\"dweb:/ipfs/Qmd4UWLzosUqs5VSWV48wPRMbt3RymB8DLYvHD56MpnZRt\"]},\"project:/contracts/exchange/Exchange.sol\":{\"keccak256\":\"0x4ea622b5db6786c70eb3b99b9a49ded6921b64e5b1fa3e57d98f12f80d1983d6\",\"license\":\"Unlicense\",\"urls\":[\"bzz-raw://6aacccfb699a9330133e3a343611698a3d034335213d15c1e1f54768e6bdb219\",\"dweb:/ipfs/QmfEZV1UREZzNtn9vvwDAQZKrsBJY6hp2KZu76se9rVJwM\"]},\"project:/contracts/interfaces/IClipSwapFarm.sol\":{\"keccak256\":\"0x0527987d8067e4f043917f08d947dac67fbc3055686d833d0c5a1e2461423748\",\"license\":\"Unlicense\",\"urls\":[\"bzz-raw://70db9c434cde1ce3b250e4c7df0f058858998ae7ded0fcf26be8705f251ded42\",\"dweb:/ipfs/QmWBGU5fyTGhYvN5oMmoywrvqaeEG3oJGWYmLJWMr2Udaf\"]},\"project:/contracts/interfaces/ICurvePool.sol\":{\"keccak256\":\"0x968971f626a70525e025b2ec5433f7e8d50713fe1048a107b8c7288877cb56e2\",\"license\":\"Unlicense\",\"urls\":[\"bzz-raw://21fcd1c45424083ac3c8a6369e6d28c7ad0b33be04633b6619cf1ac084c375a3\",\"dweb:/ipfs/QmQ8McchbfWXHv8LiS9FoGq4KT75jXD4T56au6snqRZVzX\"]},\"project:/contracts/interfaces/IExchangePlugin.sol\":{\"keccak256\":\"0x66913b968ed867be6d24704325f17e5d4670b1eca3d9ed125740d2aa40372dd5\",\"license\":\"Unlicense\",\"urls\":[\"bzz-raw://1c72c38973f2919ba3ac569129d5d3df099b9907a86154cdf7fc9375be5e7093\",\"dweb:/ipfs/QmbQ7S5VujCsCAKViqeBwxiQ8h6BZXbQvFhoFJ8KftZFrJ\"]},\"project:/contracts/interfaces/IStrategy.sol\":{\"keccak256\":\"0x5cb0189b225e6d4075337cd96d8c6f9262418c95cbb65ca56fdd23e371317100\",\"license\":\"Unlicense\",\"urls\":[\"bzz-raw://cdaad3588c049888f4677d391bb0ca71ec75a4f6d6344f6186706cbb7c131409\",\"dweb:/ipfs/QmRrLBUhm3JXqZGVP5JSksfojZHi8m6zjfYcpJQC8ec54v\"]},\"project:/contracts/interfaces/IUsdOracle.sol\":{\"keccak256\":\"0xe93076c75786c51180946175e7257eb4126c53645f110fc3a47d0639a653928a\",\"license\":\"Unlicense\",\"urls\":[\"bzz-raw://38ef90584e16b61575c1ef658fb3252c40355fdb0eb733d6a91a85d6a21aedec\",\"dweb:/ipfs/QmRzHnmYsUNXjWQHVGsSHrMRPf6Wku2cfPM6otQXEGt2ek\"]},\"project:/contracts/interfaces/IWithdrawalBox.sol\":{\"keccak256\":\"0xb55c99eef298a295d0d84365cf672393fdf8c6f3edbef7806fd28cada7950097\",\"license\":\"GPL-3.0-only\",\"urls\":[\"bzz-raw://43f9d39edd9931af45f0f6410d65418f496f6d1f63a02476972b4eaad6eef3b9\",\"dweb:/ipfs/QmaNw4G7DDBEG4oCsUfHQjbdGgZ7NBX8cYWhfvzu1Yqgat\"]},\"project:/contracts/interfaces/IcBridgeRouter.sol\":{\"keccak256\":\"0x8c72160cb06349030268555bc20abd9502990ad410aa793d975d62dbdebe40b5\",\"license\":\"GPL-3.0-only\",\"urls\":[\"bzz-raw://6c9f86a358e93d92ece5791d2956094734cb17fb59c759aa264a2ed07fe2ed3f\",\"dweb:/ipfs/QmfGDRSBcmiG8FJTPigTbkCxrCVdPbG3cLrJCcV2ofnTNz\"]},\"project:/contracts/main/Batch.sol\":{\"keccak256\":\"0xb39df36817092a3d23cb60aa1d06ee8bd0fc344936802e1e13f537d4528c0261\",\"license\":\"Unlicense\",\"urls\":[\"bzz-raw://0c585deaefa27dcc80e61bb2f0390d4e98c3aade2471296f97124af8f1da5fce\",\"dweb:/ipfs/QmbM8UYmoWE3vbBwqqWwYD8VCsMtXgajpJ516sk1ugHx3u\"]},\"project:/contracts/main/Moderator.sol\":{\"keccak256\":\"0x3d2917fae9d060553bd929b9877150fef8897b838e03529e9a0f1031f13549e0\",\"license\":\"Unlicense\",\"urls\":[\"bzz-raw://b7d95c18db39e21d96e7114eff2bbd87e241ce0db1d9f888e5a5f8b4b22287b5\",\"dweb:/ipfs/QmWWJVryBwEMPHPeUvwpSQZjEQ9uiMspGh4EXkYtC4Musz\"]},\"project:/contracts/main/ReceiptNFT.sol\":{\"keccak256\":\"0xc280fb683738ab61f1c160dae1162ccff099d163c9e15f1c0e17a3b795d163ac\",\"license\":\"Unlicense\",\"urls\":[\"bzz-raw://12176fb9c0138ec99753b3b5a47d96fddfe4ad1367dc89765a48f29f98c01500\",\"dweb:/ipfs/QmY9Yk84o3vZE3MmkrBBHygDZy5fNC8bn7zxnsi7DWNFjZ\"]},\"project:/contracts/main/SharesToken.sol\":{\"keccak256\":\"0x7f5c62c43f4716083b7b8c25864ca3fa3a4d197100121f477bf1a76f652077d6\",\"license\":\"Unlicense\",\"urls\":[\"bzz-raw://9a82592452b3e055588fadd0345c01393e3e8884a6aa3da3bccd1c7e87830ed0\",\"dweb:/ipfs/QmZ2Favck6GEdV1pKuwX65rgTx9zgUKQtHxpCYnATefMDy\"]},\"project:/contracts/main/StrategyRouter.sol\":{\"keccak256\":\"0x561010964cc4452e8ec6579693106e6406305aa41abe1ddbb444a1eac1348f5d\",\"license\":\"Unlicense\",\"urls\":[\"bzz-raw://4fa13fe563469602d0e674e6aad44e4f64c27ab3309facc15ea9941410f4d091\",\"dweb:/ipfs/QmPHEKK58xrraq1izyvA97VMMnPb7tRnapLD5cAboY4abj\"]},\"project:/contracts/main/StrategyRouterLib.sol\":{\"keccak256\":\"0xa78515ae7ec2c354a400307e4e6f72304370a74018f240cd6a43e8c1ab814e62\",\"license\":\"Unlicense\",\"urls\":[\"bzz-raw://ffd95c3b1ef6a0c1395486f14c78acdc00a6fda61de6f3aa32bb1aa81ce56e04\",\"dweb:/ipfs/QmQtVvvSpVuMYqRfdgixsbcGL1o5mwFPTG5YU6FBtp9Y62\"]}},\"version\":1}",
+  "bytecode": "0x",
+  "deployedBytecode": "0x",
+  "immutableReferences": {},
+  "generatedSources": [],
+  "deployedGeneratedSources": [],
+  "sourceMap": "",
+  "deployedSourceMap": "",
+  "source": "//SPDX-License-Identifier: Unlicense\r\n\r\npragma solidity ^0.8.0;\r\n\r\nimport \"@openzeppelin/contracts/token/ERC20/IERC20.sol\";\r\nimport \"@openzeppelin/contracts/token/ERC20/utils/SafeERC20.sol\";\r\nimport \"@uniswap/v2-periphery/contracts/interfaces/IUniswapV2Router02.sol\";\r\nimport \"@uniswap/v2-core/contracts/interfaces/IUniswapV2Pair.sol\";\r\nimport \"@uniswap/v2-core/contracts/interfaces/IUniswapV2Factory.sol\";\r\nimport \"../interfaces/IStrategy.sol\";\r\nimport \"../interfaces/IClipSwapFarm.sol\";\r\nimport \"../interfaces/IcBridgeRouter.sol\";\r\nimport \"../interfaces/IWithdrawalBox.sol\";\r\nimport \"@openzeppelin/contracts/token/ERC20/utils/SafeERC20.sol\";\r\nimport \"@openzeppelin/contracts/security/ReentrancyGuard.sol\";\r\n\r\n/** CBridge USDT Liquidity pool.\r\n        Chain: BSC - https://bscscan.com/address/0xf0FF9888A70f44eb12223A6a55C65976BA7bf854\r\n        Pool: USDT\r\n        Yield Source: Bridge fees and token rewards\r\n        Yield Token: CELR\r\n        Link: https://cbridge.celer.network/liquidity\r\n\r\n        Strategy Description:\r\n        USDT is provided as liquidity to the Celer cBridge. This USDT is used as liquidity by people moving between chains.\r\n        Most rewards are received as CELR tokens. Some rewards, which come from bridge fees, are compounded directly into the pool.\r\n        CELR rewards are sold for USDT and USDT is redeposited to strategy to earn fees.\r\n        \r\n        Functions: \r\n            o deposit()\r\n            o withdraw()\r\n            o withdrawall()\r\n            o compound()\r\n        \r\n    @custom:oz-upgrades-unsafe-allow constructor state-variable-immutable\r\n */\r\nabstract contract CBridgeStrategy is Ownable, IStrategy {\r\n    // using SafeERC20 for address;\r\n\r\n    // error CallerUpgrader();\r\n\r\n    // address internal upgrader;\r\n    \r\n    // ERC20 internal immutable tokenA;\r\n    // // ERC20 internal immutable celrRewardToken;\r\n    // ERC20 internal immutable lpToken;\r\n    // StrategyRouter internal immutable strategyRouter;\r\n\r\n    // address internal immutable cBridgeRouter;\r\n\r\n    // ERC20 internal immutable celrRewardToken;\r\n    // IClipSwapFarm internal immutable farm;\r\n    // IUniswapV2Router02 internal immutable celrRouter;\r\n\r\n    // uint256 internal immutable poolId;\r\n\r\n    // uint256 private immutable LEFTOVER_THRESHOLD_A;\r\n    // uint256 private immutable LEFTOVER_THRESHOLD_B;\r\n    // uint256 private constant PERCENT_DENOMINATOR = 10000;\r\n\r\n    // modifier onlyUpgrader() {\r\n    //     if (msg.sender != address(upgrader)) revert CallerUpgrader();\r\n    //     _;\r\n    // }\r\n\r\n    // /// @dev construct is intended to initialize immutables on implementation\r\n    // constructor(\r\n    //     StrategyRouter _strategyRouter,\r\n    //     uint256 _poolId,\r\n    //     ERC20 _tokenA,\r\n    //     // ERC20 B,\r\n    //     ERC20 _celrRewardToken,\r\n    //     address _farm,\r\n    //     address _celrRouter,\r\n    //     address _cBridgeRouter\r\n    // ) {\r\n    //     strategyRouter = _strategyRouter;\r\n    //     poolId = _poolId;\r\n    //     tokenA = _tokenA;\r\n    //     // celrRewardToken = B;\r\n    //     celrRewardToken = _celrRewardToken ;\r\n    //     farm = IClipSwapFarm(_farm);\r\n    //     celrRouter = IUniswapV2Router02(_celrRouter);\r\n    //     cBridgeRouter = _cBridgeRouter;\r\n    //     LEFTOVER_THRESHOLD_A = 10**_tokenA.decimals();\r\n    //     LEFTOVER_THRESHOLD_B = 10**_celrRewardToken.decimals();\r\n        \r\n    //     // lock implementation\r\n    //     _disableInitializers();\r\n    // }\r\n\r\n    // function initialize(address _upgrader) external initializer {\r\n    //     __Ownable_init();\r\n    //     __UUPSUpgradeable_init();\r\n    //     upgrader = _upgrader;\r\n    // }\r\n\r\n    // function _authorizeUpgrade(address newImplementation) internal override onlyUpgrader {}\r\n\r\n    // function depositToken() external view override returns (address) {\r\n    //     return address(tokenA);\r\n    // }\r\n\r\n    // function deposit(uint256 _amount) external override onlyOwner {\r\n    //     SafeERC20.safeTransferFrom(tokenA, msg.sender, address(this), _amount);\r\n    //     require(IERC20(tokenA).balanceOf(address(this)) >= _amount, \"insufficient balance\");\r\n    //     SafeERC20.safeIncreaseAllowance(tokenA, address(cBridgeRouter), _amount);\r\n    //     IcBridgeRouter(cBridgeRouter).addLiquidity(address(tokenA), _amount);\r\n    //     // Exchange exchange = strategyRouter.getExchange();\r\n    //     celrRewardToken.approve(address(farm), _amount);\r\n    //     farm.deposit(poolId, _amount);\r\n    // }\r\n\r\n    // ///@notice The chain Id used here is Testnet\r\n    // function withdraw(uint256 amtToWithdraw)\r\n    //     external\r\n    //     override\r\n    //     onlyOwner\r\n    //     returns (uint256 amountWithdrawn)\r\n    // {\r\n       \r\n    //     farm.withdraw(poolId, amtToWithdraw);\r\n    //     // celrRewardToken.approve(address(celrRouter), amtToWithdraw);\r\n    //     IWithdrawInbox(cBridgeRouter).withdraw(\r\n    //         uint64(poolId), \r\n    //         _msgSender(), \r\n    //         97, // BSC Testnet \r\n    //         [uint64(97)], \r\n    //         [address(tokenA)], \r\n    //         [uint32(1)], \r\n    //         [uint32(0)]\r\n    //     );\r\n    //     lpToken.approve(address(celrRouter), amtToWithdraw);\r\n    //     uint bal = celrRewardToken.balanceOf(address(this));\r\n\r\n    //     Exchange exchange = strategyRouter.getExchange();\r\n    //     celrRewardToken.transfer(address(exchange), bal);\r\n    //     uint amountA = exchange.swap(bal, address(celrRewardToken), address(tokenA), address(this));\r\n    //     tokenA.transfer(msg.sender, amountA);\r\n       \r\n    //     return amountA;\r\n    // }\r\n\r\n    // function compound() external override onlyOwner {\r\n    //     // inside withdraw happens CELR rewards collection\r\n    //     farm.withdraw(poolId, 0);\r\n    //     // use balance because CELR is harvested on deposit and withdraw calls\r\n    //     uint256 celrAmount = celrRewardToken.balanceOf(address(this));\r\n\r\n    //     if (celrAmount > 0) {\r\n    //         fix_leftover(0);\r\n    //         sellReward(celrAmount);\r\n    //         uint256 balanceA = tokenA.balanceOf(address(this));\r\n    //         uint256 balanceB = celrRewardToken.balanceOf(address(this));\r\n\r\n    //         tokenA.approve(address(cBridgeRouter), balanceA);\r\n    //         // celrRewardToken.approve(address(celrRouter), balanceB);\r\n    //         IcBridgeRouter(cBridgeRouter).addLiquidity(balanceA, address(this));\r\n\r\n    //         uint256 lpAmount = lpToken.balanceOf(address(this));\r\n    //         lpToken.approve(address(farm), lpAmount);\r\n    //         farm.deposit(poolId, lpAmount);\r\n    //     }\r\n    // }\r\n\r\n\r\n    // function withdrawAll() external override onlyOwner returns (uint256 amountWithdrawn) {\r\n    //     (uint256 amount, ) = farm.userInfo(poolId, address(this));\r\n    //     if (amount > 0) {\r\n    //         farm.withdraw(poolId, amount);\r\n    //         uint256 lpAmount = lpToken.balanceOf(address(this));\r\n    //         lpToken.approve(address(celrRouter), lpAmount);\r\n    //         IWithdrawInbox(celrRouter).withdraw(\r\n    //             poolId, \r\n    //             _msgSender(), \r\n    //             97, // BSC Testnet \r\n    //             [97], \r\n    //             [tokenA], \r\n    //             [1], \r\n    //             [0]\r\n    //         );\r\n    //     }\r\n\r\n    //     uint256 amountA = tokenA.balanceOf(address(this));\r\n    //     uint256 amountB = celrRewardToken.balanceOf(address(this));\r\n\r\n    //     if (amountB > 0) {\r\n    //         Exchange exchange = strategyRouter.getExchange();\r\n    //         celrRewardToken.transfer(address(exchange), amountB);\r\n    //         amountA += exchange.swap(amountB, address(celrRewardToken), address(tokenA), address(this));\r\n    //     }\r\n    //     if (amountA > 0) {\r\n    //         tokenA.transfer(msg.sender, amountA);\r\n    //         return amountA;\r\n    //     }\r\n    // }\r\n\r\n    // /// @dev Swaps leftover tokens for a better ratio for LP.\r\n    // function fix_leftover(uint256 amountIgnore) private {\r\n    //     Exchange exchange = strategyRouter.getExchange();\r\n    //     uint256 amountB = celrRewardToken.balanceOf(address(this));\r\n    //     uint256 amountA = tokenA.balanceOf(address(this)) - amountIgnore;\r\n    //     uint256 toSwap;\r\n    //     if (amountB > amountA && (toSwap = amountB - amountA) > LEFTOVER_THRESHOLD_B) {\r\n    //         uint256 dexFee = exchange.getFee(toSwap / 2, address(tokenA), address(celrRewardToken));\r\n    //         toSwap = calculateSwapAmount(toSwap / 2, dexFee);\r\n    //         celrRewardToken.transfer(address(exchange), toSwap);\r\n    //         exchange.swap(toSwap, address(celrRewardToken), address(tokenA), address(this));\r\n    //     } else if (amountA > amountB && (toSwap = amountA - amountB) > LEFTOVER_THRESHOLD_A) {\r\n    //         uint256 dexFee = exchange.getFee(toSwap / 2, address(tokenA), address(celrRewardToken));\r\n    //         toSwap = calculateSwapAmount(toSwap / 2, dexFee);\r\n    //         tokenA.transfer(address(exchange), toSwap);\r\n    //         exchange.swap(toSwap, address(tokenA), address(celrRewardToken), address(this));\r\n    //     }\r\n    // }\r\n\r\n    // function totalTokens() external view override returns (uint256) {\r\n    //     (uint256 liquidity, ) = farm.userInfo(poolId, address(this));\r\n\r\n    //     uint256 _totalSupply = lpToken.totalSupply();\r\n    //     // this formula is from uniswap.remove_liquidity -> uniswapPair.burn function\r\n    //     uint256 balanceA = tokenA.balanceOf(address(lpToken));\r\n    //     uint256 balanceB = celrRewardToken.balanceOf(address(lpToken));\r\n    //     uint256 amountA = (liquidity * balanceA) / _totalSupply;\r\n    //     uint256 amountB = (liquidity * balanceB) / _totalSupply;\r\n\r\n    //     if (amountB > 0) {\r\n    //         address token0 = IUniswapV2Pair(address(lpToken)).token0();\r\n\r\n    //         (uint256 _reserve0, uint256 _reserve1) = token0 == address(celrRewardToken)\r\n    //             ? (balanceB, balanceA)\r\n    //             : (balanceA, balanceB);\r\n\r\n    //         // convert amountB to amount tokenA\r\n    //         amountA += celrRouter.quote(amountB, _reserve0, _reserve1);\r\n    //     }\r\n\r\n    //     return amountA;\r\n    // }\r\n\r\n\r\n    // // swap celrRewardToken for tokenA & celrRewardToken in proportions 50/50\r\n    // function sellReward(uint256 celrRewardTokenAmount) private returns (uint256 receivedA, uint256 receivedB) {\r\n    //     // sell for lp ratio\r\n    //     uint256 amountA = celrRewardTokenAmount / 2;\r\n    //     uint256 amountB = celrRewardTokenAmount - amountA;\r\n\r\n    //     Exchange exchange = strategyRouter.getExchange();\r\n    //     celrRewardToken.transfer(address(exchange), amountA);\r\n    //     receivedA = exchange.swap(amountA, address(celrRewardToken), address(tokenA), address(this));\r\n\r\n    //     celrRewardToken.transfer(address(exchange), amountB);\r\n    //     receivedB = exchange.swap(amountB, address(celrRewardToken), address(cBridgeRouter), address(this));\r\n\r\n    //     (receivedA, receivedB) = collectProtocolCommission(receivedA, receivedB);\r\n    // }\r\n\r\n    // function collectProtocolCommission(uint256 amountA, uint256 amountB)\r\n    //     private\r\n    //     returns (uint256 amountAfterFeeA, uint256 amountAfterFeeB)\r\n    // {\r\n    //     uint256 feePercent = StrategyRouter(strategyRouter).feePercent();\r\n    //     address feeAddress = StrategyRouter(strategyRouter).feeAddress();\r\n    //     uint256 ratioUint;\r\n    //     uint256 feeAmount = ((amountA + amountB) * feePercent) / PERCENT_DENOMINATOR;\r\n    //     {\r\n    //         (uint256 r0, uint256 r1, ) = IUniswapV2Pair(address(lpToken)).getReserves();\r\n\r\n    //         // equation: (a - (c*v))/(b - (c-c*v)) = z/x\r\n    //         // solution for v = (a*x - b*z + c*z) / (c * (z+x))\r\n    //         // a,b is current token amounts, z,x is pair reserves, c is total fee amount to take from a+b\r\n    //         // v is ratio to apply to feeAmount and take fee from a and b\r\n    //         // a and z should be converted to same decimals as token b (TODO for cases when decimals are different)\r\n    //         int256 numerator = int256(amountA * r1 + feeAmount * r0) - int256(amountB * r0);\r\n    //         int256 denominator = int256(feeAmount * (r0 + r1));\r\n    //         int256 ratio = (numerator * 1e18) / denominator;\r\n    //         // ratio here could be negative or greater than 1.0\r\n    //         // only need to be between 0 and 1\r\n    //         if (ratio < 0) ratio = 0;\r\n    //         if (ratio > 1e18) ratio = 1e18;\r\n\r\n    //         ratioUint = uint256(ratio);\r\n    //     }\r\n\r\n    //     // these two have same decimals, should adjust A to have A decimals,\r\n    //     // this is TODO for cases when tokenA and celrRewardToken has different decimals\r\n    //     uint256 comissionA = (feeAmount * ratioUint) / 1e18;\r\n    //     // uint256 comissionB = feeAmount - comissionA;\r\n\r\n    //     tokenA.transfer(feeAddress, comissionA);\r\n    //     // celrRewardToken.transfer(feeAddress, comissionB);\r\n\r\n    //     return (amountA - comissionA, 0);\r\n    // }\r\n\r\n    // function calculateSwapAmount(uint256 half, uint256 dexFee) private view returns (uint256 amountAfterFee) {\r\n    //     (uint256 r0, uint256 r1, ) = IUniswapV2Pair(address(celrRewardToken)).getReserves();\r\n    //     uint256 halfWithFee = (2 * r0 * (dexFee + 1e18)) / ((r0 * (dexFee + 1e18)) / 1e18 + r1);\r\n    //     uint256 amountB = (half * halfWithFee) / 1e18;\r\n    //     return amountB;\r\n    // }\r\n}\r\n\r\n",
+  "sourcePath": "C:\\Users\\FVO_MMILLLER\\Desktop\\elvolution\\Testers\\contracts\\clipStrategies\\CBridgeStrategy.sol",
+  "ast": {
+    "absolutePath": "project:/contracts/clipStrategies/CBridgeStrategy.sol",
+    "exportedSymbols": {
+      "Address": [
+        4472
+      ],
+      "Batch": [
+        22277
+      ],
+      "CBridgeStrategy": [
+        14189
+      ],
+      "Context": [
+        4494
+      ],
+      "ERC20": [
+        3757
+      ],
+      "EnumerableSet": [
+        5405
+      ],
+      "EnumerableSetExtension": [
+        17493
+      ],
+      "Exchange": [
+        18733
+      ],
+      "IClipSwapFarm": [
+        19645
+      ],
+      "IERC20": [
+        3835
+      ],
+      "IERC20Metadata": [
+        3860
+      ],
+      "IERC20Permit": [
+        3896
+      ],
+      "IStrategy": [
+        20909
+      ],
+      "IUniswapV2Factory": [
+        5468
+      ],
+      "IUniswapV2Pair": [
+        5710
+      ],
+      "IUniswapV2Router01": [
+        6018
+      ],
+      "IUniswapV2Router02": [
+        6106
+      ],
+      "IUsdOracle": [
+        20922
+      ],
+      "IWithdrawInbox": [
+        20946
+      ],
+      "IcBridgeRouter": [
+        21076
+      ],
+      "Moderator": [
+        22356
+      ],
+      "Ownable": [
+        3131
+      ],
+      "ReceiptNFT": [
+        22753
+      ],
+      "ReentrancyGuard": [
+        3171
+      ],
+      "SafeERC20": [
+        4177
+      ],
+      "SharesToken": [
+        22848
+      ],
+      "StrategyRouter": [
+        24656
+      ],
+      "StrategyRouterLib": [
+        25706
+      ]
+    },
+    "id": 14190,
+    "license": "Unlicense",
+    "nodeType": "SourceUnit",
+    "nodes": [
+      {
+        "id": 14172,
+        "literals": [
+          "solidity",
+          "^",
+          "0.8",
+          ".0"
+        ],
+        "nodeType": "PragmaDirective",
+        "src": "40:23:37"
+      },
+      {
+        "absolutePath": "@openzeppelin/contracts/token/ERC20/IERC20.sol",
+        "file": "@openzeppelin/contracts/token/ERC20/IERC20.sol",
+        "id": 14173,
+        "nameLocation": "-1:-1:-1",
+        "nodeType": "ImportDirective",
+        "scope": 14190,
+        "sourceUnit": 3836,
+        "src": "67:56:37",
+        "symbolAliases": [],
+        "unitAlias": ""
+      },
+      {
+        "absolutePath": "@openzeppelin/contracts/token/ERC20/utils/SafeERC20.sol",
+        "file": "@openzeppelin/contracts/token/ERC20/utils/SafeERC20.sol",
+        "id": 14174,
+        "nameLocation": "-1:-1:-1",
+        "nodeType": "ImportDirective",
+        "scope": 14190,
+        "sourceUnit": 4178,
+        "src": "125:65:37",
+        "symbolAliases": [],
+        "unitAlias": ""
+      },
+      {
+        "absolutePath": "@uniswap/v2-periphery/contracts/interfaces/IUniswapV2Router02.sol",
+        "file": "@uniswap/v2-periphery/contracts/interfaces/IUniswapV2Router02.sol",
+        "id": 14175,
+        "nameLocation": "-1:-1:-1",
+        "nodeType": "ImportDirective",
+        "scope": 14190,
+        "sourceUnit": 6107,
+        "src": "192:75:37",
+        "symbolAliases": [],
+        "unitAlias": ""
+      },
+      {
+        "absolutePath": "@uniswap/v2-core/contracts/interfaces/IUniswapV2Pair.sol",
+        "file": "@uniswap/v2-core/contracts/interfaces/IUniswapV2Pair.sol",
+        "id": 14176,
+        "nameLocation": "-1:-1:-1",
+        "nodeType": "ImportDirective",
+        "scope": 14190,
+        "sourceUnit": 5711,
+        "src": "269:66:37",
+        "symbolAliases": [],
+        "unitAlias": ""
+      },
+      {
+        "absolutePath": "@uniswap/v2-core/contracts/interfaces/IUniswapV2Factory.sol",
+        "file": "@uniswap/v2-core/contracts/interfaces/IUniswapV2Factory.sol",
+        "id": 14177,
+        "nameLocation": "-1:-1:-1",
+        "nodeType": "ImportDirective",
+        "scope": 14190,
+        "sourceUnit": 5469,
+        "src": "337:69:37",
+        "symbolAliases": [],
+        "unitAlias": ""
+      },
+      {
+        "absolutePath": "project:/contracts/interfaces/IStrategy.sol",
+        "file": "../interfaces/IStrategy.sol",
+        "id": 14178,
+        "nameLocation": "-1:-1:-1",
+        "nodeType": "ImportDirective",
+        "scope": 14190,
+        "sourceUnit": 20910,
+        "src": "408:37:37",
+        "symbolAliases": [],
+        "unitAlias": ""
+      },
+      {
+        "absolutePath": "project:/contracts/interfaces/IClipSwapFarm.sol",
+        "file": "../interfaces/IClipSwapFarm.sol",
+        "id": 14179,
+        "nameLocation": "-1:-1:-1",
+        "nodeType": "ImportDirective",
+        "scope": 14190,
+        "sourceUnit": 19646,
+        "src": "447:41:37",
+        "symbolAliases": [],
+        "unitAlias": ""
+      },
+      {
+        "absolutePath": "project:/contracts/interfaces/IcBridgeRouter.sol",
+        "file": "../interfaces/IcBridgeRouter.sol",
+        "id": 14180,
+        "nameLocation": "-1:-1:-1",
+        "nodeType": "ImportDirective",
+        "scope": 14190,
+        "sourceUnit": 21077,
+        "src": "490:42:37",
+        "symbolAliases": [],
+        "unitAlias": ""
+      },
+      {
+        "absolutePath": "project:/contracts/interfaces/IWithdrawalBox.sol",
+        "file": "../interfaces/IWithdrawalBox.sol",
+        "id": 14181,
+        "nameLocation": "-1:-1:-1",
+        "nodeType": "ImportDirective",
+        "scope": 14190,
+        "sourceUnit": 20947,
+        "src": "534:42:37",
+        "symbolAliases": [],
+        "unitAlias": ""
+      },
+      {
+        "absolutePath": "@openzeppelin/contracts/token/ERC20/utils/SafeERC20.sol",
+        "file": "@openzeppelin/contracts/token/ERC20/utils/SafeERC20.sol",
+        "id": 14182,
+        "nameLocation": "-1:-1:-1",
+        "nodeType": "ImportDirective",
+        "scope": 14190,
+        "sourceUnit": 4178,
+        "src": "578:65:37",
+        "symbolAliases": [],
+        "unitAlias": ""
+      },
+      {
+        "absolutePath": "@openzeppelin/contracts/security/ReentrancyGuard.sol",
+        "file": "@openzeppelin/contracts/security/ReentrancyGuard.sol",
+        "id": 14183,
+        "nameLocation": "-1:-1:-1",
+        "nodeType": "ImportDirective",
+        "scope": 14190,
+        "sourceUnit": 3172,
+        "src": "645:62:37",
+        "symbolAliases": [],
+        "unitAlias": ""
+      },
+      {
+        "abstract": true,
+        "baseContracts": [
+          {
+            "baseName": {
+              "id": 14185,
+              "name": "Ownable",
+              "nodeType": "IdentifierPath",
+              "referencedDeclaration": 3131,
+              "src": "1638:7:37"
+            },
+            "id": 14186,
+            "nodeType": "InheritanceSpecifier",
+            "src": "1638:7:37"
+          },
+          {
+            "baseName": {
+              "id": 14187,
+              "name": "IStrategy",
+              "nodeType": "IdentifierPath",
+              "referencedDeclaration": 20909,
+              "src": "1647:9:37"
+            },
+            "id": 14188,
+            "nodeType": "InheritanceSpecifier",
+            "src": "1647:9:37"
+          }
+        ],
+        "canonicalName": "CBridgeStrategy",
+        "contractDependencies": [],
+        "contractKind": "contract",
+        "documentation": {
+          "id": 14184,
+          "nodeType": "StructuredDocumentation",
+          "src": "711:888:37",
+          "text": "CBridge USDT Liquidity pool.\nChain: BSC - https://bscscan.com/address/0xf0FF9888A70f44eb12223A6a55C65976BA7bf854\nPool: USDT\nYield Source: Bridge fees and token rewards\nYield Token: CELR\nLink: https://cbridge.celer.network/liquidity\nStrategy Description:\nUSDT is provided as liquidity to the Celer cBridge. This USDT is used as liquidity by people moving between chains.\nMost rewards are received as CELR tokens. Some rewards, which come from bridge fees, are compounded directly into the pool.\nCELR rewards are sold for USDT and USDT is redeposited to strategy to earn fees.\nFunctions: \no deposit()\no withdraw()\no withdrawall()\no compound()\n@custom:oz-upgrades-unsafe-allow constructor state-variable-immutable"
+        },
+        "fullyImplemented": false,
+        "id": 14189,
+        "linearizedBaseContracts": [
+          14189,
+          20909,
+          3131,
+          4494
+        ],
+        "name": "CBridgeStrategy",
+        "nameLocation": "1619:15:37",
+        "nodeType": "ContractDefinition",
+        "nodes": [],
+        "scope": 14190,
+        "src": "1601:11791:37",
+        "usedErrors": [
+          20828,
+          20830,
+          20832,
+          20834,
+          20836,
+          20838,
+          20840,
+          20842,
+          20844,
+          20846,
+          20848,
+          20850,
+          20852
+        ]
+      }
+    ],
+    "src": "40:13356:37"
+  },
+  "compiler": {
+    "name": "solc",
+    "version": "0.8.15+commit.e14f2714.Emscripten.clang"
+  },
+  "networks": {},
+  "schemaVersion": "3.4.8",
+  "updatedAt": "2022-09-08T16:23:05.378Z",
+  "devdoc": {
+    "custom:oz-upgrades-unsafe-allow": "constructor state-variable-immutable",
+    "kind": "dev",
+    "methods": {
+      "owner()": {
+        "details": "Returns the address of the current owner."
+      },
+      "renounceOwnership()": {
+        "details": "Leaves the contract without owner. It will not be possible to call `onlyOwner` functions anymore. Can only be called by the current owner. NOTE: Renouncing ownership will leave the contract without an owner, thereby removing any functionality that is only available to the owner."
+      },
+      "transferOwnership(address)": {
+        "details": "Transfers ownership of the contract to a new account (`newOwner`). Can only be called by the current owner."
+      },
+      "withdraw(uint256)": {
+        "details": "Max withdrawable amount is returned by totalTokens."
+      }
+    },
+    "version": 1
+  },
+  "userdoc": {
+    "events": {
+      "AllocateToStrategies(uint256,uint256)": {
+        "notice": "Fires when batch is deposited into strategies."
+      },
+      "Deposit(address,address,uint256)": {
+        "notice": "Fires when user deposits in batch."
+      },
+      "RedeemReceiptsToShares(address,uint256,uint256[])": {
+        "notice": "Fires when user converts his receipt into shares token."
+      },
+      "RedeemReceiptsToSharesByModerators(address,uint256[])": {
+        "notice": "Fires when moderator converts foreign receipts into shares token."
+      },
+      "WithdrawFromBatch(address,address,uint256)": {
+        "notice": "Fires when user withdraw from batch."
+      },
+      "WithdrawFromStrategies(address,address,uint256)": {
+        "notice": "Fires when user withdraw from strategies."
+      }
+    },
+    "kind": "user",
+    "methods": {
+      "compound()": {
+        "notice": "Harvest rewards and reinvest them."
+      },
+      "deposit(uint256)": {
+        "notice": "Deposit token to strategy."
+      },
+      "depositToken()": {
+        "notice": "Token used to deposit to strategy."
+      },
+      "totalTokens()": {
+        "notice": "Approximated amount of token on the strategy."
+      },
+      "withdraw(uint256)": {
+        "notice": "Withdraw tokens from strategy."
+      },
+      "withdrawAll()": {
+        "notice": "Withdraw all tokens from strategy."
+      }
+    },
+    "notice": "CBridge USDT Liquidity pool. Chain: BSC - https://bscscan.com/address/0xf0FF9888A70f44eb12223A6a55C65976BA7bf854 Pool: USDT Yield Source: Bridge fees and token rewards Yield Token: CELR Link: https://cbridge.celer.network/liquidity Strategy Description: USDT is provided as liquidity to the Celer cBridge. This USDT is used as liquidity by people moving between chains. Most rewards are received as CELR tokens. Some rewards, which come from bridge fees, are compounded directly into the pool. CELR rewards are sold for USDT and USDT is redeposited to strategy to earn fees. Functions:  o deposit() o withdraw() o withdrawall() o compound()",
+    "version": 1
+  }
+}

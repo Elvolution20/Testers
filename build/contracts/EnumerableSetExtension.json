@@ -1,0 +1,459 @@
+{
+  "contractName": "EnumerableSetExtension",
+  "abi": [],
+  "metadata": "{\"compiler\":{\"version\":\"0.8.15+commit.e14f2714\"},\"language\":\"Solidity\",\"output\":{\"abi\":[],\"devdoc\":{\"kind\":\"dev\",\"methods\":{},\"version\":1},\"userdoc\":{\"kind\":\"user\",\"methods\":{},\"version\":1}},\"settings\":{\"compilationTarget\":{\"project:/contracts/deps/EnumerableSetExtension.sol\":\"EnumerableSetExtension\"},\"evmVersion\":\"london\",\"libraries\":{},\"metadata\":{\"bytecodeHash\":\"ipfs\"},\"optimizer\":{\"enabled\":false,\"runs\":200},\"remappings\":[]},\"sources\":{\"@openzeppelin/contracts/utils/structs/EnumerableSet.sol\":{\"keccak256\":\"0x5050943b32b6a8f282573d166b2e9d87ab7eb4dbba4ab6acf36ecb54fe6995e4\",\"license\":\"MIT\",\"urls\":[\"bzz-raw://d4831d777a29ebdf9f2caecd70e74b97bff1b70e53622fd0a02aed01e21c8271\",\"dweb:/ipfs/QmUqurVVnCc7XkMxb2k23TVQUtuhHZduJ3hTZarTJrqU24\"]},\"project:/contracts/deps/EnumerableSetExtension.sol\":{\"keccak256\":\"0xc09b6f66a4027ee76d75936a7abf127e1dcc41921a2433098991c3d643af8f10\",\"urls\":[\"bzz-raw://0775192a24cd6f64cacc9995de4562848140f3d20bad0631b52573780329a8a0\",\"dweb:/ipfs/Qmd4UWLzosUqs5VSWV48wPRMbt3RymB8DLYvHD56MpnZRt\"]}},\"version\":1}",
+  "bytecode": "0x60566050600b82828239805160001a6073146043577f4e487b7100000000000000000000000000000000000000000000000000000000600052600060045260246000fd5b30600052607381538281f3fe73000000000000000000000000000000000000000030146080604052600080fdfea2646970667358221220ab5f6031277be040b04dbc49e0b63bbbc75c807ad750a4204fbcbf2bbf79a23464736f6c634300080f0033",
+  "deployedBytecode": "0x73000000000000000000000000000000000000000030146080604052600080fdfea2646970667358221220ab5f6031277be040b04dbc49e0b63bbbc75c807ad750a4204fbcbf2bbf79a23464736f6c634300080f0033",
+  "immutableReferences": {},
+  "generatedSources": [],
+  "deployedGeneratedSources": [],
+  "sourceMap": "96:293:43:-:0;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;",
+  "deployedSourceMap": "96:293:43:-:0;;;;;;;;",
+  "source": "pragma solidity ^0.8.4;\r\n\r\nimport \"@openzeppelin/contracts/utils/structs/EnumerableSet.sol\";\r\n\r\nlibrary EnumerableSetExtension {\r\n    /// @dev Function will revert if address is not in set.\r\n    function indexOf(EnumerableSet.AddressSet storage set, address value) internal view returns (uint256 index) {\r\n        return set._inner._indexes[bytes32(uint256(uint160(value)))] - 1;\r\n    }\r\n}\r\n",
+  "sourcePath": "C:\\Users\\FVO_MMILLLER\\Desktop\\elvolution\\Testers\\contracts\\deps\\EnumerableSetExtension.sol",
+  "ast": {
+    "absolutePath": "project:/contracts/deps/EnumerableSetExtension.sol",
+    "exportedSymbols": {
+      "EnumerableSet": [
+        5405
+      ],
+      "EnumerableSetExtension": [
+        17493
+      ]
+    },
+    "id": 17494,
+    "nodeType": "SourceUnit",
+    "nodes": [
+      {
+        "id": 17462,
+        "literals": [
+          "solidity",
+          "^",
+          "0.8",
+          ".4"
+        ],
+        "nodeType": "PragmaDirective",
+        "src": "0:23:43"
+      },
+      {
+        "absolutePath": "@openzeppelin/contracts/utils/structs/EnumerableSet.sol",
+        "file": "@openzeppelin/contracts/utils/structs/EnumerableSet.sol",
+        "id": 17463,
+        "nameLocation": "-1:-1:-1",
+        "nodeType": "ImportDirective",
+        "scope": 17494,
+        "sourceUnit": 5406,
+        "src": "27:65:43",
+        "symbolAliases": [],
+        "unitAlias": ""
+      },
+      {
+        "abstract": false,
+        "baseContracts": [],
+        "canonicalName": "EnumerableSetExtension",
+        "contractDependencies": [],
+        "contractKind": "library",
+        "fullyImplemented": true,
+        "id": 17493,
+        "linearizedBaseContracts": [
+          17493
+        ],
+        "name": "EnumerableSetExtension",
+        "nameLocation": "104:22:43",
+        "nodeType": "ContractDefinition",
+        "nodes": [
+          {
+            "body": {
+              "id": 17491,
+              "nodeType": "Block",
+              "src": "303:83:43",
+              "statements": [
+                {
+                  "expression": {
+                    "commonType": {
+                      "typeIdentifier": "t_uint256",
+                      "typeString": "uint256"
+                    },
+                    "id": 17489,
+                    "isConstant": false,
+                    "isLValue": false,
+                    "isPure": false,
+                    "lValueRequested": false,
+                    "leftExpression": {
+                      "baseExpression": {
+                        "expression": {
+                          "expression": {
+                            "id": 17474,
+                            "name": "set",
+                            "nodeType": "Identifier",
+                            "overloadedDeclarations": [],
+                            "referencedDeclaration": 17467,
+                            "src": "321:3:43",
+                            "typeDescriptions": {
+                              "typeIdentifier": "t_struct$_AddressSet_$5118_storage_ptr",
+                              "typeString": "struct EnumerableSet.AddressSet storage pointer"
+                            }
+                          },
+                          "id": 17475,
+                          "isConstant": false,
+                          "isLValue": true,
+                          "isPure": false,
+                          "lValueRequested": false,
+                          "memberName": "_inner",
+                          "nodeType": "MemberAccess",
+                          "referencedDeclaration": 5117,
+                          "src": "321:10:43",
+                          "typeDescriptions": {
+                            "typeIdentifier": "t_struct$_Set_$4817_storage",
+                            "typeString": "struct EnumerableSet.Set storage ref"
+                          }
+                        },
+                        "id": 17476,
+                        "isConstant": false,
+                        "isLValue": true,
+                        "isPure": false,
+                        "lValueRequested": false,
+                        "memberName": "_indexes",
+                        "nodeType": "MemberAccess",
+                        "referencedDeclaration": 4816,
+                        "src": "321:19:43",
+                        "typeDescriptions": {
+                          "typeIdentifier": "t_mapping$_t_bytes32_$_t_uint256_$",
+                          "typeString": "mapping(bytes32 => uint256)"
+                        }
+                      },
+                      "id": 17487,
+                      "indexExpression": {
+                        "arguments": [
+                          {
+                            "arguments": [
+                              {
+                                "arguments": [
+                                  {
+                                    "id": 17483,
+                                    "name": "value",
+                                    "nodeType": "Identifier",
+                                    "overloadedDeclarations": [],
+                                    "referencedDeclaration": 17469,
+                                    "src": "365:5:43",
+                                    "typeDescriptions": {
+                                      "typeIdentifier": "t_address",
+                                      "typeString": "address"
+                                    }
+                                  }
+                                ],
+                                "expression": {
+                                  "argumentTypes": [
+                                    {
+                                      "typeIdentifier": "t_address",
+                                      "typeString": "address"
+                                    }
+                                  ],
+                                  "id": 17482,
+                                  "isConstant": false,
+                                  "isLValue": false,
+                                  "isPure": true,
+                                  "lValueRequested": false,
+                                  "nodeType": "ElementaryTypeNameExpression",
+                                  "src": "357:7:43",
+                                  "typeDescriptions": {
+                                    "typeIdentifier": "t_type$_t_uint160_$",
+                                    "typeString": "type(uint160)"
+                                  },
+                                  "typeName": {
+                                    "id": 17481,
+                                    "name": "uint160",
+                                    "nodeType": "ElementaryTypeName",
+                                    "src": "357:7:43",
+                                    "typeDescriptions": {}
+                                  }
+                                },
+                                "id": 17484,
+                                "isConstant": false,
+                                "isLValue": false,
+                                "isPure": false,
+                                "kind": "typeConversion",
+                                "lValueRequested": false,
+                                "names": [],
+                                "nodeType": "FunctionCall",
+                                "src": "357:14:43",
+                                "tryCall": false,
+                                "typeDescriptions": {
+                                  "typeIdentifier": "t_uint160",
+                                  "typeString": "uint160"
+                                }
+                              }
+                            ],
+                            "expression": {
+                              "argumentTypes": [
+                                {
+                                  "typeIdentifier": "t_uint160",
+                                  "typeString": "uint160"
+                                }
+                              ],
+                              "id": 17480,
+                              "isConstant": false,
+                              "isLValue": false,
+                              "isPure": true,
+                              "lValueRequested": false,
+                              "nodeType": "ElementaryTypeNameExpression",
+                              "src": "349:7:43",
+                              "typeDescriptions": {
+                                "typeIdentifier": "t_type$_t_uint256_$",
+                                "typeString": "type(uint256)"
+                              },
+                              "typeName": {
+                                "id": 17479,
+                                "name": "uint256",
+                                "nodeType": "ElementaryTypeName",
+                                "src": "349:7:43",
+                                "typeDescriptions": {}
+                              }
+                            },
+                            "id": 17485,
+                            "isConstant": false,
+                            "isLValue": false,
+                            "isPure": false,
+                            "kind": "typeConversion",
+                            "lValueRequested": false,
+                            "names": [],
+                            "nodeType": "FunctionCall",
+                            "src": "349:23:43",
+                            "tryCall": false,
+                            "typeDescriptions": {
+                              "typeIdentifier": "t_uint256",
+                              "typeString": "uint256"
+                            }
+                          }
+                        ],
+                        "expression": {
+                          "argumentTypes": [
+                            {
+                              "typeIdentifier": "t_uint256",
+                              "typeString": "uint256"
+                            }
+                          ],
+                          "id": 17478,
+                          "isConstant": false,
+                          "isLValue": false,
+                          "isPure": true,
+                          "lValueRequested": false,
+                          "nodeType": "ElementaryTypeNameExpression",
+                          "src": "341:7:43",
+                          "typeDescriptions": {
+                            "typeIdentifier": "t_type$_t_bytes32_$",
+                            "typeString": "type(bytes32)"
+                          },
+                          "typeName": {
+                            "id": 17477,
+                            "name": "bytes32",
+                            "nodeType": "ElementaryTypeName",
+                            "src": "341:7:43",
+                            "typeDescriptions": {}
+                          }
+                        },
+                        "id": 17486,
+                        "isConstant": false,
+                        "isLValue": false,
+                        "isPure": false,
+                        "kind": "typeConversion",
+                        "lValueRequested": false,
+                        "names": [],
+                        "nodeType": "FunctionCall",
+                        "src": "341:32:43",
+                        "tryCall": false,
+                        "typeDescriptions": {
+                          "typeIdentifier": "t_bytes32",
+                          "typeString": "bytes32"
+                        }
+                      },
+                      "isConstant": false,
+                      "isLValue": true,
+                      "isPure": false,
+                      "lValueRequested": false,
+                      "nodeType": "IndexAccess",
+                      "src": "321:53:43",
+                      "typeDescriptions": {
+                        "typeIdentifier": "t_uint256",
+                        "typeString": "uint256"
+                      }
+                    },
+                    "nodeType": "BinaryOperation",
+                    "operator": "-",
+                    "rightExpression": {
+                      "hexValue": "31",
+                      "id": 17488,
+                      "isConstant": false,
+                      "isLValue": false,
+                      "isPure": true,
+                      "kind": "number",
+                      "lValueRequested": false,
+                      "nodeType": "Literal",
+                      "src": "377:1:43",
+                      "typeDescriptions": {
+                        "typeIdentifier": "t_rational_1_by_1",
+                        "typeString": "int_const 1"
+                      },
+                      "value": "1"
+                    },
+                    "src": "321:57:43",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_uint256",
+                      "typeString": "uint256"
+                    }
+                  },
+                  "functionReturnParameters": 17473,
+                  "id": 17490,
+                  "nodeType": "Return",
+                  "src": "314:64:43"
+                }
+              ]
+            },
+            "documentation": {
+              "id": 17464,
+              "nodeType": "StructuredDocumentation",
+              "src": "134:55:43",
+              "text": "@dev Function will revert if address is not in set."
+            },
+            "id": 17492,
+            "implemented": true,
+            "kind": "function",
+            "modifiers": [],
+            "name": "indexOf",
+            "nameLocation": "204:7:43",
+            "nodeType": "FunctionDefinition",
+            "parameters": {
+              "id": 17470,
+              "nodeType": "ParameterList",
+              "parameters": [
+                {
+                  "constant": false,
+                  "id": 17467,
+                  "mutability": "mutable",
+                  "name": "set",
+                  "nameLocation": "245:3:43",
+                  "nodeType": "VariableDeclaration",
+                  "scope": 17492,
+                  "src": "212:36:43",
+                  "stateVariable": false,
+                  "storageLocation": "storage",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_struct$_AddressSet_$5118_storage_ptr",
+                    "typeString": "struct EnumerableSet.AddressSet"
+                  },
+                  "typeName": {
+                    "id": 17466,
+                    "nodeType": "UserDefinedTypeName",
+                    "pathNode": {
+                      "id": 17465,
+                      "name": "EnumerableSet.AddressSet",
+                      "nodeType": "IdentifierPath",
+                      "referencedDeclaration": 5118,
+                      "src": "212:24:43"
+                    },
+                    "referencedDeclaration": 5118,
+                    "src": "212:24:43",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_struct$_AddressSet_$5118_storage_ptr",
+                      "typeString": "struct EnumerableSet.AddressSet"
+                    }
+                  },
+                  "visibility": "internal"
+                },
+                {
+                  "constant": false,
+                  "id": 17469,
+                  "mutability": "mutable",
+                  "name": "value",
+                  "nameLocation": "258:5:43",
+                  "nodeType": "VariableDeclaration",
+                  "scope": 17492,
+                  "src": "250:13:43",
+                  "stateVariable": false,
+                  "storageLocation": "default",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_address",
+                    "typeString": "address"
+                  },
+                  "typeName": {
+                    "id": 17468,
+                    "name": "address",
+                    "nodeType": "ElementaryTypeName",
+                    "src": "250:7:43",
+                    "stateMutability": "nonpayable",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_address",
+                      "typeString": "address"
+                    }
+                  },
+                  "visibility": "internal"
+                }
+              ],
+              "src": "211:53:43"
+            },
+            "returnParameters": {
+              "id": 17473,
+              "nodeType": "ParameterList",
+              "parameters": [
+                {
+                  "constant": false,
+                  "id": 17472,
+                  "mutability": "mutable",
+                  "name": "index",
+                  "nameLocation": "296:5:43",
+                  "nodeType": "VariableDeclaration",
+                  "scope": 17492,
+                  "src": "288:13:43",
+                  "stateVariable": false,
+                  "storageLocation": "default",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_uint256",
+                    "typeString": "uint256"
+                  },
+                  "typeName": {
+                    "id": 17471,
+                    "name": "uint256",
+                    "nodeType": "ElementaryTypeName",
+                    "src": "288:7:43",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_uint256",
+                      "typeString": "uint256"
+                    }
+                  },
+                  "visibility": "internal"
+                }
+              ],
+              "src": "287:15:43"
+            },
+            "scope": 17493,
+            "src": "195:191:43",
+            "stateMutability": "view",
+            "virtual": false,
+            "visibility": "internal"
+          }
+        ],
+        "scope": 17494,
+        "src": "96:293:43",
+        "usedErrors": []
+      }
+    ],
+    "src": "0:391:43"
+  },
+  "compiler": {
+    "name": "solc",
+    "version": "0.8.15+commit.e14f2714.Emscripten.clang"
+  },
+  "networks": {},
+  "schemaVersion": "3.4.8",
+  "updatedAt": "2022-09-08T16:23:06.347Z",
+  "devdoc": {
+    "kind": "dev",
+    "methods": {},
+    "version": 1
+  },
+  "userdoc": {
+    "kind": "user",
+    "methods": {},
+    "version": 1
+  }
+}

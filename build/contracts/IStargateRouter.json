@@ -1,0 +1,1880 @@
+{
+  "contractName": "IStargateRouter",
+  "abi": [
+    {
+      "inputs": [
+        {
+          "internalType": "uint256",
+          "name": "_poolId",
+          "type": "uint256"
+        },
+        {
+          "internalType": "uint256",
+          "name": "_amountLD",
+          "type": "uint256"
+        },
+        {
+          "internalType": "address",
+          "name": "_to",
+          "type": "address"
+        }
+      ],
+      "name": "addLiquidity",
+      "outputs": [],
+      "stateMutability": "nonpayable",
+      "type": "function"
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "uint16",
+          "name": "_dstChainId",
+          "type": "uint16"
+        },
+        {
+          "internalType": "uint256",
+          "name": "_srcPoolId",
+          "type": "uint256"
+        },
+        {
+          "internalType": "uint256",
+          "name": "_dstPoolId",
+          "type": "uint256"
+        },
+        {
+          "internalType": "address payable",
+          "name": "_refundAddress",
+          "type": "address"
+        },
+        {
+          "internalType": "uint256",
+          "name": "amountLD",
+          "type": "uint256"
+        },
+        {
+          "internalType": "uint256",
+          "name": "_minAmountLD",
+          "type": "uint256"
+        },
+        {
+          "components": [
+            {
+              "internalType": "uint256",
+              "name": "dstGasForCall",
+              "type": "uint256"
+            },
+            {
+              "internalType": "uint256",
+              "name": "dstNativeAmmount",
+              "type": "uint256"
+            },
+            {
+              "internalType": "bytes",
+              "name": "dstNativeAddr",
+              "type": "bytes"
+            }
+          ],
+          "internalType": "struct IStargateRouter.lzTxObj",
+          "name": "_lzTxParams",
+          "type": "tuple"
+        },
+        {
+          "internalType": "bytes",
+          "name": "_to",
+          "type": "bytes"
+        },
+        {
+          "internalType": "bytes",
+          "name": "_payLoad",
+          "type": "bytes"
+        }
+      ],
+      "name": "swap",
+      "outputs": [],
+      "stateMutability": "payable",
+      "type": "function"
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "uint16",
+          "name": "_dstChainId",
+          "type": "uint16"
+        },
+        {
+          "internalType": "uint256",
+          "name": "_srcPoolId",
+          "type": "uint256"
+        },
+        {
+          "internalType": "uint256",
+          "name": "_dstPoolId",
+          "type": "uint256"
+        },
+        {
+          "internalType": "address payable",
+          "name": "_refundAddress",
+          "type": "address"
+        },
+        {
+          "internalType": "uint256",
+          "name": "amountLP",
+          "type": "uint256"
+        },
+        {
+          "internalType": "uint256",
+          "name": "_minAmountLD",
+          "type": "uint256"
+        },
+        {
+          "internalType": "bytes",
+          "name": "_to",
+          "type": "bytes"
+        },
+        {
+          "components": [
+            {
+              "internalType": "uint256",
+              "name": "dstGasForCall",
+              "type": "uint256"
+            },
+            {
+              "internalType": "uint256",
+              "name": "dstNativeAmmount",
+              "type": "uint256"
+            },
+            {
+              "internalType": "bytes",
+              "name": "dstNativeAddr",
+              "type": "bytes"
+            }
+          ],
+          "internalType": "struct IStargateRouter.lzTxObj",
+          "name": "_lzTxParams",
+          "type": "tuple"
+        }
+      ],
+      "name": "redeemRemote",
+      "outputs": [],
+      "stateMutability": "payable",
+      "type": "function"
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "uint256",
+          "name": "_srcPoolId",
+          "type": "uint256"
+        },
+        {
+          "internalType": "uint256",
+          "name": "amountLP",
+          "type": "uint256"
+        },
+        {
+          "internalType": "bytes",
+          "name": "_to",
+          "type": "bytes"
+        }
+      ],
+      "name": "instantRedeemLocal",
+      "outputs": [
+        {
+          "internalType": "uint256",
+          "name": "",
+          "type": "uint256"
+        }
+      ],
+      "stateMutability": "nonpayable",
+      "type": "function"
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "uint16",
+          "name": "_dstChainId",
+          "type": "uint16"
+        },
+        {
+          "internalType": "uint256",
+          "name": "_srcPoolId",
+          "type": "uint256"
+        },
+        {
+          "internalType": "uint256",
+          "name": "_dstPoolId",
+          "type": "uint256"
+        },
+        {
+          "internalType": "address payable",
+          "name": "_refundAddress",
+          "type": "address"
+        },
+        {
+          "internalType": "uint256",
+          "name": "amountLP",
+          "type": "uint256"
+        },
+        {
+          "internalType": "bytes",
+          "name": "_to",
+          "type": "bytes"
+        },
+        {
+          "components": [
+            {
+              "internalType": "uint256",
+              "name": "dstGasForCall",
+              "type": "uint256"
+            },
+            {
+              "internalType": "uint256",
+              "name": "dstNativeAmmount",
+              "type": "uint256"
+            },
+            {
+              "internalType": "bytes",
+              "name": "dstNativeAddr",
+              "type": "bytes"
+            }
+          ],
+          "internalType": "struct IStargateRouter.lzTxObj",
+          "name": "_lzTxParams",
+          "type": "tuple"
+        }
+      ],
+      "name": "redeemLocal",
+      "outputs": [],
+      "stateMutability": "payable",
+      "type": "function"
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "uint16",
+          "name": "_dstChainId",
+          "type": "uint16"
+        },
+        {
+          "internalType": "uint256",
+          "name": "_srcPoolId",
+          "type": "uint256"
+        },
+        {
+          "internalType": "uint256",
+          "name": "_dstPoolId",
+          "type": "uint256"
+        },
+        {
+          "internalType": "address payable",
+          "name": "_refundAddress",
+          "type": "address"
+        }
+      ],
+      "name": "sendCredits",
+      "outputs": [],
+      "stateMutability": "payable",
+      "type": "function"
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "uint16",
+          "name": "_dstChainId",
+          "type": "uint16"
+        },
+        {
+          "internalType": "uint8",
+          "name": "_functionType",
+          "type": "uint8"
+        },
+        {
+          "internalType": "bytes",
+          "name": "_toAddress",
+          "type": "bytes"
+        },
+        {
+          "internalType": "bytes",
+          "name": "_transferAndCallPayload",
+          "type": "bytes"
+        },
+        {
+          "components": [
+            {
+              "internalType": "uint256",
+              "name": "dstGasForCall",
+              "type": "uint256"
+            },
+            {
+              "internalType": "uint256",
+              "name": "dstNativeAmmount",
+              "type": "uint256"
+            },
+            {
+              "internalType": "bytes",
+              "name": "dstNativeAddr",
+              "type": "bytes"
+            }
+          ],
+          "internalType": "struct IStargateRouter.lzTxObj",
+          "name": "_lzTxParams",
+          "type": "tuple"
+        }
+      ],
+      "name": "quoteLayerZeroFee",
+      "outputs": [
+        {
+          "internalType": "uint256",
+          "name": "",
+          "type": "uint256"
+        },
+        {
+          "internalType": "uint256",
+          "name": "",
+          "type": "uint256"
+        }
+      ],
+      "stateMutability": "view",
+      "type": "function"
+    }
+  ],
+  "metadata": "{\"compiler\":{\"version\":\"0.8.15+commit.e14f2714\"},\"language\":\"Solidity\",\"output\":{\"abi\":[{\"inputs\":[{\"internalType\":\"uint256\",\"name\":\"_poolId\",\"type\":\"uint256\"},{\"internalType\":\"uint256\",\"name\":\"_amountLD\",\"type\":\"uint256\"},{\"internalType\":\"address\",\"name\":\"_to\",\"type\":\"address\"}],\"name\":\"addLiquidity\",\"outputs\":[],\"stateMutability\":\"nonpayable\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"uint256\",\"name\":\"_srcPoolId\",\"type\":\"uint256\"},{\"internalType\":\"uint256\",\"name\":\"amountLP\",\"type\":\"uint256\"},{\"internalType\":\"bytes\",\"name\":\"_to\",\"type\":\"bytes\"}],\"name\":\"instantRedeemLocal\",\"outputs\":[{\"internalType\":\"uint256\",\"name\":\"\",\"type\":\"uint256\"}],\"stateMutability\":\"nonpayable\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"uint16\",\"name\":\"_dstChainId\",\"type\":\"uint16\"},{\"internalType\":\"uint8\",\"name\":\"_functionType\",\"type\":\"uint8\"},{\"internalType\":\"bytes\",\"name\":\"_toAddress\",\"type\":\"bytes\"},{\"internalType\":\"bytes\",\"name\":\"_transferAndCallPayload\",\"type\":\"bytes\"},{\"components\":[{\"internalType\":\"uint256\",\"name\":\"dstGasForCall\",\"type\":\"uint256\"},{\"internalType\":\"uint256\",\"name\":\"dstNativeAmmount\",\"type\":\"uint256\"},{\"internalType\":\"bytes\",\"name\":\"dstNativeAddr\",\"type\":\"bytes\"}],\"internalType\":\"struct IStargateRouter.lzTxObj\",\"name\":\"_lzTxParams\",\"type\":\"tuple\"}],\"name\":\"quoteLayerZeroFee\",\"outputs\":[{\"internalType\":\"uint256\",\"name\":\"\",\"type\":\"uint256\"},{\"internalType\":\"uint256\",\"name\":\"\",\"type\":\"uint256\"}],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"uint16\",\"name\":\"_dstChainId\",\"type\":\"uint16\"},{\"internalType\":\"uint256\",\"name\":\"_srcPoolId\",\"type\":\"uint256\"},{\"internalType\":\"uint256\",\"name\":\"_dstPoolId\",\"type\":\"uint256\"},{\"internalType\":\"address payable\",\"name\":\"_refundAddress\",\"type\":\"address\"},{\"internalType\":\"uint256\",\"name\":\"amountLP\",\"type\":\"uint256\"},{\"internalType\":\"bytes\",\"name\":\"_to\",\"type\":\"bytes\"},{\"components\":[{\"internalType\":\"uint256\",\"name\":\"dstGasForCall\",\"type\":\"uint256\"},{\"internalType\":\"uint256\",\"name\":\"dstNativeAmmount\",\"type\":\"uint256\"},{\"internalType\":\"bytes\",\"name\":\"dstNativeAddr\",\"type\":\"bytes\"}],\"internalType\":\"struct IStargateRouter.lzTxObj\",\"name\":\"_lzTxParams\",\"type\":\"tuple\"}],\"name\":\"redeemLocal\",\"outputs\":[],\"stateMutability\":\"payable\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"uint16\",\"name\":\"_dstChainId\",\"type\":\"uint16\"},{\"internalType\":\"uint256\",\"name\":\"_srcPoolId\",\"type\":\"uint256\"},{\"internalType\":\"uint256\",\"name\":\"_dstPoolId\",\"type\":\"uint256\"},{\"internalType\":\"address payable\",\"name\":\"_refundAddress\",\"type\":\"address\"},{\"internalType\":\"uint256\",\"name\":\"amountLP\",\"type\":\"uint256\"},{\"internalType\":\"uint256\",\"name\":\"_minAmountLD\",\"type\":\"uint256\"},{\"internalType\":\"bytes\",\"name\":\"_to\",\"type\":\"bytes\"},{\"components\":[{\"internalType\":\"uint256\",\"name\":\"dstGasForCall\",\"type\":\"uint256\"},{\"internalType\":\"uint256\",\"name\":\"dstNativeAmmount\",\"type\":\"uint256\"},{\"internalType\":\"bytes\",\"name\":\"dstNativeAddr\",\"type\":\"bytes\"}],\"internalType\":\"struct IStargateRouter.lzTxObj\",\"name\":\"_lzTxParams\",\"type\":\"tuple\"}],\"name\":\"redeemRemote\",\"outputs\":[],\"stateMutability\":\"payable\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"uint16\",\"name\":\"_dstChainId\",\"type\":\"uint16\"},{\"internalType\":\"uint256\",\"name\":\"_srcPoolId\",\"type\":\"uint256\"},{\"internalType\":\"uint256\",\"name\":\"_dstPoolId\",\"type\":\"uint256\"},{\"internalType\":\"address payable\",\"name\":\"_refundAddress\",\"type\":\"address\"}],\"name\":\"sendCredits\",\"outputs\":[],\"stateMutability\":\"payable\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"uint16\",\"name\":\"_dstChainId\",\"type\":\"uint16\"},{\"internalType\":\"uint256\",\"name\":\"_srcPoolId\",\"type\":\"uint256\"},{\"internalType\":\"uint256\",\"name\":\"_dstPoolId\",\"type\":\"uint256\"},{\"internalType\":\"address payable\",\"name\":\"_refundAddress\",\"type\":\"address\"},{\"internalType\":\"uint256\",\"name\":\"amountLD\",\"type\":\"uint256\"},{\"internalType\":\"uint256\",\"name\":\"_minAmountLD\",\"type\":\"uint256\"},{\"components\":[{\"internalType\":\"uint256\",\"name\":\"dstGasForCall\",\"type\":\"uint256\"},{\"internalType\":\"uint256\",\"name\":\"dstNativeAmmount\",\"type\":\"uint256\"},{\"internalType\":\"bytes\",\"name\":\"dstNativeAddr\",\"type\":\"bytes\"}],\"internalType\":\"struct IStargateRouter.lzTxObj\",\"name\":\"_lzTxParams\",\"type\":\"tuple\"},{\"internalType\":\"bytes\",\"name\":\"_to\",\"type\":\"bytes\"},{\"internalType\":\"bytes\",\"name\":\"_payLoad\",\"type\":\"bytes\"}],\"name\":\"swap\",\"outputs\":[],\"stateMutability\":\"payable\",\"type\":\"function\"}],\"devdoc\":{\"kind\":\"dev\",\"methods\":{},\"version\":1},\"userdoc\":{\"kind\":\"user\",\"methods\":{},\"version\":1}},\"settings\":{\"compilationTarget\":{\"project:/contracts/interfaces/IStargateRouter.sol\":\"IStargateRouter\"},\"evmVersion\":\"london\",\"libraries\":{},\"metadata\":{\"bytecodeHash\":\"ipfs\"},\"optimizer\":{\"enabled\":false,\"runs\":200},\"remappings\":[]},\"sources\":{\"project:/contracts/interfaces/IStargateRouter.sol\":{\"keccak256\":\"0x9221ba41fcf47b2ffe4eb24aa1d60522841f125274ba322885324f1f1175d1ba\",\"license\":\"Unlicense\",\"urls\":[\"bzz-raw://518f88fe609ff2ec21a20619e270adf6ddda9e3636909303b9dc16be73a61eaa\",\"dweb:/ipfs/QmaMfzcrYkSZNf8zskN8SyUUTE91wpMqkcHs2iFTYaMXXo\"]}},\"version\":1}",
+  "bytecode": "0x",
+  "deployedBytecode": "0x",
+  "immutableReferences": {},
+  "generatedSources": [],
+  "deployedGeneratedSources": [],
+  "sourceMap": "",
+  "deployedSourceMap": "",
+  "source": "//SPDX-License-Identifier: Unlicense\r\n\r\npragma solidity ^0.8.0;\r\npragma abicoder v2;\r\n\r\ninterface IStargateRouter {\r\n  struct lzTxObj {\r\n    uint256 dstGasForCall;\r\n    uint256 dstNativeAmmount;\r\n    bytes dstNativeAddr;\r\n  }\r\n\r\n  function addLiquidity(uint256 _poolId, uint256 _amountLD, address _to) external;\r\n  \r\n  function swap(\r\n    uint16 _dstChainId,\r\n    uint256 _srcPoolId,\r\n    uint256 _dstPoolId,\r\n    address payable _refundAddress,\r\n    uint256 amountLD,\r\n    uint256 _minAmountLD,\r\n    lzTxObj memory _lzTxParams,\r\n    bytes calldata _to,\r\n    bytes calldata _payLoad\r\n  ) external payable;\r\n\r\n  function redeemRemote(\r\n    uint16 _dstChainId,\r\n    uint256 _srcPoolId,\r\n    uint256 _dstPoolId,\r\n    address payable _refundAddress,\r\n    uint256 amountLP,\r\n    uint256 _minAmountLD,\r\n    bytes calldata _to,\r\n    lzTxObj memory _lzTxParams\r\n  ) external payable;\r\n\r\n  function instantRedeemLocal(\r\n    uint256 _srcPoolId,\r\n    uint256 amountLP,\r\n    bytes calldata _to\r\n  ) external returns(uint256);\r\n\r\n  function redeemLocal(\r\n    uint16 _dstChainId,\r\n    uint256 _srcPoolId,\r\n    uint256 _dstPoolId,\r\n    address payable _refundAddress,\r\n    uint256 amountLP,\r\n    bytes calldata _to,\r\n    lzTxObj memory _lzTxParams\r\n  ) external payable;\r\n\r\n  function sendCredits(\r\n    uint16 _dstChainId,\r\n    uint256 _srcPoolId,\r\n    uint256 _dstPoolId,\r\n    address payable _refundAddress\r\n  ) external payable;\r\n\r\n  function quoteLayerZeroFee(\r\n    uint16 _dstChainId,\r\n    uint8 _functionType,\r\n    bytes calldata _toAddress,\r\n    bytes calldata _transferAndCallPayload,\r\n    lzTxObj memory _lzTxParams\r\n  ) external view returns (uint256, uint256);\r\n}",
+  "sourcePath": "C:\\Users\\FVO_MMILLLER\\Desktop\\elvolution\\Testers\\contracts\\interfaces\\IStargateRouter.sol",
+  "ast": {
+    "absolutePath": "project:/contracts/interfaces/IStargateRouter.sol",
+    "exportedSymbols": {
+      "IStargateRouter": [
+        20734
+      ]
+    },
+    "id": 20735,
+    "license": "Unlicense",
+    "nodeType": "SourceUnit",
+    "nodes": [
+      {
+        "id": 20616,
+        "literals": [
+          "solidity",
+          "^",
+          "0.8",
+          ".0"
+        ],
+        "nodeType": "PragmaDirective",
+        "src": "40:23:59"
+      },
+      {
+        "id": 20617,
+        "literals": [
+          "abicoder",
+          "v2"
+        ],
+        "nodeType": "PragmaDirective",
+        "src": "65:19:59"
+      },
+      {
+        "abstract": false,
+        "baseContracts": [],
+        "canonicalName": "IStargateRouter",
+        "contractDependencies": [],
+        "contractKind": "interface",
+        "fullyImplemented": false,
+        "id": 20734,
+        "linearizedBaseContracts": [
+          20734
+        ],
+        "name": "IStargateRouter",
+        "nameLocation": "98:15:59",
+        "nodeType": "ContractDefinition",
+        "nodes": [
+          {
+            "canonicalName": "IStargateRouter.lzTxObj",
+            "id": 20624,
+            "members": [
+              {
+                "constant": false,
+                "id": 20619,
+                "mutability": "mutable",
+                "name": "dstGasForCall",
+                "nameLocation": "149:13:59",
+                "nodeType": "VariableDeclaration",
+                "scope": 20624,
+                "src": "141:21:59",
+                "stateVariable": false,
+                "storageLocation": "default",
+                "typeDescriptions": {
+                  "typeIdentifier": "t_uint256",
+                  "typeString": "uint256"
+                },
+                "typeName": {
+                  "id": 20618,
+                  "name": "uint256",
+                  "nodeType": "ElementaryTypeName",
+                  "src": "141:7:59",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_uint256",
+                    "typeString": "uint256"
+                  }
+                },
+                "visibility": "internal"
+              },
+              {
+                "constant": false,
+                "id": 20621,
+                "mutability": "mutable",
+                "name": "dstNativeAmmount",
+                "nameLocation": "177:16:59",
+                "nodeType": "VariableDeclaration",
+                "scope": 20624,
+                "src": "169:24:59",
+                "stateVariable": false,
+                "storageLocation": "default",
+                "typeDescriptions": {
+                  "typeIdentifier": "t_uint256",
+                  "typeString": "uint256"
+                },
+                "typeName": {
+                  "id": 20620,
+                  "name": "uint256",
+                  "nodeType": "ElementaryTypeName",
+                  "src": "169:7:59",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_uint256",
+                    "typeString": "uint256"
+                  }
+                },
+                "visibility": "internal"
+              },
+              {
+                "constant": false,
+                "id": 20623,
+                "mutability": "mutable",
+                "name": "dstNativeAddr",
+                "nameLocation": "206:13:59",
+                "nodeType": "VariableDeclaration",
+                "scope": 20624,
+                "src": "200:19:59",
+                "stateVariable": false,
+                "storageLocation": "default",
+                "typeDescriptions": {
+                  "typeIdentifier": "t_bytes_storage_ptr",
+                  "typeString": "bytes"
+                },
+                "typeName": {
+                  "id": 20622,
+                  "name": "bytes",
+                  "nodeType": "ElementaryTypeName",
+                  "src": "200:5:59",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_bytes_storage_ptr",
+                    "typeString": "bytes"
+                  }
+                },
+                "visibility": "internal"
+              }
+            ],
+            "name": "lzTxObj",
+            "nameLocation": "126:7:59",
+            "nodeType": "StructDefinition",
+            "scope": 20734,
+            "src": "119:106:59",
+            "visibility": "public"
+          },
+          {
+            "functionSelector": "87b21efc",
+            "id": 20633,
+            "implemented": false,
+            "kind": "function",
+            "modifiers": [],
+            "name": "addLiquidity",
+            "nameLocation": "240:12:59",
+            "nodeType": "FunctionDefinition",
+            "parameters": {
+              "id": 20631,
+              "nodeType": "ParameterList",
+              "parameters": [
+                {
+                  "constant": false,
+                  "id": 20626,
+                  "mutability": "mutable",
+                  "name": "_poolId",
+                  "nameLocation": "261:7:59",
+                  "nodeType": "VariableDeclaration",
+                  "scope": 20633,
+                  "src": "253:15:59",
+                  "stateVariable": false,
+                  "storageLocation": "default",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_uint256",
+                    "typeString": "uint256"
+                  },
+                  "typeName": {
+                    "id": 20625,
+                    "name": "uint256",
+                    "nodeType": "ElementaryTypeName",
+                    "src": "253:7:59",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_uint256",
+                      "typeString": "uint256"
+                    }
+                  },
+                  "visibility": "internal"
+                },
+                {
+                  "constant": false,
+                  "id": 20628,
+                  "mutability": "mutable",
+                  "name": "_amountLD",
+                  "nameLocation": "278:9:59",
+                  "nodeType": "VariableDeclaration",
+                  "scope": 20633,
+                  "src": "270:17:59",
+                  "stateVariable": false,
+                  "storageLocation": "default",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_uint256",
+                    "typeString": "uint256"
+                  },
+                  "typeName": {
+                    "id": 20627,
+                    "name": "uint256",
+                    "nodeType": "ElementaryTypeName",
+                    "src": "270:7:59",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_uint256",
+                      "typeString": "uint256"
+                    }
+                  },
+                  "visibility": "internal"
+                },
+                {
+                  "constant": false,
+                  "id": 20630,
+                  "mutability": "mutable",
+                  "name": "_to",
+                  "nameLocation": "297:3:59",
+                  "nodeType": "VariableDeclaration",
+                  "scope": 20633,
+                  "src": "289:11:59",
+                  "stateVariable": false,
+                  "storageLocation": "default",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_address",
+                    "typeString": "address"
+                  },
+                  "typeName": {
+                    "id": 20629,
+                    "name": "address",
+                    "nodeType": "ElementaryTypeName",
+                    "src": "289:7:59",
+                    "stateMutability": "nonpayable",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_address",
+                      "typeString": "address"
+                    }
+                  },
+                  "visibility": "internal"
+                }
+              ],
+              "src": "252:49:59"
+            },
+            "returnParameters": {
+              "id": 20632,
+              "nodeType": "ParameterList",
+              "parameters": [],
+              "src": "310:0:59"
+            },
+            "scope": 20734,
+            "src": "231:80:59",
+            "stateMutability": "nonpayable",
+            "virtual": false,
+            "visibility": "external"
+          },
+          {
+            "functionSelector": "9fbf10fc",
+            "id": 20655,
+            "implemented": false,
+            "kind": "function",
+            "modifiers": [],
+            "name": "swap",
+            "nameLocation": "328:4:59",
+            "nodeType": "FunctionDefinition",
+            "parameters": {
+              "id": 20653,
+              "nodeType": "ParameterList",
+              "parameters": [
+                {
+                  "constant": false,
+                  "id": 20635,
+                  "mutability": "mutable",
+                  "name": "_dstChainId",
+                  "nameLocation": "346:11:59",
+                  "nodeType": "VariableDeclaration",
+                  "scope": 20655,
+                  "src": "339:18:59",
+                  "stateVariable": false,
+                  "storageLocation": "default",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_uint16",
+                    "typeString": "uint16"
+                  },
+                  "typeName": {
+                    "id": 20634,
+                    "name": "uint16",
+                    "nodeType": "ElementaryTypeName",
+                    "src": "339:6:59",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_uint16",
+                      "typeString": "uint16"
+                    }
+                  },
+                  "visibility": "internal"
+                },
+                {
+                  "constant": false,
+                  "id": 20637,
+                  "mutability": "mutable",
+                  "name": "_srcPoolId",
+                  "nameLocation": "372:10:59",
+                  "nodeType": "VariableDeclaration",
+                  "scope": 20655,
+                  "src": "364:18:59",
+                  "stateVariable": false,
+                  "storageLocation": "default",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_uint256",
+                    "typeString": "uint256"
+                  },
+                  "typeName": {
+                    "id": 20636,
+                    "name": "uint256",
+                    "nodeType": "ElementaryTypeName",
+                    "src": "364:7:59",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_uint256",
+                      "typeString": "uint256"
+                    }
+                  },
+                  "visibility": "internal"
+                },
+                {
+                  "constant": false,
+                  "id": 20639,
+                  "mutability": "mutable",
+                  "name": "_dstPoolId",
+                  "nameLocation": "397:10:59",
+                  "nodeType": "VariableDeclaration",
+                  "scope": 20655,
+                  "src": "389:18:59",
+                  "stateVariable": false,
+                  "storageLocation": "default",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_uint256",
+                    "typeString": "uint256"
+                  },
+                  "typeName": {
+                    "id": 20638,
+                    "name": "uint256",
+                    "nodeType": "ElementaryTypeName",
+                    "src": "389:7:59",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_uint256",
+                      "typeString": "uint256"
+                    }
+                  },
+                  "visibility": "internal"
+                },
+                {
+                  "constant": false,
+                  "id": 20641,
+                  "mutability": "mutable",
+                  "name": "_refundAddress",
+                  "nameLocation": "430:14:59",
+                  "nodeType": "VariableDeclaration",
+                  "scope": 20655,
+                  "src": "414:30:59",
+                  "stateVariable": false,
+                  "storageLocation": "default",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_address_payable",
+                    "typeString": "address payable"
+                  },
+                  "typeName": {
+                    "id": 20640,
+                    "name": "address",
+                    "nodeType": "ElementaryTypeName",
+                    "src": "414:15:59",
+                    "stateMutability": "payable",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_address_payable",
+                      "typeString": "address payable"
+                    }
+                  },
+                  "visibility": "internal"
+                },
+                {
+                  "constant": false,
+                  "id": 20643,
+                  "mutability": "mutable",
+                  "name": "amountLD",
+                  "nameLocation": "459:8:59",
+                  "nodeType": "VariableDeclaration",
+                  "scope": 20655,
+                  "src": "451:16:59",
+                  "stateVariable": false,
+                  "storageLocation": "default",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_uint256",
+                    "typeString": "uint256"
+                  },
+                  "typeName": {
+                    "id": 20642,
+                    "name": "uint256",
+                    "nodeType": "ElementaryTypeName",
+                    "src": "451:7:59",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_uint256",
+                      "typeString": "uint256"
+                    }
+                  },
+                  "visibility": "internal"
+                },
+                {
+                  "constant": false,
+                  "id": 20645,
+                  "mutability": "mutable",
+                  "name": "_minAmountLD",
+                  "nameLocation": "482:12:59",
+                  "nodeType": "VariableDeclaration",
+                  "scope": 20655,
+                  "src": "474:20:59",
+                  "stateVariable": false,
+                  "storageLocation": "default",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_uint256",
+                    "typeString": "uint256"
+                  },
+                  "typeName": {
+                    "id": 20644,
+                    "name": "uint256",
+                    "nodeType": "ElementaryTypeName",
+                    "src": "474:7:59",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_uint256",
+                      "typeString": "uint256"
+                    }
+                  },
+                  "visibility": "internal"
+                },
+                {
+                  "constant": false,
+                  "id": 20648,
+                  "mutability": "mutable",
+                  "name": "_lzTxParams",
+                  "nameLocation": "516:11:59",
+                  "nodeType": "VariableDeclaration",
+                  "scope": 20655,
+                  "src": "501:26:59",
+                  "stateVariable": false,
+                  "storageLocation": "memory",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_struct$_lzTxObj_$20624_memory_ptr",
+                    "typeString": "struct IStargateRouter.lzTxObj"
+                  },
+                  "typeName": {
+                    "id": 20647,
+                    "nodeType": "UserDefinedTypeName",
+                    "pathNode": {
+                      "id": 20646,
+                      "name": "lzTxObj",
+                      "nodeType": "IdentifierPath",
+                      "referencedDeclaration": 20624,
+                      "src": "501:7:59"
+                    },
+                    "referencedDeclaration": 20624,
+                    "src": "501:7:59",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_struct$_lzTxObj_$20624_storage_ptr",
+                      "typeString": "struct IStargateRouter.lzTxObj"
+                    }
+                  },
+                  "visibility": "internal"
+                },
+                {
+                  "constant": false,
+                  "id": 20650,
+                  "mutability": "mutable",
+                  "name": "_to",
+                  "nameLocation": "549:3:59",
+                  "nodeType": "VariableDeclaration",
+                  "scope": 20655,
+                  "src": "534:18:59",
+                  "stateVariable": false,
+                  "storageLocation": "calldata",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_bytes_calldata_ptr",
+                    "typeString": "bytes"
+                  },
+                  "typeName": {
+                    "id": 20649,
+                    "name": "bytes",
+                    "nodeType": "ElementaryTypeName",
+                    "src": "534:5:59",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_bytes_storage_ptr",
+                      "typeString": "bytes"
+                    }
+                  },
+                  "visibility": "internal"
+                },
+                {
+                  "constant": false,
+                  "id": 20652,
+                  "mutability": "mutable",
+                  "name": "_payLoad",
+                  "nameLocation": "574:8:59",
+                  "nodeType": "VariableDeclaration",
+                  "scope": 20655,
+                  "src": "559:23:59",
+                  "stateVariable": false,
+                  "storageLocation": "calldata",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_bytes_calldata_ptr",
+                    "typeString": "bytes"
+                  },
+                  "typeName": {
+                    "id": 20651,
+                    "name": "bytes",
+                    "nodeType": "ElementaryTypeName",
+                    "src": "559:5:59",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_bytes_storage_ptr",
+                      "typeString": "bytes"
+                    }
+                  },
+                  "visibility": "internal"
+                }
+              ],
+              "src": "332:255:59"
+            },
+            "returnParameters": {
+              "id": 20654,
+              "nodeType": "ParameterList",
+              "parameters": [],
+              "src": "604:0:59"
+            },
+            "scope": 20734,
+            "src": "319:286:59",
+            "stateMutability": "payable",
+            "virtual": false,
+            "visibility": "external"
+          },
+          {
+            "functionSelector": "84d0dba3",
+            "id": 20675,
+            "implemented": false,
+            "kind": "function",
+            "modifiers": [],
+            "name": "redeemRemote",
+            "nameLocation": "620:12:59",
+            "nodeType": "FunctionDefinition",
+            "parameters": {
+              "id": 20673,
+              "nodeType": "ParameterList",
+              "parameters": [
+                {
+                  "constant": false,
+                  "id": 20657,
+                  "mutability": "mutable",
+                  "name": "_dstChainId",
+                  "nameLocation": "646:11:59",
+                  "nodeType": "VariableDeclaration",
+                  "scope": 20675,
+                  "src": "639:18:59",
+                  "stateVariable": false,
+                  "storageLocation": "default",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_uint16",
+                    "typeString": "uint16"
+                  },
+                  "typeName": {
+                    "id": 20656,
+                    "name": "uint16",
+                    "nodeType": "ElementaryTypeName",
+                    "src": "639:6:59",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_uint16",
+                      "typeString": "uint16"
+                    }
+                  },
+                  "visibility": "internal"
+                },
+                {
+                  "constant": false,
+                  "id": 20659,
+                  "mutability": "mutable",
+                  "name": "_srcPoolId",
+                  "nameLocation": "672:10:59",
+                  "nodeType": "VariableDeclaration",
+                  "scope": 20675,
+                  "src": "664:18:59",
+                  "stateVariable": false,
+                  "storageLocation": "default",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_uint256",
+                    "typeString": "uint256"
+                  },
+                  "typeName": {
+                    "id": 20658,
+                    "name": "uint256",
+                    "nodeType": "ElementaryTypeName",
+                    "src": "664:7:59",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_uint256",
+                      "typeString": "uint256"
+                    }
+                  },
+                  "visibility": "internal"
+                },
+                {
+                  "constant": false,
+                  "id": 20661,
+                  "mutability": "mutable",
+                  "name": "_dstPoolId",
+                  "nameLocation": "697:10:59",
+                  "nodeType": "VariableDeclaration",
+                  "scope": 20675,
+                  "src": "689:18:59",
+                  "stateVariable": false,
+                  "storageLocation": "default",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_uint256",
+                    "typeString": "uint256"
+                  },
+                  "typeName": {
+                    "id": 20660,
+                    "name": "uint256",
+                    "nodeType": "ElementaryTypeName",
+                    "src": "689:7:59",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_uint256",
+                      "typeString": "uint256"
+                    }
+                  },
+                  "visibility": "internal"
+                },
+                {
+                  "constant": false,
+                  "id": 20663,
+                  "mutability": "mutable",
+                  "name": "_refundAddress",
+                  "nameLocation": "730:14:59",
+                  "nodeType": "VariableDeclaration",
+                  "scope": 20675,
+                  "src": "714:30:59",
+                  "stateVariable": false,
+                  "storageLocation": "default",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_address_payable",
+                    "typeString": "address payable"
+                  },
+                  "typeName": {
+                    "id": 20662,
+                    "name": "address",
+                    "nodeType": "ElementaryTypeName",
+                    "src": "714:15:59",
+                    "stateMutability": "payable",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_address_payable",
+                      "typeString": "address payable"
+                    }
+                  },
+                  "visibility": "internal"
+                },
+                {
+                  "constant": false,
+                  "id": 20665,
+                  "mutability": "mutable",
+                  "name": "amountLP",
+                  "nameLocation": "759:8:59",
+                  "nodeType": "VariableDeclaration",
+                  "scope": 20675,
+                  "src": "751:16:59",
+                  "stateVariable": false,
+                  "storageLocation": "default",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_uint256",
+                    "typeString": "uint256"
+                  },
+                  "typeName": {
+                    "id": 20664,
+                    "name": "uint256",
+                    "nodeType": "ElementaryTypeName",
+                    "src": "751:7:59",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_uint256",
+                      "typeString": "uint256"
+                    }
+                  },
+                  "visibility": "internal"
+                },
+                {
+                  "constant": false,
+                  "id": 20667,
+                  "mutability": "mutable",
+                  "name": "_minAmountLD",
+                  "nameLocation": "782:12:59",
+                  "nodeType": "VariableDeclaration",
+                  "scope": 20675,
+                  "src": "774:20:59",
+                  "stateVariable": false,
+                  "storageLocation": "default",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_uint256",
+                    "typeString": "uint256"
+                  },
+                  "typeName": {
+                    "id": 20666,
+                    "name": "uint256",
+                    "nodeType": "ElementaryTypeName",
+                    "src": "774:7:59",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_uint256",
+                      "typeString": "uint256"
+                    }
+                  },
+                  "visibility": "internal"
+                },
+                {
+                  "constant": false,
+                  "id": 20669,
+                  "mutability": "mutable",
+                  "name": "_to",
+                  "nameLocation": "816:3:59",
+                  "nodeType": "VariableDeclaration",
+                  "scope": 20675,
+                  "src": "801:18:59",
+                  "stateVariable": false,
+                  "storageLocation": "calldata",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_bytes_calldata_ptr",
+                    "typeString": "bytes"
+                  },
+                  "typeName": {
+                    "id": 20668,
+                    "name": "bytes",
+                    "nodeType": "ElementaryTypeName",
+                    "src": "801:5:59",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_bytes_storage_ptr",
+                      "typeString": "bytes"
+                    }
+                  },
+                  "visibility": "internal"
+                },
+                {
+                  "constant": false,
+                  "id": 20672,
+                  "mutability": "mutable",
+                  "name": "_lzTxParams",
+                  "nameLocation": "841:11:59",
+                  "nodeType": "VariableDeclaration",
+                  "scope": 20675,
+                  "src": "826:26:59",
+                  "stateVariable": false,
+                  "storageLocation": "memory",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_struct$_lzTxObj_$20624_memory_ptr",
+                    "typeString": "struct IStargateRouter.lzTxObj"
+                  },
+                  "typeName": {
+                    "id": 20671,
+                    "nodeType": "UserDefinedTypeName",
+                    "pathNode": {
+                      "id": 20670,
+                      "name": "lzTxObj",
+                      "nodeType": "IdentifierPath",
+                      "referencedDeclaration": 20624,
+                      "src": "826:7:59"
+                    },
+                    "referencedDeclaration": 20624,
+                    "src": "826:7:59",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_struct$_lzTxObj_$20624_storage_ptr",
+                      "typeString": "struct IStargateRouter.lzTxObj"
+                    }
+                  },
+                  "visibility": "internal"
+                }
+              ],
+              "src": "632:225:59"
+            },
+            "returnParameters": {
+              "id": 20674,
+              "nodeType": "ParameterList",
+              "parameters": [],
+              "src": "874:0:59"
+            },
+            "scope": 20734,
+            "src": "611:264:59",
+            "stateMutability": "payable",
+            "virtual": false,
+            "visibility": "external"
+          },
+          {
+            "functionSelector": "2b07a5e3",
+            "id": 20686,
+            "implemented": false,
+            "kind": "function",
+            "modifiers": [],
+            "name": "instantRedeemLocal",
+            "nameLocation": "890:18:59",
+            "nodeType": "FunctionDefinition",
+            "parameters": {
+              "id": 20682,
+              "nodeType": "ParameterList",
+              "parameters": [
+                {
+                  "constant": false,
+                  "id": 20677,
+                  "mutability": "mutable",
+                  "name": "_srcPoolId",
+                  "nameLocation": "923:10:59",
+                  "nodeType": "VariableDeclaration",
+                  "scope": 20686,
+                  "src": "915:18:59",
+                  "stateVariable": false,
+                  "storageLocation": "default",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_uint256",
+                    "typeString": "uint256"
+                  },
+                  "typeName": {
+                    "id": 20676,
+                    "name": "uint256",
+                    "nodeType": "ElementaryTypeName",
+                    "src": "915:7:59",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_uint256",
+                      "typeString": "uint256"
+                    }
+                  },
+                  "visibility": "internal"
+                },
+                {
+                  "constant": false,
+                  "id": 20679,
+                  "mutability": "mutable",
+                  "name": "amountLP",
+                  "nameLocation": "948:8:59",
+                  "nodeType": "VariableDeclaration",
+                  "scope": 20686,
+                  "src": "940:16:59",
+                  "stateVariable": false,
+                  "storageLocation": "default",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_uint256",
+                    "typeString": "uint256"
+                  },
+                  "typeName": {
+                    "id": 20678,
+                    "name": "uint256",
+                    "nodeType": "ElementaryTypeName",
+                    "src": "940:7:59",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_uint256",
+                      "typeString": "uint256"
+                    }
+                  },
+                  "visibility": "internal"
+                },
+                {
+                  "constant": false,
+                  "id": 20681,
+                  "mutability": "mutable",
+                  "name": "_to",
+                  "nameLocation": "978:3:59",
+                  "nodeType": "VariableDeclaration",
+                  "scope": 20686,
+                  "src": "963:18:59",
+                  "stateVariable": false,
+                  "storageLocation": "calldata",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_bytes_calldata_ptr",
+                    "typeString": "bytes"
+                  },
+                  "typeName": {
+                    "id": 20680,
+                    "name": "bytes",
+                    "nodeType": "ElementaryTypeName",
+                    "src": "963:5:59",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_bytes_storage_ptr",
+                      "typeString": "bytes"
+                    }
+                  },
+                  "visibility": "internal"
+                }
+              ],
+              "src": "908:78:59"
+            },
+            "returnParameters": {
+              "id": 20685,
+              "nodeType": "ParameterList",
+              "parameters": [
+                {
+                  "constant": false,
+                  "id": 20684,
+                  "mutability": "mutable",
+                  "name": "",
+                  "nameLocation": "-1:-1:-1",
+                  "nodeType": "VariableDeclaration",
+                  "scope": 20686,
+                  "src": "1004:7:59",
+                  "stateVariable": false,
+                  "storageLocation": "default",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_uint256",
+                    "typeString": "uint256"
+                  },
+                  "typeName": {
+                    "id": 20683,
+                    "name": "uint256",
+                    "nodeType": "ElementaryTypeName",
+                    "src": "1004:7:59",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_uint256",
+                      "typeString": "uint256"
+                    }
+                  },
+                  "visibility": "internal"
+                }
+              ],
+              "src": "1003:9:59"
+            },
+            "scope": 20734,
+            "src": "881:132:59",
+            "stateMutability": "nonpayable",
+            "virtual": false,
+            "visibility": "external"
+          },
+          {
+            "functionSelector": "8f2e1d18",
+            "id": 20704,
+            "implemented": false,
+            "kind": "function",
+            "modifiers": [],
+            "name": "redeemLocal",
+            "nameLocation": "1028:11:59",
+            "nodeType": "FunctionDefinition",
+            "parameters": {
+              "id": 20702,
+              "nodeType": "ParameterList",
+              "parameters": [
+                {
+                  "constant": false,
+                  "id": 20688,
+                  "mutability": "mutable",
+                  "name": "_dstChainId",
+                  "nameLocation": "1053:11:59",
+                  "nodeType": "VariableDeclaration",
+                  "scope": 20704,
+                  "src": "1046:18:59",
+                  "stateVariable": false,
+                  "storageLocation": "default",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_uint16",
+                    "typeString": "uint16"
+                  },
+                  "typeName": {
+                    "id": 20687,
+                    "name": "uint16",
+                    "nodeType": "ElementaryTypeName",
+                    "src": "1046:6:59",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_uint16",
+                      "typeString": "uint16"
+                    }
+                  },
+                  "visibility": "internal"
+                },
+                {
+                  "constant": false,
+                  "id": 20690,
+                  "mutability": "mutable",
+                  "name": "_srcPoolId",
+                  "nameLocation": "1079:10:59",
+                  "nodeType": "VariableDeclaration",
+                  "scope": 20704,
+                  "src": "1071:18:59",
+                  "stateVariable": false,
+                  "storageLocation": "default",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_uint256",
+                    "typeString": "uint256"
+                  },
+                  "typeName": {
+                    "id": 20689,
+                    "name": "uint256",
+                    "nodeType": "ElementaryTypeName",
+                    "src": "1071:7:59",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_uint256",
+                      "typeString": "uint256"
+                    }
+                  },
+                  "visibility": "internal"
+                },
+                {
+                  "constant": false,
+                  "id": 20692,
+                  "mutability": "mutable",
+                  "name": "_dstPoolId",
+                  "nameLocation": "1104:10:59",
+                  "nodeType": "VariableDeclaration",
+                  "scope": 20704,
+                  "src": "1096:18:59",
+                  "stateVariable": false,
+                  "storageLocation": "default",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_uint256",
+                    "typeString": "uint256"
+                  },
+                  "typeName": {
+                    "id": 20691,
+                    "name": "uint256",
+                    "nodeType": "ElementaryTypeName",
+                    "src": "1096:7:59",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_uint256",
+                      "typeString": "uint256"
+                    }
+                  },
+                  "visibility": "internal"
+                },
+                {
+                  "constant": false,
+                  "id": 20694,
+                  "mutability": "mutable",
+                  "name": "_refundAddress",
+                  "nameLocation": "1137:14:59",
+                  "nodeType": "VariableDeclaration",
+                  "scope": 20704,
+                  "src": "1121:30:59",
+                  "stateVariable": false,
+                  "storageLocation": "default",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_address_payable",
+                    "typeString": "address payable"
+                  },
+                  "typeName": {
+                    "id": 20693,
+                    "name": "address",
+                    "nodeType": "ElementaryTypeName",
+                    "src": "1121:15:59",
+                    "stateMutability": "payable",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_address_payable",
+                      "typeString": "address payable"
+                    }
+                  },
+                  "visibility": "internal"
+                },
+                {
+                  "constant": false,
+                  "id": 20696,
+                  "mutability": "mutable",
+                  "name": "amountLP",
+                  "nameLocation": "1166:8:59",
+                  "nodeType": "VariableDeclaration",
+                  "scope": 20704,
+                  "src": "1158:16:59",
+                  "stateVariable": false,
+                  "storageLocation": "default",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_uint256",
+                    "typeString": "uint256"
+                  },
+                  "typeName": {
+                    "id": 20695,
+                    "name": "uint256",
+                    "nodeType": "ElementaryTypeName",
+                    "src": "1158:7:59",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_uint256",
+                      "typeString": "uint256"
+                    }
+                  },
+                  "visibility": "internal"
+                },
+                {
+                  "constant": false,
+                  "id": 20698,
+                  "mutability": "mutable",
+                  "name": "_to",
+                  "nameLocation": "1196:3:59",
+                  "nodeType": "VariableDeclaration",
+                  "scope": 20704,
+                  "src": "1181:18:59",
+                  "stateVariable": false,
+                  "storageLocation": "calldata",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_bytes_calldata_ptr",
+                    "typeString": "bytes"
+                  },
+                  "typeName": {
+                    "id": 20697,
+                    "name": "bytes",
+                    "nodeType": "ElementaryTypeName",
+                    "src": "1181:5:59",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_bytes_storage_ptr",
+                      "typeString": "bytes"
+                    }
+                  },
+                  "visibility": "internal"
+                },
+                {
+                  "constant": false,
+                  "id": 20701,
+                  "mutability": "mutable",
+                  "name": "_lzTxParams",
+                  "nameLocation": "1221:11:59",
+                  "nodeType": "VariableDeclaration",
+                  "scope": 20704,
+                  "src": "1206:26:59",
+                  "stateVariable": false,
+                  "storageLocation": "memory",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_struct$_lzTxObj_$20624_memory_ptr",
+                    "typeString": "struct IStargateRouter.lzTxObj"
+                  },
+                  "typeName": {
+                    "id": 20700,
+                    "nodeType": "UserDefinedTypeName",
+                    "pathNode": {
+                      "id": 20699,
+                      "name": "lzTxObj",
+                      "nodeType": "IdentifierPath",
+                      "referencedDeclaration": 20624,
+                      "src": "1206:7:59"
+                    },
+                    "referencedDeclaration": 20624,
+                    "src": "1206:7:59",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_struct$_lzTxObj_$20624_storage_ptr",
+                      "typeString": "struct IStargateRouter.lzTxObj"
+                    }
+                  },
+                  "visibility": "internal"
+                }
+              ],
+              "src": "1039:198:59"
+            },
+            "returnParameters": {
+              "id": 20703,
+              "nodeType": "ParameterList",
+              "parameters": [],
+              "src": "1254:0:59"
+            },
+            "scope": 20734,
+            "src": "1019:236:59",
+            "stateMutability": "payable",
+            "virtual": false,
+            "visibility": "external"
+          },
+          {
+            "functionSelector": "9ba3aa74",
+            "id": 20715,
+            "implemented": false,
+            "kind": "function",
+            "modifiers": [],
+            "name": "sendCredits",
+            "nameLocation": "1270:11:59",
+            "nodeType": "FunctionDefinition",
+            "parameters": {
+              "id": 20713,
+              "nodeType": "ParameterList",
+              "parameters": [
+                {
+                  "constant": false,
+                  "id": 20706,
+                  "mutability": "mutable",
+                  "name": "_dstChainId",
+                  "nameLocation": "1295:11:59",
+                  "nodeType": "VariableDeclaration",
+                  "scope": 20715,
+                  "src": "1288:18:59",
+                  "stateVariable": false,
+                  "storageLocation": "default",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_uint16",
+                    "typeString": "uint16"
+                  },
+                  "typeName": {
+                    "id": 20705,
+                    "name": "uint16",
+                    "nodeType": "ElementaryTypeName",
+                    "src": "1288:6:59",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_uint16",
+                      "typeString": "uint16"
+                    }
+                  },
+                  "visibility": "internal"
+                },
+                {
+                  "constant": false,
+                  "id": 20708,
+                  "mutability": "mutable",
+                  "name": "_srcPoolId",
+                  "nameLocation": "1321:10:59",
+                  "nodeType": "VariableDeclaration",
+                  "scope": 20715,
+                  "src": "1313:18:59",
+                  "stateVariable": false,
+                  "storageLocation": "default",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_uint256",
+                    "typeString": "uint256"
+                  },
+                  "typeName": {
+                    "id": 20707,
+                    "name": "uint256",
+                    "nodeType": "ElementaryTypeName",
+                    "src": "1313:7:59",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_uint256",
+                      "typeString": "uint256"
+                    }
+                  },
+                  "visibility": "internal"
+                },
+                {
+                  "constant": false,
+                  "id": 20710,
+                  "mutability": "mutable",
+                  "name": "_dstPoolId",
+                  "nameLocation": "1346:10:59",
+                  "nodeType": "VariableDeclaration",
+                  "scope": 20715,
+                  "src": "1338:18:59",
+                  "stateVariable": false,
+                  "storageLocation": "default",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_uint256",
+                    "typeString": "uint256"
+                  },
+                  "typeName": {
+                    "id": 20709,
+                    "name": "uint256",
+                    "nodeType": "ElementaryTypeName",
+                    "src": "1338:7:59",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_uint256",
+                      "typeString": "uint256"
+                    }
+                  },
+                  "visibility": "internal"
+                },
+                {
+                  "constant": false,
+                  "id": 20712,
+                  "mutability": "mutable",
+                  "name": "_refundAddress",
+                  "nameLocation": "1379:14:59",
+                  "nodeType": "VariableDeclaration",
+                  "scope": 20715,
+                  "src": "1363:30:59",
+                  "stateVariable": false,
+                  "storageLocation": "default",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_address_payable",
+                    "typeString": "address payable"
+                  },
+                  "typeName": {
+                    "id": 20711,
+                    "name": "address",
+                    "nodeType": "ElementaryTypeName",
+                    "src": "1363:15:59",
+                    "stateMutability": "payable",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_address_payable",
+                      "typeString": "address payable"
+                    }
+                  },
+                  "visibility": "internal"
+                }
+              ],
+              "src": "1281:117:59"
+            },
+            "returnParameters": {
+              "id": 20714,
+              "nodeType": "ParameterList",
+              "parameters": [],
+              "src": "1415:0:59"
+            },
+            "scope": 20734,
+            "src": "1261:155:59",
+            "stateMutability": "payable",
+            "virtual": false,
+            "visibility": "external"
+          },
+          {
+            "functionSelector": "0a512369",
+            "id": 20733,
+            "implemented": false,
+            "kind": "function",
+            "modifiers": [],
+            "name": "quoteLayerZeroFee",
+            "nameLocation": "1431:17:59",
+            "nodeType": "FunctionDefinition",
+            "parameters": {
+              "id": 20727,
+              "nodeType": "ParameterList",
+              "parameters": [
+                {
+                  "constant": false,
+                  "id": 20717,
+                  "mutability": "mutable",
+                  "name": "_dstChainId",
+                  "nameLocation": "1462:11:59",
+                  "nodeType": "VariableDeclaration",
+                  "scope": 20733,
+                  "src": "1455:18:59",
+                  "stateVariable": false,
+                  "storageLocation": "default",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_uint16",
+                    "typeString": "uint16"
+                  },
+                  "typeName": {
+                    "id": 20716,
+                    "name": "uint16",
+                    "nodeType": "ElementaryTypeName",
+                    "src": "1455:6:59",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_uint16",
+                      "typeString": "uint16"
+                    }
+                  },
+                  "visibility": "internal"
+                },
+                {
+                  "constant": false,
+                  "id": 20719,
+                  "mutability": "mutable",
+                  "name": "_functionType",
+                  "nameLocation": "1486:13:59",
+                  "nodeType": "VariableDeclaration",
+                  "scope": 20733,
+                  "src": "1480:19:59",
+                  "stateVariable": false,
+                  "storageLocation": "default",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_uint8",
+                    "typeString": "uint8"
+                  },
+                  "typeName": {
+                    "id": 20718,
+                    "name": "uint8",
+                    "nodeType": "ElementaryTypeName",
+                    "src": "1480:5:59",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_uint8",
+                      "typeString": "uint8"
+                    }
+                  },
+                  "visibility": "internal"
+                },
+                {
+                  "constant": false,
+                  "id": 20721,
+                  "mutability": "mutable",
+                  "name": "_toAddress",
+                  "nameLocation": "1521:10:59",
+                  "nodeType": "VariableDeclaration",
+                  "scope": 20733,
+                  "src": "1506:25:59",
+                  "stateVariable": false,
+                  "storageLocation": "calldata",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_bytes_calldata_ptr",
+                    "typeString": "bytes"
+                  },
+                  "typeName": {
+                    "id": 20720,
+                    "name": "bytes",
+                    "nodeType": "ElementaryTypeName",
+                    "src": "1506:5:59",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_bytes_storage_ptr",
+                      "typeString": "bytes"
+                    }
+                  },
+                  "visibility": "internal"
+                },
+                {
+                  "constant": false,
+                  "id": 20723,
+                  "mutability": "mutable",
+                  "name": "_transferAndCallPayload",
+                  "nameLocation": "1553:23:59",
+                  "nodeType": "VariableDeclaration",
+                  "scope": 20733,
+                  "src": "1538:38:59",
+                  "stateVariable": false,
+                  "storageLocation": "calldata",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_bytes_calldata_ptr",
+                    "typeString": "bytes"
+                  },
+                  "typeName": {
+                    "id": 20722,
+                    "name": "bytes",
+                    "nodeType": "ElementaryTypeName",
+                    "src": "1538:5:59",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_bytes_storage_ptr",
+                      "typeString": "bytes"
+                    }
+                  },
+                  "visibility": "internal"
+                },
+                {
+                  "constant": false,
+                  "id": 20726,
+                  "mutability": "mutable",
+                  "name": "_lzTxParams",
+                  "nameLocation": "1598:11:59",
+                  "nodeType": "VariableDeclaration",
+                  "scope": 20733,
+                  "src": "1583:26:59",
+                  "stateVariable": false,
+                  "storageLocation": "memory",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_struct$_lzTxObj_$20624_memory_ptr",
+                    "typeString": "struct IStargateRouter.lzTxObj"
+                  },
+                  "typeName": {
+                    "id": 20725,
+                    "nodeType": "UserDefinedTypeName",
+                    "pathNode": {
+                      "id": 20724,
+                      "name": "lzTxObj",
+                      "nodeType": "IdentifierPath",
+                      "referencedDeclaration": 20624,
+                      "src": "1583:7:59"
+                    },
+                    "referencedDeclaration": 20624,
+                    "src": "1583:7:59",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_struct$_lzTxObj_$20624_storage_ptr",
+                      "typeString": "struct IStargateRouter.lzTxObj"
+                    }
+                  },
+                  "visibility": "internal"
+                }
+              ],
+              "src": "1448:166:59"
+            },
+            "returnParameters": {
+              "id": 20732,
+              "nodeType": "ParameterList",
+              "parameters": [
+                {
+                  "constant": false,
+                  "id": 20729,
+                  "mutability": "mutable",
+                  "name": "",
+                  "nameLocation": "-1:-1:-1",
+                  "nodeType": "VariableDeclaration",
+                  "scope": 20733,
+                  "src": "1638:7:59",
+                  "stateVariable": false,
+                  "storageLocation": "default",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_uint256",
+                    "typeString": "uint256"
+                  },
+                  "typeName": {
+                    "id": 20728,
+                    "name": "uint256",
+                    "nodeType": "ElementaryTypeName",
+                    "src": "1638:7:59",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_uint256",
+                      "typeString": "uint256"
+                    }
+                  },
+                  "visibility": "internal"
+                },
+                {
+                  "constant": false,
+                  "id": 20731,
+                  "mutability": "mutable",
+                  "name": "",
+                  "nameLocation": "-1:-1:-1",
+                  "nodeType": "VariableDeclaration",
+                  "scope": 20733,
+                  "src": "1647:7:59",
+                  "stateVariable": false,
+                  "storageLocation": "default",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_uint256",
+                    "typeString": "uint256"
+                  },
+                  "typeName": {
+                    "id": 20730,
+                    "name": "uint256",
+                    "nodeType": "ElementaryTypeName",
+                    "src": "1647:7:59",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_uint256",
+                      "typeString": "uint256"
+                    }
+                  },
+                  "visibility": "internal"
+                }
+              ],
+              "src": "1637:18:59"
+            },
+            "scope": 20734,
+            "src": "1422:234:59",
+            "stateMutability": "view",
+            "virtual": false,
+            "visibility": "external"
+          }
+        ],
+        "scope": 20735,
+        "src": "88:1571:59",
+        "usedErrors": []
+      }
+    ],
+    "src": "40:1619:59"
+  },
+  "compiler": {
+    "name": "solc",
+    "version": "0.8.15+commit.e14f2714.Emscripten.clang"
+  },
+  "networks": {},
+  "schemaVersion": "3.4.8",
+  "updatedAt": "2022-09-08T16:23:07.692Z",
+  "devdoc": {
+    "kind": "dev",
+    "methods": {},
+    "version": 1
+  },
+  "userdoc": {
+    "kind": "user",
+    "methods": {},
+    "version": 1
+  }
+}

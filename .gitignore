@@ -10,6 +10,7 @@ cache
 artifacts
 .vscode/
 .idea/*
+.secret
 
 # OpenZeppelin
 .openzeppelin/unknown-*.json

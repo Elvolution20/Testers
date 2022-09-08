@@ -2,8 +2,8 @@
 pragma solidity ^0.8.0;
 import "@openzeppelin/contracts/token/ERC20/IERC20.sol";
 import "@openzeppelin/contracts/token/ERC20/ERC20.sol";
-import "@openzeppelin/contracts-upgradeable/access/OwnableUpgradeable.sol";
-import "@openzeppelin/contracts-upgradeable/proxy/utils/UUPSUpgradeable.sol";
+import "@openzeppelin/contracts/access/Ownable.sol";
+// import "@openzeppelin/contracts/proxy/utils/UUPS.sol";
 import "@uniswap/v2-periphery/contracts/interfaces/IUniswapV2Router02.sol";
 import "../interfaces/ICurvePool.sol";
 import "../interfaces/IExchangePlugin.sol";
@@ -11,7 +11,7 @@ import {StrategyRouter} from "../main/StrategyRouter.sol";
 
 // import "hardhat/console.sol";
 
-contract Exchange is UUPSUpgradeable, OwnableUpgradeable {
+contract Exchange is Ownable {
     error RoutedSwapFailed();
     error RouteNotFound();
 
@@ -33,15 +33,15 @@ contract Exchange is UUPSUpgradeable, OwnableUpgradeable {
     /// @custom:oz-upgrades-unsafe-allow constructor
     constructor() {
         // lock implementation
-        _disableInitializers();
+        // _disableInitializers();
     }
 
-    function initialize() external initializer {
-        __Ownable_init();
-        __UUPSUpgradeable_init();
-    }
+    // function initialize() external initializer {
+    //     __Ownable_init();
+    //     __UUPSUpgradeable_init();
+    // }
 
-    function _authorizeUpgrade(address newImplementation) internal override onlyOwner {}
+    // function _authorizeUpgrade(address newImplementation) internal override onlyOwner {}
 
     /// @notice Choose plugin where pair of tokens should be swapped.
     function setRoute(

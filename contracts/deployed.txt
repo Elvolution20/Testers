@@ -9,3 +9,16 @@ Account balance: 352224883997358440
 strategyRouter : deployed to 0x831D92c03FA7Ed6BFcb73F5e504BE35E012A2361
 dodoStrategy : deployed to 0x9D7e28273720856642A9dcD43Ab1f852E37C854A
 cBridgeStrategy : deployed to 0x5A76Bb7fe88B5e248dC4d9A4567166745D37c6E5
+
+
+Third deployment
+================
+Compiled 1 Solidity file successfully
+Deploying with the account: 0xA7B2387bF4C259e188751B46859fcA7E2043FEFD
+Account balance: 137330423997358440
+dodoStrategy : deployed to 0x3bAFcd1246a17C883253f24E21512E5b96DCE60c
+StargateStrategy : deployed to 0x1E4c334bec7e182d9a18D3Ba881070f7415baB70
+
+Verified: 
+  dodoStrategy  https://testnet.bscscan.com/address/0x3bAFcd1246a17C883253f24E21512E5b96DCE60c#code
+  StargateStrategy: https://testnet.bscscan.com/address/0x1E4c334bec7e182d9a18D3Ba881070f7415baB70#code

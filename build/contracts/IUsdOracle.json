@@ -1,0 +1,222 @@
+{
+  "contractName": "IUsdOracle",
+  "abi": [
+    {
+      "inputs": [
+        {
+          "internalType": "address",
+          "name": "base",
+          "type": "address"
+        }
+      ],
+      "name": "getTokenUsdPrice",
+      "outputs": [
+        {
+          "internalType": "uint256",
+          "name": "price",
+          "type": "uint256"
+        },
+        {
+          "internalType": "uint8",
+          "name": "decimals",
+          "type": "uint8"
+        }
+      ],
+      "stateMutability": "view",
+      "type": "function"
+    }
+  ],
+  "metadata": "{\"compiler\":{\"version\":\"0.8.15+commit.e14f2714\"},\"language\":\"Solidity\",\"output\":{\"abi\":[{\"inputs\":[{\"internalType\":\"address\",\"name\":\"base\",\"type\":\"address\"}],\"name\":\"getTokenUsdPrice\",\"outputs\":[{\"internalType\":\"uint256\",\"name\":\"price\",\"type\":\"uint256\"},{\"internalType\":\"uint8\",\"name\":\"decimals\",\"type\":\"uint8\"}],\"stateMutability\":\"view\",\"type\":\"function\"}],\"devdoc\":{\"kind\":\"dev\",\"methods\":{},\"version\":1},\"userdoc\":{\"kind\":\"user\",\"methods\":{\"getTokenUsdPrice(address)\":{\"notice\":\"Get usd value of token `base`.\"}},\"version\":1}},\"settings\":{\"compilationTarget\":{\"project:/contracts/interfaces/IUsdOracle.sol\":\"IUsdOracle\"},\"evmVersion\":\"london\",\"libraries\":{},\"metadata\":{\"bytecodeHash\":\"ipfs\"},\"optimizer\":{\"enabled\":false,\"runs\":200},\"remappings\":[]},\"sources\":{\"project:/contracts/interfaces/IUsdOracle.sol\":{\"keccak256\":\"0xe93076c75786c51180946175e7257eb4126c53645f110fc3a47d0639a653928a\",\"license\":\"Unlicense\",\"urls\":[\"bzz-raw://38ef90584e16b61575c1ef658fb3252c40355fdb0eb733d6a91a85d6a21aedec\",\"dweb:/ipfs/QmRzHnmYsUNXjWQHVGsSHrMRPf6Wku2cfPM6otQXEGt2ek\"]}},\"version\":1}",
+  "bytecode": "0x",
+  "deployedBytecode": "0x",
+  "immutableReferences": {},
+  "generatedSources": [],
+  "deployedGeneratedSources": [],
+  "sourceMap": "",
+  "deployedSourceMap": "",
+  "source": "//SPDX-License-Identifier: Unlicense\r\npragma solidity ^0.8.0;\r\n\r\ninterface IUsdOracle {\r\n    /// @notice Get usd value of token `base`.\r\n    function getTokenUsdPrice(address base)\r\n        external\r\n        view\r\n        returns (uint256 price, uint8 decimals);\r\n}\r\n",
+  "sourcePath": "C:\\Users\\FVO_MMILLLER\\Desktop\\elvolution\\Testers\\contracts\\interfaces\\IUsdOracle.sol",
+  "ast": {
+    "absolutePath": "project:/contracts/interfaces/IUsdOracle.sol",
+    "exportedSymbols": {
+      "IUsdOracle": [
+        20922
+      ]
+    },
+    "id": 20923,
+    "license": "Unlicense",
+    "nodeType": "SourceUnit",
+    "nodes": [
+      {
+        "id": 20911,
+        "literals": [
+          "solidity",
+          "^",
+          "0.8",
+          ".0"
+        ],
+        "nodeType": "PragmaDirective",
+        "src": "38:23:61"
+      },
+      {
+        "abstract": false,
+        "baseContracts": [],
+        "canonicalName": "IUsdOracle",
+        "contractDependencies": [],
+        "contractKind": "interface",
+        "fullyImplemented": false,
+        "id": 20922,
+        "linearizedBaseContracts": [
+          20922
+        ],
+        "name": "IUsdOracle",
+        "nameLocation": "75:10:61",
+        "nodeType": "ContractDefinition",
+        "nodes": [
+          {
+            "documentation": {
+              "id": 20912,
+              "nodeType": "StructuredDocumentation",
+              "src": "93:42:61",
+              "text": "@notice Get usd value of token `base`."
+            },
+            "functionSelector": "00593bcf",
+            "id": 20921,
+            "implemented": false,
+            "kind": "function",
+            "modifiers": [],
+            "name": "getTokenUsdPrice",
+            "nameLocation": "150:16:61",
+            "nodeType": "FunctionDefinition",
+            "parameters": {
+              "id": 20915,
+              "nodeType": "ParameterList",
+              "parameters": [
+                {
+                  "constant": false,
+                  "id": 20914,
+                  "mutability": "mutable",
+                  "name": "base",
+                  "nameLocation": "175:4:61",
+                  "nodeType": "VariableDeclaration",
+                  "scope": 20921,
+                  "src": "167:12:61",
+                  "stateVariable": false,
+                  "storageLocation": "default",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_address",
+                    "typeString": "address"
+                  },
+                  "typeName": {
+                    "id": 20913,
+                    "name": "address",
+                    "nodeType": "ElementaryTypeName",
+                    "src": "167:7:61",
+                    "stateMutability": "nonpayable",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_address",
+                      "typeString": "address"
+                    }
+                  },
+                  "visibility": "internal"
+                }
+              ],
+              "src": "166:14:61"
+            },
+            "returnParameters": {
+              "id": 20920,
+              "nodeType": "ParameterList",
+              "parameters": [
+                {
+                  "constant": false,
+                  "id": 20917,
+                  "mutability": "mutable",
+                  "name": "price",
+                  "nameLocation": "239:5:61",
+                  "nodeType": "VariableDeclaration",
+                  "scope": 20921,
+                  "src": "231:13:61",
+                  "stateVariable": false,
+                  "storageLocation": "default",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_uint256",
+                    "typeString": "uint256"
+                  },
+                  "typeName": {
+                    "id": 20916,
+                    "name": "uint256",
+                    "nodeType": "ElementaryTypeName",
+                    "src": "231:7:61",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_uint256",
+                      "typeString": "uint256"
+                    }
+                  },
+                  "visibility": "internal"
+                },
+                {
+                  "constant": false,
+                  "id": 20919,
+                  "mutability": "mutable",
+                  "name": "decimals",
+                  "nameLocation": "252:8:61",
+                  "nodeType": "VariableDeclaration",
+                  "scope": 20921,
+                  "src": "246:14:61",
+                  "stateVariable": false,
+                  "storageLocation": "default",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_uint8",
+                    "typeString": "uint8"
+                  },
+                  "typeName": {
+                    "id": 20918,
+                    "name": "uint8",
+                    "nodeType": "ElementaryTypeName",
+                    "src": "246:5:61",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_uint8",
+                      "typeString": "uint8"
+                    }
+                  },
+                  "visibility": "internal"
+                }
+              ],
+              "src": "230:31:61"
+            },
+            "scope": 20922,
+            "src": "141:121:61",
+            "stateMutability": "view",
+            "virtual": false,
+            "visibility": "external"
+          }
+        ],
+        "scope": 20923,
+        "src": "65:200:61",
+        "usedErrors": []
+      }
+    ],
+    "src": "38:229:61"
+  },
+  "compiler": {
+    "name": "solc",
+    "version": "0.8.15+commit.e14f2714.Emscripten.clang"
+  },
+  "networks": {},
+  "schemaVersion": "3.4.8",
+  "updatedAt": "2022-09-08T16:23:07.846Z",
+  "devdoc": {
+    "kind": "dev",
+    "methods": {},
+    "version": 1
+  },
+  "userdoc": {
+    "kind": "user",
+    "methods": {
+      "getTokenUsdPrice(address)": {
+        "notice": "Get usd value of token `base`."
+      }
+    },
+    "version": 1
+  }
+}
