@@ -34,7 +34,7 @@ import "@openzeppelin/contracts/security/ReentrancyGuard.sol";
         
     @custom:oz-upgrades-unsafe-allow constructor state-variable-immutable
  */
-abstract contract CBridgeStrategyT is Initializable, UUPSUpgradeable, OwnableUpgradeable, IStrategy {
+abstract contract CBridgeStrategy is Initializable, UUPSUpgradeable, OwnableUpgradeable, IStrategy {
     // using SafeERC20 for address;
 
     // error CallerUpgrader();

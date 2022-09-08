@@ -11,100 +11,75 @@
 const Web3 = require("web3");
 
 async function main() {
-  const deploy = async(contractArtifact, params) => {
-    const [deployer, acc2, acc3, acc4, acc5] = await hre.ethers.getSigners();
-    console.log(`Deploying ${contractArtifact} with the account:`, deployer.address);
+  // const deploy = async(contractArtifact) => {
+    const [deployer, acc2, acc3, acc4, acc5, acc6, acc7] = await hre.ethers.getSigners();
+    console.log(`Deploying with the account:`, deployer.address);
     console.log("Account balance:", (await deployer.getBalance()).toString());
-    const Artifact =await ethers.getContractFactory(contractArtifact);
-    let artifact;
-    if(contractArtifact === "CBridgeUSDT") {
-      const {
-        strategyRouter,
-        poolId,
-        tokenA,
-        tokenB,
-        celrRewardToken,
-        farm,
-        celrRouter,
-        cBridgeRouter
-      } = params;
-      artifact = await Artifact?.deploy( strategyRouter, poolId, tokenA, tokenB, celrRewardToken, farm, celrRouter, cBridgeRouter);
-    }
+    // const StrategyRouter =await ethers.getContractFactory("StrategyRouter");
+    const DodoStrategy =await ethers.getContractFactory("DodoStrategy");
+    const StargateStrategy =await ethers.getContractFactory("StargateStrategy");
 
-    if(contractArtifact === "DodoStrategy") {
-      const {
-        strategyRouter,
-        poolId,
-        tokenA,
-        tokenB,
-        lpToken
-      } = params;
-      artifact = await Artifact?.deploy( strategyRouter, poolId, tokenA, tokenB, lpToken);
-    }
+    // let artifact;
+    // if(contractArtifact === "CBridgeUSDT") {
+    //   const {
+    //     strategyRouter,
+    //     poolId,
+    //     tokenA,
+    //     tokenB,
+    //     celrRewardToken,
+    //     farm,
+    //     celrRouter,
+    //     cBridgeRouter
+    //   } = params;
+    //   artifact = await Artifact?.deploy( strategyRouter, poolId, tokenA, tokenB, celrRewardToken, farm, celrRouter, cBridgeRouter);
+    // }
 
-    if(contractArtifact === "StargateStrategy") {
-      const {
-        strategyRouter,
-        poolId,
-        tokenA,
-        lpToken,
-        stgRewardToken,
-        farm,
-        stgRouter,
-        stargateRouter
-      } = params;
-      artifact = await Artifact?.deploy( strategyRouter, poolId, tokenA, lpToken, stgRewardToken, farm, stgRouter, stargateRouter );
-    }
-    if(contractArtifact === "StrategyRouter") {
-      artifact = await Artifact?.deploy();
-    }
+    // if(contractArtifact === "DodoStrategy") {
+    //   const {
+    //     strategyRouter,
+    //     poolId,
+    //     tokenA,
+    //     tokenB,
+    //     lpToken
+    //   } = params;
+    //   artifact = await Artifact?.deploy( strategyRouter, poolId, tokenA, tokenB, lpToken);
+    // }
 
-    await artifact.deployed();
-    const address = artifact?.address;
-    console.log(`${contractArtifact} : deployed to ${address}` ); 
-  }
+    // if(contractArtifact === "StargateStrategy") {
+    //   const {
+    //     strategyRouter,
+    //     poolId,
+    //     tokenA,
+    //     lpToken,
+    //     stgRewardToken,
+    //     farm,
+    //     stgRouter,
+    //     stargateRouter
+    //   } = params;
+    //   artifact = await Artifact?.deploy( strategyRouter, poolId, tokenA, lpToken, stgRewardToken, farm, stgRouter, stargateRouter );
+    // }
+    // if(contractArtifact === "StrategyRouter") {
+    //   artifact = await Artifact?.deploy();
+    // }
 
-  deploy(
-    "StrategyRouter",
-    {}
-  )
+    // const strategyRouter = await StrategyRouter?.deploy();
+    const dodoStrategy = await DodoStrategy?.deploy();
+    const stargateStrategy = await StargateStrategy.deploy();
 
-  // deploy(
-  //   "CBridgeUSDT",
-  //   {
-  //     strategyRouter: "supplyParameterHere",
-  //     poolId: 1,
-  //     tokenA: "supplyParameterHere",
-  //     tokenB: "supplyParameterHere",
-  //     celrRewardToken: "supplyParameterHere",
-  //     farm: "supplyParameterHere",
-  //     celrRouter: "supplyParameterHere",
-  //     cBridgeRouter: "supplyParameterHere"
-  //   }
-  // );
-  deploy(
-    "DodoStrategy",
-    {
-      strategyRouter: "supplyParamhere",
-      poolId: 1,
-      tokenA: "supplyParamhere",
-      tokenB: "supplyParamhere",
-      lpToken: "supplyParamhere",
-    }
-  );
-  deploy(
-    "StargateStrategy",
-    {
-      strategyRouter: "supplyParamterHere",
-      poolId: 1,
-      tokenA: "supplyParamterHere",
-      lpToken: "supplyParamterHere",
-      stgRewardToken: "supplyParamterHere",
-      farm: "supplyParamterHere",
-      stgRouter: "supplyParamterHere",
-      stargateRouter: "supplyParamterHere",
-    }
-  );
+    // await strategyRouter.deployed();
+    await dodoStrategy.deployed();
+    await stargateStrategy.deployed();
+
+    // const address = strategyRouter.address;
+    const address2 = dodoStrategy.address;
+    const address3 = stargateStrategy.address;
+
+    // console.log("strategyRouter : deployed to", address ); 
+    console.log("dodoStrategy : deployed to", address2 ); 
+    console.log("cBridgeStrategy : deployed to", address3 ); 
+  // deploy("StrategyRouter")
+  // deploy("DodoStrategy");
+  // deploy("StargateStrategy");
   
 }
   

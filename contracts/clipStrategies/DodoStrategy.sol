@@ -34,19 +34,19 @@ contract DodoStrategy is Initializable, UUPSUpgradeable, OwnableUpgradeable, ISt
 
     address internal upgrader;
     
-    ERC20 internal immutable tokenA; // USDT Token to deposit
-    ERC20 internal immutable tokenB; // BUSD 
-    ERC20 internal immutable lpToken; // BUSD-USDT LpToken
-    StrategyRouter internal immutable strategyRouter; // StrategyRouter contract
+    ERC20 internal tokenA; // USDT Token to deposit
+    ERC20 internal tokenB; // BUSD 
+    ERC20 internal lpToken; // BUSD-USDT LpToken
+    StrategyRouter internal strategyRouter; // StrategyRouter contract
 
     ERC20 internal constant dodo = ERC20(0x67ee3Cb086F8a16f34beE3ca72FAD36F7Db929e2); //reward token
-    IClipSwapFarm internal immutable farm; // Dodo farm
-    IUniswapV2Router02 internal immutable dodoRouter;  // Dodo Exchange
+    IClipSwapFarm internal farm; // Dodo farm
+    IUniswapV2Router02 internal dodoRouter;  // Dodo Exchange
 
-    uint256 internal immutable poolId;
+    uint256 internal poolId;
 
-    uint256 private immutable LEFTOVER_THRESHOLD_TOKEN_A;
-    uint256 private immutable LEFTOVER_THRESHOLD_TOKEN_B;
+    uint256 private LEFTOVER_THRESHOLD_TOKEN_A;
+    uint256 private LEFTOVER_THRESHOLD_TOKEN_B;
     uint256 private constant PERCENT_DENOMINATOR = 10000;
 
     modifier onlyUpgrader() {
@@ -55,7 +55,13 @@ contract DodoStrategy is Initializable, UUPSUpgradeable, OwnableUpgradeable, ISt
     }
 
     /// @dev construct is intended to initialize immutables on implementation
-    constructor(
+    constructor() {
+        // lock implementation
+        _disableInitializers();
+    }
+
+    function initialize(
+        address _upgrader,
         StrategyRouter _strategyRouter,
         uint256 _poolId,
         ERC20 _tokenA,
@@ -63,8 +69,11 @@ contract DodoStrategy is Initializable, UUPSUpgradeable, OwnableUpgradeable, ISt
         ERC20 _lpToken,
         address _farm,
         address _dodoRouter
-    ) {
-        strategyRouter = _strategyRouter;
+    ) external initializer {
+        __Ownable_init();
+        __UUPSUpgradeable_init();
+        upgrader = _upgrader;
+         strategyRouter = _strategyRouter;
         poolId = _poolId;
         tokenA = _tokenA;
         tokenB = _tokenB;
@@ -73,15 +82,6 @@ contract DodoStrategy is Initializable, UUPSUpgradeable, OwnableUpgradeable, ISt
         dodoRouter = IUniswapV2Router02(_dodoRouter);
         LEFTOVER_THRESHOLD_TOKEN_A = 10**_tokenA.decimals();
         LEFTOVER_THRESHOLD_TOKEN_B = 10**_tokenB.decimals();
-        
-        // lock implementation
-        _disableInitializers();
-    }
-
-    function initialize(address _upgrader) external initializer {
-        __Ownable_init();
-        __UUPSUpgradeable_init();
-        upgrader = _upgrader;
     }
 
     function _authorizeUpgrade(address newImplementation) internal override onlyUpgrader {}

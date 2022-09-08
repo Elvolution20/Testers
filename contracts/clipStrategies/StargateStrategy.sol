@@ -34,21 +34,21 @@ contract StargateStrategy is Initializable, UUPSUpgradeable, OwnableUpgradeable,
 
     address internal upgrader;
     
-    ERC20 internal immutable tokenA;
-    // ERC20 internal immutable stgRewardToken;
-    ERC20 internal immutable lpToken;
-    StrategyRouter internal immutable strategyRouter;
+    ERC20 internal tokenA;
+    // ERC20 internal stgRewardToken;
+    ERC20 internal lpToken;
+    StrategyRouter internal strategyRouter;
 
-    address internal immutable stargateRouter;
+    address internal stargateRouter;
 
-    ERC20 internal immutable stgRewardToken;
-    IClipSwapFarm internal immutable farm;
-    IUniswapV2Router02 internal immutable stgRouter;
+    ERC20 internal stgRewardToken;
+    IClipSwapFarm internal farm;
+    IUniswapV2Router02 internal stgRouter;
 
-    uint256 internal immutable poolId;
+    uint256 internal poolId;
 
-    uint256 private immutable LEFTOVER_THRESHOLD_TOKEN_A;
-    uint256 private immutable LEFTOVER_THRESHOLD_TOKEN_B;
+    uint256 private LEFTOVER_THRESHOLD_TOKEN_A;
+    uint256 private LEFTOVER_THRESHOLD_TOKEN_B;
     uint256 private constant PERCENT_DENOMINATOR = 10000;
 
     modifier onlyUpgrader() {
@@ -57,7 +57,13 @@ contract StargateStrategy is Initializable, UUPSUpgradeable, OwnableUpgradeable,
     }
 
     /// @dev construct is intended to initialize immutables on implementation
-    constructor(
+    constructor() {
+        // lock implementation
+        _disableInitializers();
+    }
+
+    function initialize(
+        address _upgrader,
         StrategyRouter _strategyRouter,
         uint256 _poolId,
         ERC20 _tokenA,
@@ -66,8 +72,11 @@ contract StargateStrategy is Initializable, UUPSUpgradeable, OwnableUpgradeable,
         address _farm,
         address _stgRouter,
         address _stargateRouter
-    ) {
-        strategyRouter = _strategyRouter;
+    ) external initializer {
+        __Ownable_init();
+        __UUPSUpgradeable_init();
+        upgrader = _upgrader;
+         strategyRouter = _strategyRouter;
         poolId = _poolId;
         tokenA = _tokenA;
         lpToken = _lpToken;
@@ -77,15 +86,6 @@ contract StargateStrategy is Initializable, UUPSUpgradeable, OwnableUpgradeable,
         stargateRouter = _stargateRouter;
         LEFTOVER_THRESHOLD_TOKEN_A = 10**_tokenA.decimals();
         LEFTOVER_THRESHOLD_TOKEN_B = 10**_stgRewardToken.decimals();
-        
-        // lock implementation
-        _disableInitializers();
-    }
-
-    function initialize(address _upgrader) external initializer {
-        __Ownable_init();
-        __UUPSUpgradeable_init();
-        upgrader = _upgrader;
     }
 
     function _authorizeUpgrade(address newImplementation) internal override onlyUpgrader {}
