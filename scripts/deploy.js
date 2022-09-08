@@ -11,16 +11,92 @@
 const Web3 = require("web3");
 
 async function main() {
-  const [deployer] = await hre.ethers.getSigners();
-  console.log("Deploying contracts with the account:", deployer.address);
-  console.log("Account balance:", (await deployer.getBalance()).toString());
+  const deploy = async(contractArtifact, params) => {
+    const [deployer] = await hre.ethers.getSigners();
+    console.log(`Deploying ${contractArtifact} with the account:`, deployer.address);
+    console.log("Account balance:", (await deployer.getBalance()).toString());
+    const Artifact =await ethers.getContractFactory(contractArtifact);
+    let artifact;
+    if(contractArtifact === "CBridgeUSDT") {
+      const {
+        strategyRouter,
+        poolId,
+        tokenA,
+        tokenB,
+        celrRewardToken,
+        farm,
+        celrRouter,
+        cBridgeRouter
+      } = params;
+      artifact = await Artifact?.deploy( strategyRouter, poolId, tokenA, tokenB, celrRewardToken, farm, celrRouter, cBridgeRouter);
+    }
 
-  console.log("Deploying CBridge: ");
-  const CBridgeUSDT = await ethers.getContractFactory("CBridgeUSDT");
-  const cBridgeUSDT = await CBridgeUSDT.deploy();
-  await cBridgeUSDT.deployed();
-  const tokenAddress = cBridgeUSDT.address;
-  console.log("cBridgeUSDT deployed to: ", tokenAddress)
+    if(contractArtifact === "DodoStrategy") {
+      const {
+        strategyRouter,
+        poolId,
+        tokenA,
+        tokenB,
+        lpToken
+      } = params;
+      artifact = await Artifact?.deploy( strategyRouter, poolId, tokenA, tokenB, lpToken);
+    }
+
+    if(contractArtifact === "StargateStrategy") {
+      const {
+        strategyRouter,
+        poolId,
+        tokenA,
+        tokenB,
+        stgRewardToken,
+        farm,
+        stgRouter,
+        stargateRouter
+      } = params;
+      artifact = await Artifact?.deploy( strategyRouter, poolId, tokenA, tokenB, stgRewardToken, farm, stgRouter, stargateRouter );
+    }
+
+    await artifact.deployed();
+    const address = artifact?.address;
+    console.log(`${contractArtifact} : deployed to ${address}` ); 
+  }
+
+  deploy(
+    "CBridgeUSDT",
+    {
+      strategyRouter: "supplyParameterHere",
+      poolId: "supplyParameterHere",
+      tokenA: "supplyParameterHere",
+      tokenB: "supplyParameterHere",
+      celrRewardToken: "supplyParameterHere",
+      farm: "supplyParameterHere",
+      celrRouter: "supplyParameterHere",
+      cBridgeRouter: "supplyParameterHere"
+    }
+  );
+  deploy(
+    "DodoStrategy",
+    {
+      strategyRouter: "supplyParamhere",
+      poolId: "supplyParamhere",
+      tokenA: "supplyParamhere",
+      tokenB: "supplyParamhere",
+      lpToken: "supplyParamhere",
+    }
+  );
+  deploy(
+    "StargateStrategy",
+    {
+      strategyRouter: "supplyParamterHere",
+      poolId: "supplyParamterHere",
+      tokenA: "supplyParamterHere",
+      tokenB: "supplyParamterHere",
+      stgRewardToken: "supplyParamterHere",
+      farm: "supplyParamterHere",
+      stgRouter: "supplyParamterHere",
+      stargateRouter: "supplyParamterHere",
+    }
+  );
   
 }
   

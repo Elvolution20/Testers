@@ -13,7 +13,7 @@ import "../interfaces/IWithdrawalBox.sol";
 import "../deps/openzeppelin/contracts/token/ERC20/utils/SafeERC20.sol";
 import "../deps/openzeppelin/contracts/security/ReentrancyGuard.sol";
 
-/** @title Stargate USDT Liquidity pool.
+/** @title CBridge USDT Liquidity pool.
         Chain: BSC - https://bscscan.com/address/0xf0FF9888A70f44eb12223A6a55C65976BA7bf854
         Pool: USDT
         Yield Source: Bridge fees and token rewards
@@ -28,7 +28,7 @@ import "../deps/openzeppelin/contracts/security/ReentrancyGuard.sol";
         
     @custom:oz-upgrades-unsafe-allow constructor state-variable-immutable
  */
-contract CBridgeUSDT is Initializable, UUPSUpgradeable, OwnableUpgradeable, IStrategy {
+contract CBridgeStrategyT is Initializable, UUPSUpgradeable, OwnableUpgradeable, IStrategy {
     error CallerUpgrader();
 
     address internal upgrader;
