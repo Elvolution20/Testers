@@ -130,22 +130,30 @@
 
 
 
-import { config } from "dotenv";
-import type { HardhatUserConfig } from "hardhat/types";
-import "@nomiclabs/hardhat-ethers";
-import "@openzeppelin/hardhat-upgrades";
-import "@nomiclabs/hardhat-waffle";
-import "@nomiclabs/hardhat-truffle5";
-import "@nomiclabs/hardhat-web3";
-import "solidity-coverage";
-var HDWalletProvider = require("truffle-hdwallet-provider");
+// import { config } from "dotenv";
+// import type { HardhatUserConfig } from "hardhat/types";
+// import "@nomiclabs/hardhat-ethers";
+// import "@openzeppelin/hardhat-upgrades";
+// import "@nomiclabs/hardhat-waffle";
+// import "@nomiclabs/hardhat-truffle5";
+// import "@nomiclabs/hardhat-web3";
+// import "solidity-coverage";
+
+require("dotenv").config();
+require("@nomiclabs/hardhat-waffle");
+require("hardhat-gas-reporter");
+require("@nomiclabs/hardhat-etherscan");
+require('hardhat-contract-sizer');
+require('@openzeppelin/hardhat-upgrades');
+require('solidity-docgen');
+// var HDWalletProvider = require("truffle-hdwallet-provider");
 
 
-config();
+// config();
 
-const confg: HardhatUserConfig = {
-  solidity: "0.8.4"
-}
+// const confg: HardhatUserConfig = {
+//   solidity: "0.8.4"
+// }
 // You need to export an object to set up your config
 // Go to https://hardhat.org/config/ to learn more
 
@@ -160,29 +168,6 @@ module.exports = {
     // },
     hardhat: {
     },
-    matic: {
-      url: "https://rpc-mumbai.maticvigil.com",
-      accounts: [process.env.PRIVATE]
-    },
-
-    harmony_testnet: {
-      url: "https://api.s0.b.hmny.io",
-      accounts: [process.env.PRIVATE]
-    },
-    conflux: {
-      url: "https://evmtestnet.confluxrpc.com",
-      accounts: [process.env.PRIVATE]
-    },
-    // one1nt40yktqqp93e4wpjvhl6hp6wfcndqa8u8n4an
-    // harmony_testnet: {
-    //   provider: () => {
-    //     return new HDWalletProvider(
-    //       process.env.PRIVATE,
-    //       "https://api.s0.b.hmny.io"
-    //     );
-    //   },
-    //   network_id: 1666700000
-    // },
     development: {
       url: "http://127.0.0.1:8545",     // Localhost (default: none)
       port: 8545,            // Standard Ethereum port (default: none)

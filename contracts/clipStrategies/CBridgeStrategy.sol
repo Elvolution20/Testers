@@ -2,16 +2,16 @@
 
 pragma solidity ^0.8.0;
 
-import "../deps/openzeppelin/contracts/token/ERC20/IERC20.sol";
-import "../deps/uniswap/v2-periphery/contracts/interfaces/IUniswapV2Router02.sol";
-import "../deps/uniswap/v2-core/contracts/interfaces/IUniswapV2Pair.sol";
-import "../deps/uniswap/v2-core/contracts/interfaces/IUniswapV2Factory.sol";
+import "@openzeppelin/contracts/token/ERC20/IERC20.sol";
+import "@uniswap/v2-periphery/contracts/interfaces/IUniswapV2Router02.sol";
+import "@uniswap/v2-core/contracts/interfaces/IUniswapV2Pair.sol";
+import "@uniswap/v2-core/contracts/interfaces/IUniswapV2Factory.sol";
 import "../interfaces/IStrategy.sol";
 import "../interfaces/IClipswapFarm.sol";
 import "../interfaces/IcBridgeRouter.sol";
 import "../interfaces/IWithdrawalBox.sol";
-import "../deps/openzeppelin/contracts/token/ERC20/utils/SafeERC20.sol";
-import "../deps/openzeppelin/contracts/security/ReentrancyGuard.sol";
+import "@openzeppelin/contracts/token/ERC20/utils/SafeERC20.sol";
+import "@openzeppelin/contracts/security/ReentrancyGuard.sol";
 
 /** @title CBridge USDT Liquidity pool.
         Chain: BSC - https://bscscan.com/address/0xf0FF9888A70f44eb12223A6a55C65976BA7bf854

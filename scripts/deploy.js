@@ -12,7 +12,7 @@ const Web3 = require("web3");
 
 async function main() {
   const deploy = async(contractArtifact, params) => {
-    const [deployer] = await hre.ethers.getSigners();
+    const [deployer, acc2, acc3, acc4, acc5] = await hre.ethers.getSigners();
     console.log(`Deploying ${contractArtifact} with the account:`, deployer.address);
     console.log("Account balance:", (await deployer.getBalance()).toString());
     const Artifact =await ethers.getContractFactory(contractArtifact);
@@ -55,6 +55,9 @@ async function main() {
       } = params;
       artifact = await Artifact?.deploy( strategyRouter, poolId, tokenA, tokenB, stgRewardToken, farm, stgRouter, stargateRouter );
     }
+    if(contractArtifact === "StrategyRouter") {
+      artifact = await Artifact?.deploy();
+    }
 
     await artifact.deployed();
     const address = artifact?.address;
@@ -62,10 +65,15 @@ async function main() {
   }
 
   deploy(
+    "StrategyRouter",
+    {}
+  )
+
+  deploy(
     "CBridgeUSDT",
     {
       strategyRouter: "supplyParameterHere",
-      poolId: "supplyParameterHere",
+      poolId: 1,
       tokenA: "supplyParameterHere",
       tokenB: "supplyParameterHere",
       celrRewardToken: "supplyParameterHere",
@@ -78,7 +86,7 @@ async function main() {
     "DodoStrategy",
     {
       strategyRouter: "supplyParamhere",
-      poolId: "supplyParamhere",
+      poolId: 1,
       tokenA: "supplyParamhere",
       tokenB: "supplyParamhere",
       lpToken: "supplyParamhere",
@@ -88,7 +96,7 @@ async function main() {
     "StargateStrategy",
     {
       strategyRouter: "supplyParamterHere",
-      poolId: "supplyParamterHere",
+      poolId: 1,
       tokenA: "supplyParamterHere",
       tokenB: "supplyParamterHere",
       stgRewardToken: "supplyParamterHere",
