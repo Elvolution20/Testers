@@ -29,10 +29,10 @@ import "../main/StrategyRouter.sol";
     @custom:oz-upgrades-unsafe-allow constructor state-variable-immutable
  */
 
-contract DodoStrategy is Initializable, UUPSUpgradeable, OwnableUpgradeable, IStrategy {
-    error CallerUpgrader();
+contract DodoStrategy is Ownable, IStrategy {
+    // error CallerUpgrader();
 
-    address internal upgrader;
+    // address internal upgrader;
     
     ERC20 internal tokenA; // USDT Token to deposit
     ERC20 internal tokenB; // BUSD 
@@ -49,19 +49,19 @@ contract DodoStrategy is Initializable, UUPSUpgradeable, OwnableUpgradeable, ISt
     uint256 private LEFTOVER_THRESHOLD_TOKEN_B;
     uint256 private constant PERCENT_DENOMINATOR = 10000;
 
-    modifier onlyUpgrader() {
-        if (msg.sender != address(upgrader)) revert CallerUpgrader();
-        _;
-    }
+    // modifier onlyUpgrader() {
+    //     if (msg.sender != address(upgrader)) revert CallerUpgrader();
+    //     _;
+    // }
 
     /// @dev construct is intended to initialize immutables on implementation
     constructor() {
         // lock implementation
-        _disableInitializers();
+        // _disableInitializers();
     }
 
-    function initialize(
-        address _upgrader,
+    function initializeState(
+        // address _upgrader,
         StrategyRouter _strategyRouter,
         uint256 _poolId,
         ERC20 _tokenA,
@@ -69,11 +69,11 @@ contract DodoStrategy is Initializable, UUPSUpgradeable, OwnableUpgradeable, ISt
         ERC20 _lpToken,
         address _farm,
         address _dodoRouter
-    ) external initializer {
-        __Ownable_init();
-        __UUPSUpgradeable_init();
-        upgrader = _upgrader;
-         strategyRouter = _strategyRouter;
+    ) external onlyOwner {
+        // __Ownable_init();
+        // __UUPSUpgradeable_init();
+        // upgrader = _upgrader;
+        strategyRouter = _strategyRouter;
         poolId = _poolId;
         tokenA = _tokenA;
         tokenB = _tokenB;
@@ -84,7 +84,7 @@ contract DodoStrategy is Initializable, UUPSUpgradeable, OwnableUpgradeable, ISt
         LEFTOVER_THRESHOLD_TOKEN_B = 10**_tokenB.decimals();
     }
 
-    function _authorizeUpgrade(address newImplementation) internal override onlyUpgrader {}
+    // function _authorizeUpgrade(address newImplementation) internal override onlyUpgrader {}
 
     function depositToken() external view override returns (address) {
         return address(tokenA);

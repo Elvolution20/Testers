@@ -1,3 +1,11 @@
 Deploying with the account: 0xA7B2387bF4C259e188751B46859fcA7E2043FEFD
 dodoStrategy : deployed to 0x26749063A57bc40D4Ef6FF621e651A4675eBE34C
 cBridgeStrategy : deployed to 0x700fb12526C9228de57C36f33be137A4399025b1
+
+Second deployment
+================
+Deploying with the account: 0xA7B2387bF4C259e188751B46859fcA7E2043FEFD
+Account balance: 352224883997358440
+strategyRouter : deployed to 0x831D92c03FA7Ed6BFcb73F5e504BE35E012A2361
+dodoStrategy : deployed to 0x9D7e28273720856642A9dcD43Ab1f852E37C854A
+cBridgeStrategy : deployed to 0x5A76Bb7fe88B5e248dC4d9A4567166745D37c6E5

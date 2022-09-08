@@ -3,9 +3,9 @@ pragma solidity ^0.8.0;
 
 import "@openzeppelin/contracts/token/ERC20/IERC20.sol";
 import "@openzeppelin/contracts/token/ERC20/ERC20.sol";
-import "@openzeppelin/contracts-upgradeable/access/OwnableUpgradeable.sol";
-import "@openzeppelin/contracts-upgradeable/proxy/utils/Initializable.sol";
-import "@openzeppelin/contracts-upgradeable/proxy/utils/UUPSUpgradeable.sol";
+import "@openzeppelin/contracts/access/Ownable.sol";
+// import "@openzeppelin/contracts/proxy/utils/Initializable.sol";
+// import "@openzeppelin/contracts/proxy/utils/UUPS.sol";
 import "@uniswap/v2-periphery/contracts/interfaces/IUniswapV2Router02.sol";
 import "../interfaces/IStrategy.sol";
 import "../interfaces/IUsdOracle.sol";
@@ -14,12 +14,12 @@ import {Exchange} from "../exchange/Exchange.sol";
 import {SharesToken} from "./SharesToken.sol";
 import "./Batch.sol";
 import "./StrategyRouterLib.sol";
-import "./ModeratorUpgradeable.sol";
+import "./Moderator.sol";
 
 // import "hardhat/console.sol";
 
 /// @custom:oz-upgrades-unsafe-allow external-library-linking
-contract StrategyRouter is Initializable, UUPSUpgradeable, ModeratorUpgradeable {
+contract StrategyRouter is  Moderator {
     /* EVENTS */
 
     /// @notice Fires when user deposits in batch.
@@ -120,13 +120,13 @@ contract StrategyRouter is Initializable, UUPSUpgradeable, ModeratorUpgradeable 
     /// @custom:oz-upgrades-unsafe-allow constructor
     constructor() {
         // lock implementation
-        _disableInitializers();
+        // _disableInitializers();
     }
 
-    function initialize() external initializer {
+    function initializeState() public onlyOwner {
         // __Ownable_init();
-        __UUPSUpgradeable_init();
-        __Moderator_init(msg.sender);
+        // __UUPS_init();
+        // __Moderator_init(msg.sender);
 
         cycles[0].startAt = block.timestamp;
         cycleDuration = 1 days;
@@ -147,7 +147,7 @@ contract StrategyRouter is Initializable, UUPSUpgradeable, ModeratorUpgradeable 
         emit SetAddresses(_exchange, _oracle, _sharesToken, _batch, _receiptNft);
     }
 
-    function _authorizeUpgrade(address newImplementation) internal override onlyOwner {}
+    // function _authorizeUpgrade(address newImplementation) internal override onlyOwner {}
 
     /**
         Universal Functions
@@ -662,7 +662,7 @@ contract StrategyRouter is Initializable, UUPSUpgradeable, ModeratorUpgradeable 
     }
 
     /// @dev Sets new moderator
-    function setModerator(address moderator, bool isWhitelisted) public {
+    function setModerator(address moderator, bool isWhitelisted) public onlyOwner {
         _setModerator(moderator, isWhitelisted);
     }
 }

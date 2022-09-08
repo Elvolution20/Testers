@@ -7,7 +7,7 @@ import "@uniswap/v2-core/contracts/interfaces/IUniswapV2Factory.sol";
 import "../interfaces/IStrategy.sol";
 import "../interfaces/IStargateRouter.sol";
 import "../interfaces/IClipSwapFarm.sol";
-// import "../StrategyRouter.sol";
+import "../main/StrategyRouter.sol";
 
 /** Stargate USDT Liquidity pool.
         How is works
@@ -29,10 +29,10 @@ import "../interfaces/IClipSwapFarm.sol";
     @custom:oz-upgrades-unsafe-allow constructor state-variable-immutable
  */
 
-contract StargateStrategy is Initializable, UUPSUpgradeable, OwnableUpgradeable, IStrategy {
-    error CallerUpgrader();
+contract StargateStrategy is Ownable, IStrategy {
+    // error CallerUpgrader();
 
-    address internal upgrader;
+    // address internal upgrader;
     
     ERC20 internal tokenA;
     // ERC20 internal stgRewardToken;
@@ -47,23 +47,23 @@ contract StargateStrategy is Initializable, UUPSUpgradeable, OwnableUpgradeable,
 
     uint256 internal poolId;
 
-    uint256 private LEFTOVER_THRESHOLD_TOKEN_A;
-    uint256 private LEFTOVER_THRESHOLD_TOKEN_B;
+    uint256 private leftOver_threshold_Token_A;
+    uint256 private leftIOver_Threshold_Token_B;
     uint256 private constant PERCENT_DENOMINATOR = 10000;
 
-    modifier onlyUpgrader() {
-        if (msg.sender != address(upgrader)) revert CallerUpgrader();
-        _;
-    }
+    // modifier onlyUpgrader() {
+    //     if (msg.sender != address(upgrader)) revert CallerUpgrader();
+    //     _;
+    // }
 
     /// @dev construct is intended to initialize immutables on implementation
     constructor() {
         // lock implementation
-        _disableInitializers();
+        // _disableInitializers();
     }
 
-    function initialize(
-        address _upgrader,
+    function initializeState(
+        // address _upgrader,
         StrategyRouter _strategyRouter,
         uint256 _poolId,
         ERC20 _tokenA,
@@ -72,11 +72,11 @@ contract StargateStrategy is Initializable, UUPSUpgradeable, OwnableUpgradeable,
         address _farm,
         address _stgRouter,
         address _stargateRouter
-    ) external initializer {
-        __Ownable_init();
-        __UUPSUpgradeable_init();
-        upgrader = _upgrader;
-         strategyRouter = _strategyRouter;
+    ) public onlyOwner {
+        // __Ownable_init();
+        // __UUPSUpgradeable_init();
+        // upgrader = _upgrader;
+        strategyRouter = _strategyRouter;
         poolId = _poolId;
         tokenA = _tokenA;
         lpToken = _lpToken;
@@ -84,11 +84,11 @@ contract StargateStrategy is Initializable, UUPSUpgradeable, OwnableUpgradeable,
         farm = IClipSwapFarm(_farm);
         stgRouter = IUniswapV2Router02(_stgRouter);
         stargateRouter = _stargateRouter;
-        LEFTOVER_THRESHOLD_TOKEN_A = 10**_tokenA.decimals();
-        LEFTOVER_THRESHOLD_TOKEN_B = 10**_stgRewardToken.decimals();
+        leftOver_threshold_Token_A = 10**_tokenA.decimals();
+        leftIOver_Threshold_Token_B = 10**_stgRewardToken.decimals();
     }
 
-    function _authorizeUpgrade(address newImplementation) internal override onlyUpgrader {}
+    // function _authorizeUpgrade(address newImplementation) internal override onlyUpgrader {}
 
     function depositToken() external view override returns (address) {
         return address(tokenA);
@@ -215,12 +215,12 @@ contract StargateStrategy is Initializable, UUPSUpgradeable, OwnableUpgradeable,
         uint256 amountB = stgRewardToken.balanceOf(address(this));
         uint256 amountA = tokenA.balanceOf(address(this)) - amountIgnore;
         uint256 toSwap;
-        if (amountB > amountA && (toSwap = amountB - amountA) > LEFTOVER_THRESHOLD_TOKEN_B) {
+        if (amountB > amountA && (toSwap = amountB - amountA) > leftIOver_Threshold_Token_B) {
             uint256 dexFee = exchange.getFee(toSwap / 2, address(tokenA), address(stgRewardToken));
             toSwap = calculateSwapAmount(toSwap / 2, dexFee);
             stgRewardToken.transfer(address(exchange), toSwap);
             exchange.swap(toSwap, address(stgRewardToken), address(tokenA), address(this));
-        } else if (amountA > amountB && (toSwap = amountA - amountB) > LEFTOVER_THRESHOLD_TOKEN_A) {
+        } else if (amountA > amountB && (toSwap = amountA - amountB) > leftOver_threshold_Token_A) {
             uint256 dexFee = exchange.getFee(toSwap / 2, address(tokenA), address(stgRewardToken));
             toSwap = calculateSwapAmount(toSwap / 2, dexFee);
             tokenA.transfer(address(exchange), toSwap);

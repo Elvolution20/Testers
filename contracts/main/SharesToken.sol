@@ -1,11 +1,11 @@
 //SPDX-License-Identifier: Unlicense
 pragma solidity ^0.8.0;
 
-import "@openzeppelin/contracts-upgradeable/token/ERC20/ERC20Upgradeable.sol";
-import "@openzeppelin/contracts-upgradeable/proxy/utils/UUPSUpgradeable.sol";
-import "@openzeppelin/contracts-upgradeable/access/OwnableUpgradeable.sol";
+import "@openzeppelin/contracts/token/ERC20/ERC20.sol";
+// import "@openzeppelin/contracts/proxy/utils/UUPSsol";
+import "@openzeppelin/contracts/access/Ownable.sol";
 
-contract SharesToken is ERC20Upgradeable, UUPSUpgradeable, OwnableUpgradeable {
+contract SharesToken is ERC20, Ownable {
 
     error CallerIsNotStrategyRouter();
 
@@ -17,19 +17,19 @@ contract SharesToken is ERC20Upgradeable, UUPSUpgradeable, OwnableUpgradeable {
     }
 
     /// @custom:oz-upgrades-unsafe-allow constructor
-    constructor() {
+    constructor() ERC20("Clip-Finance Shares", "CF"){
         // lock implementation
-        _disableInitializers();
+        // _disableInitializers();
     }
 
-    function initialize(address _strategyRouter) external initializer {
-        __Ownable_init();
-        __UUPSUpgradeable_init();
-        __ERC20_init("Clip-Finance Shares", "CF");
+    function initializeState(address _strategyRouter) public onlyOwner {
+        // __Ownable_init();
+        // __UUPSUpgradeable_init();
+        // __ERC20_init("Clip-Finance Shares", "CF");
         strategyRouter = _strategyRouter;
     }
 
-    function _authorizeUpgrade(address newImplementation) internal override onlyOwner {}
+    // function _authorizeUpgrade(address newImplementation) internal override onlyOwner {}
 
     /// @dev Helper 'transferFrom' function that don't require user approval
     /// @dev Only callable by strategy router.

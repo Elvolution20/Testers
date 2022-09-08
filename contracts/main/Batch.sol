@@ -5,9 +5,9 @@ pragma solidity ^0.8.0;
 import "@openzeppelin/contracts/token/ERC20/IERC20.sol";
 import "@openzeppelin/contracts/token/ERC20/ERC20.sol";
 import "@openzeppelin/contracts/utils/structs/EnumerableSet.sol";
-import "@openzeppelin/contracts-upgradeable/access/OwnableUpgradeable.sol";
-import "@openzeppelin/contracts-upgradeable/proxy/utils/Initializable.sol";
-import "@openzeppelin/contracts-upgradeable/proxy/utils/UUPSUpgradeable.sol";
+import "@openzeppelin/contracts/access/Ownable.sol";
+// import "@openzeppelin/contracts/proxy/utils/Initializable.sol";
+// import "@openzeppelin/contracts/proxy/utils/UUPS.sol";
 import "@uniswap/v2-periphery/contracts/interfaces/IUniswapV2Router02.sol";
 import "../interfaces/IStrategy.sol";
 import {ReceiptNFT} from "./ReceiptNFT.sol";
@@ -18,7 +18,7 @@ import "../interfaces/IUsdOracle.sol";
 
 /// @notice This contract contains batch related code, serves as part of StrategyRouter.
 /// @notice This contract should be owned by StrategyRouter.
-contract Batch is Initializable, UUPSUpgradeable, OwnableUpgradeable {
+contract Batch is Ownable {
     using EnumerableSet for EnumerableSet.AddressSet;
     using EnumerableSetExtension for EnumerableSet.AddressSet;
 
@@ -60,13 +60,13 @@ contract Batch is Initializable, UUPSUpgradeable, OwnableUpgradeable {
     /// @custom:oz-upgrades-unsafe-allow constructor
     constructor() {
         // lock implementation
-        _disableInitializers();
+        // _disableInitializers();
     }
 
-    function initialize() external initializer {
-        __Ownable_init();
-        __UUPSUpgradeable_init();
-    }
+    // function initialize() external initializer {
+    //     __Ownable_init();
+    //     __UUPSUpgradeable_init();
+    // }
 
     function setAddresses(
         Exchange _exchange,
@@ -81,7 +81,7 @@ contract Batch is Initializable, UUPSUpgradeable, OwnableUpgradeable {
         emit SetAddresses(_exchange, _oracle, _router, _receiptNft);
     }
 
-    function _authorizeUpgrade(address newImplementation) internal override onlyOwner {}
+    // function _authorizeUpgrade(address newImplementation) internal override onlyOwner {}
 
     // Universal Functions
 
