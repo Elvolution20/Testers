@@ -47,13 +47,13 @@ async function main() {
         strategyRouter,
         poolId,
         tokenA,
-        tokenB,
+        lpToken,
         stgRewardToken,
         farm,
         stgRouter,
         stargateRouter
       } = params;
-      artifact = await Artifact?.deploy( strategyRouter, poolId, tokenA, tokenB, stgRewardToken, farm, stgRouter, stargateRouter );
+      artifact = await Artifact?.deploy( strategyRouter, poolId, tokenA, lpToken, stgRewardToken, farm, stgRouter, stargateRouter );
     }
     if(contractArtifact === "StrategyRouter") {
       artifact = await Artifact?.deploy();
@@ -69,19 +69,19 @@ async function main() {
     {}
   )
 
-  deploy(
-    "CBridgeUSDT",
-    {
-      strategyRouter: "supplyParameterHere",
-      poolId: 1,
-      tokenA: "supplyParameterHere",
-      tokenB: "supplyParameterHere",
-      celrRewardToken: "supplyParameterHere",
-      farm: "supplyParameterHere",
-      celrRouter: "supplyParameterHere",
-      cBridgeRouter: "supplyParameterHere"
-    }
-  );
+  // deploy(
+  //   "CBridgeUSDT",
+  //   {
+  //     strategyRouter: "supplyParameterHere",
+  //     poolId: 1,
+  //     tokenA: "supplyParameterHere",
+  //     tokenB: "supplyParameterHere",
+  //     celrRewardToken: "supplyParameterHere",
+  //     farm: "supplyParameterHere",
+  //     celrRouter: "supplyParameterHere",
+  //     cBridgeRouter: "supplyParameterHere"
+  //   }
+  // );
   deploy(
     "DodoStrategy",
     {
@@ -98,7 +98,7 @@ async function main() {
       strategyRouter: "supplyParamterHere",
       poolId: 1,
       tokenA: "supplyParamterHere",
-      tokenB: "supplyParamterHere",
+      lpToken: "supplyParamterHere",
       stgRewardToken: "supplyParamterHere",
       farm: "supplyParamterHere",
       stgRouter: "supplyParamterHere",

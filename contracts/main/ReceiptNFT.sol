@@ -1,10 +1,10 @@
 //SPDX-License-Identifier: Unlicense
 pragma solidity ^0.8.0;
 
-import "../deps/openzeppelin/contracts-upgradeable/token/ERC721/ERC721Upgradeable.sol";
-import "../deps/openzeppelin/contracts-upgradeable/access/OwnableUpgradeable.sol";
-import "../deps/openzeppelin/contracts-upgradeable/proxy/utils/UUPSUpgradeable.sol";
-import "../deps/openzeppelin/contracts-upgradeable/proxy/utils/Initializable.sol";
+import "@openzeppelin/contracts-upgradeable/token/ERC721/ERC721Upgradeable.sol";
+import "@openzeppelin/contracts-upgradeable/access/OwnableUpgradeable.sol";
+import "@openzeppelin/contracts-upgradeable/proxy/utils/UUPSUpgradeable.sol";
+import "@openzeppelin/contracts-upgradeable/proxy/utils/Initializable.sol";
 
 contract ReceiptNFT is ERC721Upgradeable, UUPSUpgradeable, OwnableUpgradeable {
 

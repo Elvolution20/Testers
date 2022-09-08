@@ -2,13 +2,13 @@
 
 pragma solidity ^0.8.0;
 
-import "../deps/openzeppelin/contracts/token/ERC20/IERC20.sol";
-import "../deps/openzeppelin/contracts/token/ERC20/ERC20.sol";
-import "../deps/openzeppelin/contracts/utils/structs/EnumerableSet.sol";
-import "../deps/OwnableUpgradeable.sol";
-import "../deps/Initializable.sol";
-import "../deps/UUPSUpgradeable.sol";
-import "../deps/uniswap/v2-periphery/contracts/interfaces/IUniswapV2Router02.sol";
+import "@openzeppelin/contracts/token/ERC20/IERC20.sol";
+import "@openzeppelin/contracts/token/ERC20/ERC20.sol";
+import "@openzeppelin/contracts/utils/structs/EnumerableSet.sol";
+import "@openzeppelin/contracts-upgradeable/access/OwnableUpgradeable.sol";
+import "@openzeppelin/contracts-upgradeable/proxy/utils/Initializable.sol";
+import "@openzeppelin/contracts-upgradeable/proxy/utils/UUPSUpgradeable.sol";
+import "@uniswap/v2-periphery/contracts/interfaces/IUniswapV2Router02.sol";
 import "../interfaces/IStrategy.sol";
 import {ReceiptNFT} from "./ReceiptNFT.sol";
 import {StrategyRouter} from "./StrategyRouter.sol";

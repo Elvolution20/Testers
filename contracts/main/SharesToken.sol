@@ -1,8 +1,9 @@
+//SPDX-License-Identifier: Unlicense
 pragma solidity ^0.8.0;
 
-import "../deps/openzeppelin/contracts-upgradeable/token/ERC20/ERC20Upgradeable.sol";
-import "../deps/openzeppelin/contracts-upgradeable/proxy/utils/UUPSUpgradeable.sol";
-import "../deps/openzeppelin/contracts-upgradeable/access/OwnableUpgradeable.sol";
+import "@openzeppelin/contracts-upgradeable/token/ERC20/ERC20Upgradeable.sol";
+import "@openzeppelin/contracts-upgradeable/proxy/utils/UUPSUpgradeable.sol";
+import "@openzeppelin/contracts-upgradeable/access/OwnableUpgradeable.sol";
 
 contract SharesToken is ERC20Upgradeable, UUPSUpgradeable, OwnableUpgradeable {
 

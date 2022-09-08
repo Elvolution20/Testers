@@ -6,21 +6,21 @@ import "@uniswap/v2-core/contracts/interfaces/IUniswapV2Pair.sol";
 import "@uniswap/v2-core/contracts/interfaces/IUniswapV2Factory.sol";
 import "../interfaces/IStrategy.sol";
 import "../interfaces/IStargateRouter.sol";
-import "../interfaces/IClipswapFarm.sol";
+import "../interfaces/IClipSwapFarm.sol";
 // import "../StrategyRouter.sol";
 
-/** @title Stargate USDT Liquidity pool.
+/** Stargate USDT Liquidity pool.
         How is works
         ------------
         - USDT Deposited into a single-sided liquidity pool on Stargate on the Binance Smart Chain
         - USDT Lp Token is staked in the USDT Liquidity Mining Farm.
         - Rewards are received as STG.
         - STG Tokens are sold out for USDT on PancakeSwap and deposited back into the pool.
-    @notice: 
+
         stg : Contract of the reward token. (In this case STG)
         farm : Liquidity Mining Farm.
-
-    @notice Functions: 
+    
+    Functions: 
         o deposit()
         o withdraw()
         o withdrawall()
@@ -29,23 +29,21 @@ import "../interfaces/IClipswapFarm.sol";
     @custom:oz-upgrades-unsafe-allow constructor state-variable-immutable
  */
 
-/// @custom:oz-upgrades-unsafe-allow constructor state-variable-immutable
 contract StargateStrategy is Initializable, UUPSUpgradeable, OwnableUpgradeable, IStrategy {
     error CallerUpgrader();
 
     address internal upgrader;
     
     ERC20 internal immutable tokenA;
-    // ERC20 internal immutable tokenB;
+    // ERC20 internal immutable stgRewardToken;
     ERC20 internal immutable lpToken;
     StrategyRouter internal immutable strategyRouter;
 
     address internal immutable stargateRouter;
 
-    ERC20 internal constant stgRewardToken;
-    ERC20 internal constant lpToken;
-    address internal constant farm;
-    IUniswapV2Router02 internal constant stgRouter;
+    ERC20 internal immutable stgRewardToken;
+    IClipSwapFarm internal immutable farm;
+    IUniswapV2Router02 internal immutable stgRouter;
 
     uint256 internal immutable poolId;
 
@@ -63,22 +61,22 @@ contract StargateStrategy is Initializable, UUPSUpgradeable, OwnableUpgradeable,
         StrategyRouter _strategyRouter,
         uint256 _poolId,
         ERC20 _tokenA,
-        ERC20 _tokenB,
+        ERC20 _lpToken,
         ERC20 _stgRewardToken,
         address _farm,
-        ERC20 _stgRouter,
+        address _stgRouter,
         address _stargateRouter
     ) {
         strategyRouter = _strategyRouter;
         poolId = _poolId;
         tokenA = _tokenA;
-        tokenB = _tokenB;
+        lpToken = _lpToken;
         stgRewardToken = _stgRewardToken ;
-        farm = _farm;
-        stgRouter = _stgRouter;
+        farm = IClipSwapFarm(_farm);
+        stgRouter = IUniswapV2Router02(_stgRouter);
         stargateRouter = _stargateRouter;
         LEFTOVER_THRESHOLD_TOKEN_A = 10**_tokenA.decimals();
-        LEFTOVER_THRESHOLD_TOKEN_B = 10**_tokenB.decimals();
+        LEFTOVER_THRESHOLD_TOKEN_B = 10**_stgRewardToken.decimals();
         
         // lock implementation
         _disableInitializers();
@@ -99,34 +97,34 @@ contract StargateStrategy is Initializable, UUPSUpgradeable, OwnableUpgradeable,
     function deposit(uint256 amount) external override onlyOwner {
         // Exchange exchange = strategyRouter.getExchange();
         tokenA.approve(address(stargateRouter), amount);
-        IStargateRouter(stargateRouter).addLiquidity(_p.poolId, amount, address(address(this))); 
+        IStargateRouter(stargateRouter).addLiquidity(poolId, amount, address(address(this))); 
         stgRewardToken.approve(address(farm), amount);
         farm.deposit(poolId, amount);
     }
 
-    function withdraw(uint256 strategyTokenAmountToWithdraw)
+    function withdraw(uint256 amtToWithdraw)
         external
         override
         onlyOwner
         returns (uint256 amountWithdrawn)
     {
-        IClipswapFarm(farm).withdraw(_p.poolId, amtToWithdraw);
+        IClipSwapFarm(farm).withdraw(poolId, amtToWithdraw);
         uint256 balance1 = stgRewardToken.balanceOf(address(this));
         // stgRewardToken.approve(address(stgRouter), amtToWithdraw);
-        IStargateRouter(_p.stargateRouter).redeemLocal(
-            chainId, 
+        IStargateRouter(stargateRouter).redeemLocal(
+            97, //testnet 
             poolId, 
             97, // BSC testnet
-            address(this), 
+            payable(address(this)), 
             balance1, 
             abi.encode(address(this)), 
-            lzTxObj(0, 0, "")
+            IStargateRouter.lzTxObj(0, 0, "")
         );
         lpToken.approve(address(stgRouter), amtToWithdraw);
 
         Exchange exchange = strategyRouter.getExchange();
         stgRewardToken.approve(address(exchange), balance1);
-        uint amountA = exchange.swap(bai, address(stgRewardToken), address(tokenA), address(this));
+        uint amountA = exchange.swap(balance1, address(stgRewardToken), address(tokenA), address(this));
         tokenA.transfer(msg.sender, amountA);
        
         return amountA;
@@ -136,7 +134,7 @@ contract StargateStrategy is Initializable, UUPSUpgradeable, OwnableUpgradeable,
         // inside withdraw happens STG rewards collection
         farm.withdraw(poolId, 0);
         // use balance because STG is harvested on deposit and withdraw calls
-        uint256 stgAmount = stg.balanceOf(address(this));
+        uint256 stgAmount = stgRewardToken.balanceOf(address(this));
 
         if (stgAmount > 0) {
             fix_leftover(0);
@@ -145,8 +143,8 @@ contract StargateStrategy is Initializable, UUPSUpgradeable, OwnableUpgradeable,
             uint256 balanceB = stgRewardToken.balanceOf(address(this));
 
             tokenA.approve(address(stargateRouter), balanceA);
-            // tokenB.approve(address(stgRouter), balanceB);
-            IStargateRouter(stargateRouter).addLiquidity(_p.poolId, balanceA, address(this));
+            stgRewardToken.approve(address(stgRouter), balanceB);
+            IStargateRouter(stargateRouter).addLiquidity(poolId, balanceA, address(this));
 
             uint256 lpAmount = lpToken.balanceOf(address(this));
             lpToken.approve(address(farm), lpAmount);
@@ -155,20 +153,20 @@ contract StargateStrategy is Initializable, UUPSUpgradeable, OwnableUpgradeable,
     }
 
 
-    function withdrawAll(uint lpAmountToRedeem) external override onlyOwner returns (uint256 amountWithdrawn) {
+    function withdrawAll() external override onlyOwner returns (uint256 amountWithdrawn) {
         (uint256 amount, ) = farm.userInfo(poolId, address(this));
         if (amount > 0) {
             farm.withdraw(poolId, amount);
             uint256 lpAmount = lpToken.balanceOf(address(this));
             lpToken.approve(address(stgRouter), lpAmount);
             IStargateRouter(stargateRouter).redeemLocal(
-                chainId, 
+                97, //Testnet 
                 poolId, 
                 poolId, 
-                address(this), 
-                lpAmountToRedeem, 
+                payable(address(this)), 
+                lpAmount, 
                 abi.encode(address(this)), 
-                lzTxObj(0, 0, "")
+                IStargateRouter.lzTxObj(0, 0, "")
             );
         }
 
@@ -185,6 +183,31 @@ contract StargateStrategy is Initializable, UUPSUpgradeable, OwnableUpgradeable,
             return amountA;
         }
     }
+
+    function totalTokens() external view override returns (uint256) {
+        (uint256 liquidity, ) = farm.userInfo(poolId, address(this));
+
+        uint256 _totalSupply = lpToken.totalSupply();
+        // this formula is from uniswap.remove_liquidity -> uniswapPair.burn function
+        uint256 balanceA = tokenA.balanceOf(address(lpToken));
+        uint256 balanceB = stgRewardToken.balanceOf(address(lpToken));
+        uint256 amountA = (liquidity * balanceA) / _totalSupply;
+        uint256 amountB = (liquidity * balanceB) / _totalSupply;
+
+        if (amountB > 0) {
+            address token0 = IUniswapV2Pair(address(lpToken)).token0();
+
+            (uint256 _reserve0, uint256 _reserve1) = token0 == address(stgRewardToken)
+                ? (balanceB, balanceA)
+                : (balanceA, balanceB);
+
+            // convert amountB to amount tokenA
+            amountA += stgRouter.quote(amountB, _reserve0, _reserve1);
+        }
+
+        return amountA;
+    }
+
 
     /// @dev Swaps leftover tokens for a better ratio for LP.
     function fix_leftover(uint256 amountIgnore) private {
@@ -205,7 +228,7 @@ contract StargateStrategy is Initializable, UUPSUpgradeable, OwnableUpgradeable,
         }
     }
 
-    // swap stgRewardToken for tokenA & tokenB in proportions 50/50
+    // swap stgRewardToken for tokenA & stgRewardToken in proportions 50/50
     function sellReward(uint256 stgRewardTokenAmount) private returns (uint256 receivedA, uint256 receivedB) {
         // sell for lp ratio
         uint256 amountA = stgRewardTokenAmount / 2;
@@ -216,7 +239,7 @@ contract StargateStrategy is Initializable, UUPSUpgradeable, OwnableUpgradeable,
         receivedA = exchange.swap(amountA, address(stgRewardToken), address(tokenA), address(this));
 
         stgRewardToken.transfer(address(exchange), amountB);
-        receivedB = exchange.swap(amountB, address(stgRewardToken), address(tokenB), address(this));
+        receivedB = exchange.swap(amountB, address(stgRewardToken), address(stgRewardToken), address(this));
 
         (receivedA, receivedB) = collectProtocolCommission(receivedA, receivedB);
     }
@@ -249,14 +272,14 @@ contract StargateStrategy is Initializable, UUPSUpgradeable, OwnableUpgradeable,
         }
 
         // these two have same decimals, should adjust A to have A decimals,
-        // this is TODO for cases when tokenA and tokenB has different decimals
+        // this is TODO for cases when tokenA and stgRewardToken has different decimals
         uint256 comissionA = (feeAmount * ratioUint) / 1e18;
-        uint256 comissionB = feeAmount - comissionA;
+        // uint256 comissionB = feeAmount - comissionA;
 
         tokenA.transfer(feeAddress, comissionA);
-        tokenB.transfer(feeAddress, comissionB);
+        // stgRewardToken.transfer(feeAddress, comissionB);
 
-        return (amountA - comissionA, amountB - comissionB);
+        return (amountA - comissionA, 0);
     }
 
     function calculateSwapAmount(uint256 half, uint256 dexFee) private view returns (uint256 amountAfterFee) {

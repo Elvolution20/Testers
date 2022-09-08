@@ -1,10 +1,10 @@
 //SPDX-License-Identifier: Unlicense
 pragma solidity ^0.8.0;
 
-import "../deps/chainlink/contracts/src/v0.8/interfaces/AggregatorV3Interface.sol";
-import "../deps/chainlink/contracts/src/v0.8/Denominations.sol";
-import "../deps/openzeppelin/contracts-upgradeable/access/OwnableUpgradeable.sol";
-import "../deps/openzeppelin/contracts-upgradeable/proxy/utils/UUPSUpgradeable.sol";
+import "@chainlink/contracts/src/v0.8/interfaces/AggregatorV3Interface.sol";
+import "@chainlink/contracts/src/v0.8/Denominations.sol";
+import "@openzeppelin/contracts-upgradeable/access/OwnableUpgradeable.sol";
+import "@openzeppelin/contracts-upgradeable/proxy/utils/UUPSUpgradeable.sol";
 import "../interfaces/IUsdOracle.sol";
 
 contract ChainlinkOracle is IUsdOracle, UUPSUpgradeable, OwnableUpgradeable {

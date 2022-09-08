@@ -4,12 +4,12 @@ import "@openzeppelin/contracts/token/ERC20/IERC20.sol";
 import "@uniswap/v2-periphery/contracts/interfaces/IUniswapV2Router02.sol";
 import "@uniswap/v2-core/contracts/interfaces/IUniswapV2Pair.sol";
 import "@uniswap/v2-core/contracts/interfaces/IUniswapV2Factory.sol";
-// import "../interfaces/IDodoV1Router.sol";
+import "../interfaces/IClipSwapFarm.sol";
 import "../interfaces/IStrategy.sol";
 import "../interfaces/IDodoStrategy.sol";
 import "../main/StrategyRouter.sol";
 
-/** @title Dodo Exchange USDT Liquidity pool.
+/** Dodo Exchange USDT Liquidity pool.
         How is works
         ------------
         - USDT is converted to an LP token in the BUSD-USDT Pool on the DODO Exchange
@@ -17,13 +17,12 @@ import "../main/StrategyRouter.sol";
         - Rewards are received as DODO tokens.
         - DODO tokens are sold for USDT and deposited back into the pool.
            
-        @notice Functions: 
+        Functions: 
             o deposit()
             o withdraw()
             o withdrawall()
             o compound()
 
- @notice: 
         params.clip : Contract of the reward token. (In this case Dodo)
         param.farm : Liquidity Mining Farm.
 
@@ -41,8 +40,8 @@ contract DodoStrategy is Initializable, UUPSUpgradeable, OwnableUpgradeable, ISt
     StrategyRouter internal immutable strategyRouter; // StrategyRouter contract
 
     ERC20 internal constant dodo = ERC20(0x67ee3Cb086F8a16f34beE3ca72FAD36F7Db929e2); //reward token
-    IDodoFarm internal constant farm = IDodoFarm("Paste Dodo farm address here"); // Dodo farm
-    IUniswapV2Factory internal constant dodoRouter = IUniswapV2Router02("Paste Dodo riouter address here"); // Dodo Exchange
+    IClipSwapFarm internal immutable farm; // Dodo farm
+    IUniswapV2Router02 internal immutable dodoRouter;  // Dodo Exchange
 
     uint256 internal immutable poolId;
 
@@ -61,13 +60,17 @@ contract DodoStrategy is Initializable, UUPSUpgradeable, OwnableUpgradeable, ISt
         uint256 _poolId,
         ERC20 _tokenA,
         ERC20 _tokenB,
-        ERC20 _lpToken
+        ERC20 _lpToken,
+        address _farm,
+        address _dodoRouter
     ) {
         strategyRouter = _strategyRouter;
         poolId = _poolId;
         tokenA = _tokenA;
         tokenB = _tokenB;
         lpToken = _lpToken;
+        farm = IClipSwapFarm(_farm);
+        dodoRouter = IUniswapV2Router02(_dodoRouter);
         LEFTOVER_THRESHOLD_TOKEN_A = 10**_tokenA.decimals();
         LEFTOVER_THRESHOLD_TOKEN_B = 10**_tokenB.decimals();
         
@@ -92,7 +95,7 @@ contract DodoStrategy is Initializable, UUPSUpgradeable, OwnableUpgradeable, ISt
 
         // uint256 dexFee = exchange.getFee(amount / 2, address(tokenA), address(tokenB));
         uint256 amountB = calculateSwapAmount(amount / 2, 0);
-        uint256 amountB = calculateSwapAmount(amount / 2);
+        // uint256 amountB = calculateSwapAmount(amount / 2);
         uint256 amountA = amount - amountB;
 
         tokenA.transfer(address(exchange), amountB);

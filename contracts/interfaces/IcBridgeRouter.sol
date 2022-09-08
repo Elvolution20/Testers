@@ -13,7 +13,7 @@ pragma solidity >=0.8.0;
   _ratios are the percentages of liquidity to be withdrawn from each chain. They should be all positive. The max ratio is 100000000, which means 100%.
   _slippages are the maximal allowed slippages for cross-chain withdrawals. Usually a small number such as 5000, which means 0.5%, should suffice. The max slippage is 1000000, which means 100%.
  */
-interface IPool {
+interface IcBridgeRouter {
     function addLiquidity(address _token, uint256 _amount) external;
 
     function withdraws(bytes32 withdrawId) external view returns (bool);

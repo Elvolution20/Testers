@@ -7,7 +7,7 @@ import "@openzeppelin/contracts-upgradeable/proxy/utils/UUPSUpgradeable.sol";
 import "@uniswap/v2-periphery/contracts/interfaces/IUniswapV2Router02.sol";
 import "../interfaces/ICurvePool.sol";
 import "../interfaces/IExchangePlugin.sol";
-import {StrategyRouter} from "../StrategyRouter.sol";
+import {StrategyRouter} from "../main/StrategyRouter.sol";
 
 // import "hardhat/console.sol";
 

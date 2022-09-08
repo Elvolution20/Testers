@@ -2,10 +2,10 @@
 
 pragma solidity ^0.8.0;
 
-import "../deps/chainlink/contracts/src/v0.8/interfaces/FeedRegistryInterface.sol";
-import "../deps/chainlink/contracts/src/v0.8/Denominations.sol";
-import "../deps/openzeppelin/contracts/access/Ownable.sol";
-import "../deps/openzeppelin/contracts/token/ERC20/ERC20.sol";
+import "@chainlink/contracts/src/v0.8/interfaces/FeedRegistryInterface.sol";
+import "@chainlink/contracts/src/v0.8/Denominations.sol";
+import "@openzeppelin/contracts/access/Ownable.sol";
+import "@openzeppelin/contracts/token/ERC20/ERC20.sol";
 import "../interfaces/IUsdOracle.sol";
 
 // import "hardhat/console.sol";

@@ -1,10 +1,10 @@
 //SPDX-License-Identifier: Unlicense
 pragma solidity ^0.8.0;
 
-import "../deps/openzeppelin/contracts/token/ERC20/IERC20.sol";
-import "../deps/openzeppelin/contracts/token/ERC20/ERC20.sol";
-import "../deps/openzeppelin/contracts/access/Ownable.sol";
-import "../deps/uniswap/v2-periphery/contracts/interfaces/IUniswapV2Router02.sol";
+import "@openzeppelin/contracts/token/ERC20/IERC20.sol";
+import "@openzeppelin/contracts/token/ERC20/ERC20.sol";
+import "@openzeppelin/contracts/access/Ownable.sol";
+import "@uniswap/v2-periphery/contracts/interfaces/IUniswapV2Router02.sol";
 import "../interfaces/IStrategy.sol";
 import "../interfaces/IUsdOracle.sol";
 import {ReceiptNFT} from "./ReceiptNFT.sol";

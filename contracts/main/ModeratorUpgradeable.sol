@@ -1,11 +1,11 @@
 //SPDX-License-Identifier: Unlicense
 
-import "../deps/openzeppelin/contracts-upgradeable/utils/ContextUpgradeable.sol";
-import "../deps/UUPSUpgradeable.sol";
+import "@openzeppelin/contracts-upgradeable/utils/ContextUpgradeable.sol";
+import "@openzeppelin/contracts-upgradeable/access/OwnableUpgradeable.sol";
 
 pragma solidity ^0.8.0;
 
-contract ModeratorUpgradeable is Initializable, ContextUpgradeable, UUPSUpgradeable {
+contract ModeratorUpgradeable is Initializable, ContextUpgradeable, OwnableUpgradeable {
   mapping(address => bool) public moderators;
 
   /// @custom:oz-upgrades-unsafe-allow constructor
@@ -14,27 +14,22 @@ contract ModeratorUpgradeable is Initializable, ContextUpgradeable, UUPSUpgradea
     _disableInitializers();
   }
 
-  function initialize () external  initializer {
+  function __Moderator_init(address mod) internal virtual initializer {
     __Context_init();
-    __UUPSUpgradeable_init();
-    _setModerator(_msgSender(), true);
+    __Ownable_init();
+    _setModerator(mod, true);
   }
 
   /**
     @notice Set wallets that will be moderators.
     @dev Admin function.
   */
-  function _setModerator(address moderator, bool isWhitelisted, address expected) internal virtual {
-    _modifier(moderator, expected);
-    bool isModerator = _isModerator(moderator);
+  function _setModerator(address moderator, bool isWhitelisted) internal virtual onlyOwner {
+    require(moderator != address(0), "Zero address");
+    bool isModerator = _isModerator();
     if(isWhitelisted) require(!isModerator, "already whitelisted");
     else require(isModerator, "Not whitelisted");
     moderators[moderator] = isWhitelisted;
-  }
-
-  /// @notice Hook
-  function _modifier(address newModerator, address expected) internal virtual {
-    require(expected != address(0) && _msgSender() == expected, "Not authorized");
   }
 
   /// @notice Whether `who` is a moderator or not

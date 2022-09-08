@@ -1,11 +1,11 @@
 //SPDX-License-Identifier: Unlicense
 pragma solidity ^0.8.0;
-import "../_deps/openzeppelin/contracts/token/ERC20/IERC20.sol";
-import "../_deps/openzeppelin/contracts/access/Ownable.sol";
-import "../_deps/uniswap/v2-periphery/contracts/interfaces/IUniswapV2Router02.sol";
+import "@openzeppelin/contracts/token/ERC20/IERC20.sol";
+import "@openzeppelin/contracts/access/Ownable.sol";
+import "@uniswap/v2-periphery/contracts/interfaces/IUniswapV2Router02.sol";
 import "../interfaces/ICurvePool.sol";
 import "../interfaces/IExchangePlugin.sol";
-import "../StrategyRouter.sol";
+import "../main/StrategyRouter.sol";
 
 // import "hardhat/console.sol";
 

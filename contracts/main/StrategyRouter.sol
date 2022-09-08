@@ -1,12 +1,12 @@
 //SPDX-License-Identifier: Unlicense
 pragma solidity ^0.8.0;
 
-import "../deps/openzeppelin/contracts/token/ERC20/IERC20.sol";
-import "../deps/openzeppelin/contracts/token/ERC20/ERC20.sol";
-import "../deps/OwnableUpgradeable.sol";
-import "../deps/Initializable.sol";
-import "../deps/UUPSUpgradeable.sol";
-import "../deps/uniswap/v2-periphery/contracts/interfaces/IUniswapV2Router02.sol";
+import "@openzeppelin/contracts/token/ERC20/IERC20.sol";
+import "@openzeppelin/contracts/token/ERC20/ERC20.sol";
+import "@openzeppelin/contracts-upgradeable/access/OwnableUpgradeable.sol";
+import "@openzeppelin/contracts-upgradeable/proxy/utils/Initializable.sol";
+import "@openzeppelin/contracts-upgradeable/proxy/utils/UUPSUpgradeable.sol";
+import "@uniswap/v2-periphery/contracts/interfaces/IUniswapV2Router02.sol";
 import "../interfaces/IStrategy.sol";
 import "../interfaces/IUsdOracle.sol";
 import {ReceiptNFT} from "./ReceiptNFT.sol";
@@ -19,7 +19,7 @@ import "./ModeratorUpgradeable.sol";
 // import "hardhat/console.sol";
 
 /// @custom:oz-upgrades-unsafe-allow external-library-linking
-contract StrategyRouter is Initializable, UUPSUpgradeable, OwnableUpgradeable, ModeratorUpgradeable {
+contract StrategyRouter is Initializable, UUPSUpgradeable, ModeratorUpgradeable {
     /* EVENTS */
 
     /// @notice Fires when user deposits in batch.
@@ -124,8 +124,9 @@ contract StrategyRouter is Initializable, UUPSUpgradeable, OwnableUpgradeable, M
     }
 
     function initialize() external initializer {
-        __Ownable_init();
+        // __Ownable_init();
         __UUPSUpgradeable_init();
+        __Moderator_init(msg.sender);
 
         cycles[0].startAt = block.timestamp;
         cycleDuration = 1 days;
@@ -583,7 +584,7 @@ contract StrategyRouter is Initializable, UUPSUpgradeable, OwnableUpgradeable, M
     /// @param withdrawAmountUsd - USD value to withdraw. `UNIFORM_DECIMALS` decimals.
     /// @param withdrawToken Supported token to receive after withdraw.
     function _withdrawFromStrategies(uint256 withdrawAmountUsd, address withdrawToken) private {
-        (uint256 strategiesLockedUsd, uint256[] memory strategyTokenBalancesUsd) = getStrategiesValue();
+        (, uint256[] memory strategyTokenBalancesUsd) = getStrategiesValue();
         uint256 strategiesCount = strategies.length;
 
         uint256 tokenAmountToWithdraw;
@@ -662,6 +663,6 @@ contract StrategyRouter is Initializable, UUPSUpgradeable, OwnableUpgradeable, M
 
     /// @dev Sets new moderator
     function setModerator(address moderator, bool isWhitelisted) public {
-        _setModerator(moderator, isWhitelisted, owner());
+        _setModerator(moderator, isWhitelisted);
     }
 }
