@@ -3459,6 +3459,8 @@ contract BatchOnefile is Ownable {
 
     uint256 public minDeposit;
 
+    bool private initializer;
+
     ReceiptNFT public receiptContract;
     Exchange public exchange;
     StrategyRouter public router;
@@ -3488,6 +3490,8 @@ contract BatchOnefile is Ownable {
         StrategyRouter _router,
         ReceiptNFT _receiptNft
     ) external onlyOwner {
+        require(!initializer, "Already initialized");
+        initializer = true;
         exchange = _exchange;
         oracle = _oracle;
         router = _router;

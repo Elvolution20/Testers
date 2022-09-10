@@ -866,17 +866,18 @@ contract SharesTokenOnefile is ERC20, Ownable {
     }
 
     /// @custom:oz-upgrades-unsafe-allow constructor
-    constructor() ERC20("Clip-Finance Shares", "CF"){
+    constructor(address _strategyRouter) ERC20("Clip-Finance Shares", "CF"){
         // lock implementation
         // _disableInitializers();
-    }
-
-    function initializeState(address _strategyRouter) public onlyOwner {
-        // __Ownable_init();
-        // __UUPSUpgradeable_init();
-        // __ERC20_init("Clip-Finance Shares", "CF");
         strategyRouter = _strategyRouter;
     }
+
+    // function initializeState() public onlyOwner {
+    //     // __Ownable_init();
+    //     // __UUPSUpgradeable_init();
+    //     // __ERC20_init("Clip-Finance Shares", "CF");
+        
+    // }
 
     // function _authorizeUpgrade(address newImplementation) internal override onlyOwner {}
 
