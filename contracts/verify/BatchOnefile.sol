@@ -1241,379 +1241,6 @@ interface IUsdOracle {
         returns (uint256 price, uint8 decimals);
 }
 
-
-/// @notice This contract contains batch related code, serves as part of StrategyRouter.
-/// @notice This contract should be owned by StrategyRouter.
-contract Batch is Ownable {
-    using EnumerableSet for EnumerableSet.AddressSet;
-    using EnumerableSetExtension for EnumerableSet.AddressSet;
-
-    /* ERRORS */
-
-    error AlreadySupportedToken();
-    error CantRemoveTokenOfActiveStrategy();
-    error UnsupportedToken();
-    error NotReceiptOwner();
-    error CycleClosed();
-    error DepositUnderMinimum();
-    error NotEnoughBalanceInBatch();
-    error CallerIsNotStrategyRouter();
-
-    /// @notice Fires when user withdraw from batch.
-    /// @param token Supported token that user requested to receive after withdraw.
-    /// @param amount Amount of `token` received by user.
-    event WithdrawFromBatch(address indexed user, address token, uint256 amount);
-    event SetAddresses(Exchange _exchange, IUsdOracle _oracle, StrategyRouter _router, ReceiptNFT _receiptNft);
-
-    uint8 public constant UNIFORM_DECIMALS = 18;
-    // used in rebalance function, UNIFORM_DECIMALS, so 1e17 == 0.1
-    uint256 public constant REBALANCE_SWAP_THRESHOLD = 1e17;
-
-    uint256 public minDeposit;
-
-    ReceiptNFT public receiptContract;
-    Exchange public exchange;
-    StrategyRouter public router;
-    IUsdOracle public oracle;
-
-    EnumerableSet.AddressSet private supportedTokens;
-
-    modifier onlyStrategyRouter() {
-        if (msg.sender != address(router)) revert CallerIsNotStrategyRouter();
-        _;
-    }
-
-    /// @custom:oz-upgrades-unsafe-allow constructor
-    constructor() {
-        // lock implementation
-        // _disableInitializers();
-    }
-
-    // function initialize() external initializer {
-    //     __Ownable_init();
-    //     __UUPSUpgradeable_init();
-    // }
-
-    function setAddresses(
-        Exchange _exchange,
-        IUsdOracle _oracle,
-        StrategyRouter _router,
-        ReceiptNFT _receiptNft
-    ) external onlyOwner {
-        exchange = _exchange;
-        oracle = _oracle;
-        router = _router;
-        receiptContract = _receiptNft;
-        emit SetAddresses(_exchange, _oracle, _router, _receiptNft);
-    }
-
-    // function _authorizeUpgrade(address newImplementation) internal override onlyOwner {}
-
-    // Universal Functions
-
-    function supportsToken(address tokenAddress) public view returns (bool) {
-        return supportedTokens.contains(tokenAddress);
-    }
-
-    /// @dev Returns list of supported tokens.
-    function getSupportedTokens() public view returns (address[] memory) {
-        return supportedTokens.values();
-    }
-
-    function getBatchValueUsd()
-        public
-        view
-        returns (uint256 totalBalanceUsd, uint256[] memory supportedTokenBalancesUsd)
-    {
-        supportedTokenBalancesUsd = new uint256[](supportedTokens.length());
-        for (uint256 i; i < supportedTokenBalancesUsd.length; i++) {
-            address token = supportedTokens.at(i);
-            uint256 balance = ERC20(token).balanceOf(address(this));
-
-            (uint256 price, uint8 priceDecimals) = oracle.getTokenUsdPrice(token);
-            balance = ((balance * price) / 10**priceDecimals);
-            balance = toUniform(balance, token);
-            supportedTokenBalancesUsd[i] = balance;
-            totalBalanceUsd += balance;
-        }
-    }
-
-    // User Functions
-
-    /// @notice Withdraw tokens from batch while receipts are in batch.
-    /// @notice Receipts are burned.
-    /// @param receiptIds Receipt NFTs ids.
-    /// @dev Only callable by user wallets.
-    function withdraw(
-        address receiptOwner,
-        uint256[] calldata receiptIds,
-        uint256 _currentCycleId
-    ) public onlyStrategyRouter {
-        for (uint256 i = 0; i < receiptIds.length; i++) {
-            uint256 receiptId = receiptIds[i];
-            if (receiptContract.ownerOf(receiptId) != receiptOwner) revert NotReceiptOwner();
-
-            ReceiptNFT.ReceiptData memory receipt = receiptContract.getReceipt(receiptId);
-
-            // only for receipts in current batch
-            if (receipt.cycleId != _currentCycleId) revert CycleClosed();
-
-            uint256 transferAmount = fromUniform(receipt.tokenAmountUniform, receipt.token);
-            ERC20(receipt.token).transfer(receiptOwner, transferAmount);
-            receiptContract.burn(receiptId);
-            emit WithdrawFromBatch(msg.sender, receipt.token, transferAmount);
-        }
-    }
-
-    /// @notice converting token USD amount to token amount, i.e $1000 worth of token with price of $0.5 is 2000 tokens
-    function calculateTokenAmountFromUsdAmount(uint256 valueUsd, address token)
-        internal
-        view
-        returns (uint256 tokenAmountToTransfer)
-    {
-        (uint256 tokenUsdPrice, uint8 oraclePriceDecimals) = oracle.getTokenUsdPrice(token);
-        tokenAmountToTransfer = (valueUsd * 10**oraclePriceDecimals) / tokenUsdPrice;
-        tokenAmountToTransfer = fromUniform(tokenAmountToTransfer, token);
-    }
-
-    /// @notice Deposit token into batch.
-    /// @notice Tokens not deposited into strategies immediately.
-    /// @param depositToken Supported token to deposit (Must be an NFT).
-    /// @param _amount Amount to deposit.
-    /// @dev User should approve `_amount` of `depositToken` to this contract.
-    /// @dev Only callable by user wallets.
-    function deposit(
-        address depositor,
-        address depositToken,
-        uint256 _amount,
-        uint256 _currentCycleId
-    ) external onlyStrategyRouter {
-        if (!supportsToken(depositToken)) revert UnsupportedToken();
-        (uint256 price, uint8 priceDecimals) = oracle.getTokenUsdPrice(depositToken);
-        uint256 depositedUsd = toUniform((_amount * price) / 10**priceDecimals, depositToken);
-        if (minDeposit > depositedUsd) revert DepositUnderMinimum();
-
-        uint256 amountUniform = toUniform(_amount, depositToken);
-
-        receiptContract.mint(_currentCycleId, amountUniform, depositToken, depositor);
-    }
-
-    function transfer(
-        address token,
-        address to,
-        uint256 amount
-    ) external onlyStrategyRouter {
-        ERC20(token).transfer(to, amount);
-    }
-
-    // Admin functions
-
-    /// @notice Minimum to be deposited in the batch.
-    /// @param amount Amount of usd, must be `UNIFORM_DECIMALS` decimals.
-    /// @dev Admin function.
-    function setMinDepositUsd(uint256 amount) external onlyStrategyRouter {
-        minDeposit = amount;
-    }
-
-    /// @notice Rebalance batch, so that token balances will match strategies weight.
-    /// @return balances Amounts to be deposited in strategies, balanced according to strategies weights.
-    function rebalance() public onlyStrategyRouter returns (uint256[] memory balances) {
-        /*
-        1 store supported-tokens (set of unique addresses)
-            [a,b,c]
-        2 store their balances
-            [10, 6, 8]
-        3 store their sum with uniform decimals
-            24
-        4 create array of length = supported_tokens + strategies_tokens (e.g. [a])
-            [a, b, c] + [a] = 4
-        5 store in that array balances from step 2, duplicated tokens should be ignored
-            [10, 0, 6, 8] (instead of [10,10...] we got [10,0...] because first two are both token a)
-        6a get desired balance for every strategy using their weights
-            [12, 0, 4.8, 7.2] (our 1st strategy will get 50%, 2nd and 3rd will get 20% and 30% respectively)
-        6b store amounts that we need to sell or buy for each balance in order to match desired balances
-            toSell [0, 0, 1.2, 0.8]
-            toBuy  [2, 0, 0, 0]
-            these arrays contain amounts with tokens' original decimals
-        7 now sell 'toSell' amounts of respective tokens for 'toBuy' tokens
-            (token to amount connection is derived by index in the array)
-            (also track new strategies balances for cases where 1 token is shared by multiple strategies)
-        */
-        uint256 totalInBatch;
-
-        // point 1
-        uint256 supportedTokensCount = supportedTokens.length();
-        address[] memory _tokens = new address[](supportedTokensCount);
-        uint256[] memory _balances = new uint256[](supportedTokensCount);
-
-        // point 2
-        for (uint256 i; i < supportedTokensCount; i++) {
-            _tokens[i] = supportedTokens.at(i);
-            _balances[i] = ERC20(_tokens[i]).balanceOf(address(this));
-
-            // point 3
-            totalInBatch += toUniform(_balances[i], _tokens[i]);
-        }
-
-        // point 4
-        uint256 strategiesCount = router.getStrategiesCount();
-
-        uint256[] memory _strategiesAndSupportedTokensBalances = new uint256[](strategiesCount + supportedTokensCount);
-
-        // point 5
-        // We fill in strategies balances with tokens that strategies are accepting and ignoring duplicates
-        for (uint256 i; i < strategiesCount; i++) {
-            address depositToken = router.getStrategyDepositToken(i);
-            for (uint256 j; j < supportedTokensCount; j++) {
-                if (depositToken == _tokens[j] && _balances[j] > 0) {
-                    _strategiesAndSupportedTokensBalances[i] = _balances[j];
-                    _balances[j] = 0;
-                    break;
-                }
-            }
-        }
-
-        // we fill in strategies balances with balances of remaining tokens that are supported as deposits but are not
-        // accepted in strategies
-        for (uint256 i = strategiesCount; i < _strategiesAndSupportedTokensBalances.length; i++) {
-            _strategiesAndSupportedTokensBalances[i] = _balances[i - strategiesCount];
-        }
-
-        // point 6a
-        uint256[] memory toBuy = new uint256[](strategiesCount);
-        uint256[] memory toSell = new uint256[](_strategiesAndSupportedTokensBalances.length);
-        for (uint256 i; i < strategiesCount; i++) {
-            uint256 desiredBalance = (totalInBatch * router.getStrategyPercentWeight(i)) / 1e18;
-            desiredBalance = fromUniform(desiredBalance, router.getStrategyDepositToken(i));
-            // we skip safemath check since we already do comparison in if clauses
-            unchecked {
-                // point 6b
-                if (desiredBalance > _strategiesAndSupportedTokensBalances[i]) {
-                    toBuy[i] = desiredBalance - _strategiesAndSupportedTokensBalances[i];
-                } else if (desiredBalance < _strategiesAndSupportedTokensBalances[i]) {
-                    toSell[i] = _strategiesAndSupportedTokensBalances[i] - desiredBalance;
-                }
-            }
-        }
-
-        // point 7
-        // all tokens we accept to deposit but are not part of strategies therefore we are going to swap them
-        // to tokens that strategies are accepting
-        for (uint256 i = strategiesCount; i < _strategiesAndSupportedTokensBalances.length; i++) {
-            toSell[i] = _strategiesAndSupportedTokensBalances[i];
-        }
-
-        for (uint256 i; i < _strategiesAndSupportedTokensBalances.length; i++) {
-            for (uint256 j; j < strategiesCount; j++) {
-                // if we are not going to buy this token (nothing to sell), we simply skip to the next one
-                // if we can sell this token we go into swap routine
-                // we proceed to swap routine if there is some tokens to buy and some tokens sell
-                // if found which token to buy and which token to sell we proceed to swap routine
-                if (toSell[i] > 0 && toBuy[j] > 0) {
-                    // if toSell's 'i' greater than strats-1 (e.g. strats 2, tokens 2, i=2, 2>2-1==true)
-                    // then take supported_token[2-2=0]
-                    // otherwise take strategy_token[0 or 1]
-                    address sellToken = i > strategiesCount - 1
-                        ? _tokens[i - strategiesCount]
-                        : router.getStrategyDepositToken(i);
-                    address buyToken = router.getStrategyDepositToken(j);
-
-                    uint256 toSellUniform = toUniform(toSell[i], sellToken);
-                    uint256 toBuyUniform = toUniform(toBuy[j], buyToken);
-                    /*
-                    Weight of strategies is in token amount not usd equivalent
-                    In case of stablecoin depeg an administrative decision will be made to move out of the strategy
-                    that has exposure to depegged stablecoin.
-                    curSell should have sellToken decimals
-                    */
-                    uint256 curSell = toSellUniform > toBuyUniform
-                        ? changeDecimals(toBuyUniform, UNIFORM_DECIMALS, ERC20(sellToken).decimals())
-                        : toSell[i];
-
-                    // no need to swap small amounts
-                    if (toUniform(curSell, sellToken) < REBALANCE_SWAP_THRESHOLD) {
-                        toSell[i] = 0;
-                        toBuy[j] -= changeDecimals(curSell, ERC20(sellToken).decimals(), ERC20(buyToken).decimals());
-                        break;
-                    }
-                    uint256 received = _trySwap(curSell, sellToken, buyToken);
-
-                    _strategiesAndSupportedTokensBalances[i] -= curSell;
-                    _strategiesAndSupportedTokensBalances[j] += received;
-                    toSell[i] -= curSell;
-                    toBuy[j] -= changeDecimals(curSell, ERC20(sellToken).decimals(), ERC20(buyToken).decimals());
-                }
-            }
-        }
-
-        _balances = new uint256[](strategiesCount);
-        for (uint256 i; i < strategiesCount; i++) {
-            _balances[i] = _strategiesAndSupportedTokensBalances[i];
-        }
-
-        return _balances;
-    }
-
-    /// @notice Set token as supported for user deposit and withdraw.
-    /// @dev Admin function.
-    function setSupportedToken(address tokenAddress, bool supported) external onlyStrategyRouter {
-        if (supported && supportsToken(tokenAddress)) revert AlreadySupportedToken();
-
-        if (supported) {
-            supportedTokens.add(tokenAddress);
-        } else {
-            uint8 len = uint8(router.getStrategiesCount());
-            // don't remove tokens that are in use by active strategies
-            for (uint256 i = 0; i < len; i++) {
-                if (router.getStrategyDepositToken(i) == tokenAddress) {
-                    revert CantRemoveTokenOfActiveStrategy();
-                }
-            }
-            supportedTokens.remove(tokenAddress);
-        }
-    }
-
-    // Internals
-
-    /// @dev Change decimal places of number from `oldDecimals` to `newDecimals`.
-    function changeDecimals(
-        uint256 amount,
-        uint8 oldDecimals,
-        uint8 newDecimals
-    ) private pure returns (uint256) {
-        if (oldDecimals < newDecimals) {
-            return amount * (10**(newDecimals - oldDecimals));
-        } else if (oldDecimals > newDecimals) {
-            return amount / (10**(oldDecimals - newDecimals));
-        }
-        return amount;
-    }
-
-    /// @dev Swap tokens if they are different (i.e. not the same token)
-    function _trySwap(
-        uint256 amount, // tokenFromAmount
-        address from, // tokenFrom
-        address to // tokenTo
-    ) private returns (uint256 result) {
-        if (from != to) {
-            IERC20(from).transfer(address(exchange), amount);
-            result = exchange.swap(amount, from, to, address(this));
-            return result;
-        }
-        return amount;
-    }
-
-    /// @dev Change decimal places from token decimals to `UNIFORM_DECIMALS`.
-    function toUniform(uint256 amount, address token) private view returns (uint256) {
-        return changeDecimals(amount, ERC20(token).decimals(), UNIFORM_DECIMALS);
-    }
-
-    /// @dev Convert decimal places from `UNIFORM_DECIMALS` to token decimals.
-    function fromUniform(uint256 amount, address token) private view returns (uint256) {
-        return changeDecimals(amount, UNIFORM_DECIMALS, ERC20(token).decimals());
-    }
-}
-
 interface IStrategy {
      /* EVENTS */
 
@@ -1651,7 +1278,7 @@ interface IStrategy {
         Exchange _exchange,
         IUsdOracle _oracle,
         SharesToken _sharesToken,
-        Batch _batch,
+        BatchOnefile _batch,
         ReceiptNFT _receiptNft
     );
 
@@ -3206,7 +2833,7 @@ contract StrategyRouter is Ownable {
         Exchange _exchange,
         IUsdOracle _oracle,
         SharesToken _sharesToken,
-        Batch _batch,
+        BatchOnefile _batch,
         ReceiptNFT _receiptNft
     );
 
@@ -3237,7 +2864,7 @@ contract StrategyRouter is Ownable {
     Exchange public exchange;
     IUsdOracle private oracle;
     SharesToken private sharesToken;
-    Batch private batch;
+    BatchOnefile private batch;
     address public feeAddress;
 
     Data data;
@@ -3268,7 +2895,7 @@ contract StrategyRouter is Ownable {
         Exchange _exchange,
         IUsdOracle _oracle,
         SharesToken _sharesToken,
-        Batch _batch,
+        BatchOnefile _batch,
         ReceiptNFT _receiptNft
     ) external onlyOwner {
         exchange = _exchange;
@@ -3799,321 +3426,378 @@ contract StrategyRouter is Ownable {
     }
 }
 
-// import "hardhat/console.sol";
 
-// Base contract to be inherited, works with biswap MasterChef:
-// address on BNB Chain: 0xDbc1A13490deeF9c3C12b44FE77b503c1B061739
-// their code on github: https://github.com/biswap-org/staking/blob/main/contracts/MasterChef.sol
 
-/// @custom:oz-upgrades-unsafe-allow constructor state-variable-immutable
 
-/**
-  PSEUDO
-  ===========
-  o USDT is deposited to the BUSD-USDT pool on DodoRouter i.e DODO exchange.
-  o DODO is an Exchange.
-  o LP Token is given to represent deposit on the exchange.
-  o This LP Token is then staked in the ClipFinance's BUSD-USDT liquidity Mining farm to earn more reward.
-  o Lp Token is sent to Farm contract.
-  o Farm minted another Lp Token to represent deposit to the farm contract.
-  o The reward received from the DODO exchange being the reward for adding liquidity is DODO Token.
-  o When DODO Tokens is received, they're moved to and sold off on the DODO exchange for USDT.
-  o The same USDT is then redeposited back to the DODO BUSD-USDT Pool
-  o BUSD Represent TokenB.
-  o USDT Represent TokenA.
- */
-contract DodoStrategyOnefile is Ownable, IStrategy {
-    error CallerUpgrader();
 
-    bool internal initializer;
-    
-    ERC20 internal usdt;
-    ERC20 internal busd;
+/// @notice This contract contains batch related code, serves as part of StrategyRouter.
+/// @notice This contract should be owned by StrategyRouter.
+contract BatchOnefile is Ownable {
+    using EnumerableSet for EnumerableSet.AddressSet;
+    using EnumerableSetExtension for EnumerableSet.AddressSet;
 
-    // lpToken Earned earned for depositing to Dodo Router 
-    ERC20 internal lpToken; 
+    /* ERRORS */
 
-    //Strategy Router contract
-    StrategyRouter internal strategyRouter;
+    error AlreadySupportedToken();
+    error CantRemoveTokenOfActiveStrategy();
+    error UnsupportedToken();
+    error NotReceiptOwner();
+    error CycleClosed();
+    error DepositUnderMinimum();
+    error NotEnoughBalanceInBatch();
+    error CallerIsNotStrategyRouter();
 
-    //Native reward token
-    ERC20 internal constant dodo = ERC20(0x08e96D1D6188a4e0AaBa4Cf3060399522348b2Aa);
+    /// @notice Fires when user withdraw from batch.
+    /// @param token Supported token that user requested to receive after withdraw.
+    /// @param amount Amount of `token` received by user.
+    event WithdrawFromBatch(address indexed user, address token, uint256 amount);
+    event SetAddresses(Exchange _exchange, IUsdOracle _oracle, StrategyRouter _router, ReceiptNFT _receiptNft);
 
-    // Farm contract to farm lPToken
-   InterfaceClipswap  internal constant farm = InterfaceClipswap(0x879F68F154808304bf969585e8c1553Cddbf9697);
+    uint8 public constant UNIFORM_DECIMALS = 18;
+    // used in rebalance function, UNIFORM_DECIMALS, so 1e17 == 0.1
+    uint256 public constant REBALANCE_SWAP_THRESHOLD = 1e17;
 
-    // This should be Dodo address to add and remove liquidity/Perhaps the Dodo exchange
-    IUniswapV2Router02 internal constant dodoswapRouter = IUniswapV2Router02(0xcA9e894170c2372F84b06C726Cf85B384Bc4493E);
+    uint256 public minDeposit;
 
-    uint256 internal poolId;
+    ReceiptNFT public receiptContract;
+    Exchange public exchange;
+    StrategyRouter public router;
+    IUsdOracle public oracle;
 
-    uint256 private leftOverThresholdUsdt;
-    uint256 private leftOverThresholdBusd;
-    uint256 private constant PERCENT_DENOMINATOR = 10000;
+    EnumerableSet.AddressSet private supportedTokens;
 
-    // modifier onlyUpgrader() {
-    //     if (msg.sender != address(upgrader)) revert CallerUpgrader();
-    //     _;
+    modifier onlyStrategyRouter() {
+        if (msg.sender != address(router)) revert CallerIsNotStrategyRouter();
+        _;
+    }
+
+    /// @custom:oz-upgrades-unsafe-allow constructor
+    constructor() {
+        // lock implementation
+        // _disableInitializers();
+    }
+
+    // function initialize() external initializer {
+    //     __Ownable_init();
+    //     __UUPSUpgradeable_init();
     // }
 
-    /// @dev construct is intended to initialize immutables on implementation
-    constructor() { initializer = false; }
-
-    function initialize(
-        StrategyRouter _strategyRouter,
-        uint256 _poolId,
-        ERC20 _usdt,
-        ERC20 _busd,
-        ERC20 _lpToken
+    function setAddresses(
+        Exchange _exchange,
+        IUsdOracle _oracle,
+        StrategyRouter _router,
+        ReceiptNFT _receiptNft
     ) external onlyOwner {
-        require(!initializer, "Already initialized");
-        initializer = true;
-        strategyRouter = _strategyRouter;
-        poolId = _poolId;
-        usdt = _usdt;
-        busd = _busd;
-        lpToken = _lpToken;
-        leftOverThresholdUsdt = 10**_usdt.decimals();
-        leftOverThresholdBusd = 10**_busd.decimals();
+        exchange = _exchange;
+        oracle = _oracle;
+        router = _router;
+        receiptContract = _receiptNft;
+        emit SetAddresses(_exchange, _oracle, _router, _receiptNft);
     }
 
-    // function _authorizeUpgrade(address newImplementation) internal override onlyUpgrader {}
+    // function _authorizeUpgrade(address newImplementation) internal override onlyOwner {}
 
-    function depositToken() external view override returns (address) {
-        return address(usdt);
+    // Universal Functions
+
+    function supportsToken(address tokenAddress) public view returns (bool) {
+        return supportedTokens.contains(tokenAddress);
     }
 
-    // Deposit to the Dodo exchange
-    function deposit(uint256 amount) external override onlyOwner {
-        Exchange exchange = strategyRouter.getExchange();
-
-        uint256 dexFee = exchange.getFee(amount / 2, address(usdt), address(busd));
-        uint256 busdAmt = calculateSwapAmount(amount / 2, dexFee);
-        uint256 usdtAmt = amount - busdAmt;
-
-        usdt.transfer(address(exchange), busdAmt);
-        busdAmt = exchange.swap(busdAmt, address(usdt), address(busd), address(this));
-
-        usdt.approve(address(dodoswapRouter), usdtAmt);
-        busd.approve(address(dodoswapRouter), busdAmt);
-        (, , uint256 liquidity) = dodoswapRouter.addLiquidity(
-            address(usdt),
-            address(busd),
-            usdtAmt,
-            busdAmt,
-            0,
-            0,
-            address(this),
-            block.timestamp
-        );
-
-        lpToken.approve(address(farm), liquidity);
-        farm.deposit(poolId, liquidity);
+    /// @dev Returns list of supported tokens.
+    function getSupportedTokens() public view returns (address[] memory) {
+        return supportedTokens.values();
     }
 
-    function withdraw(uint256 strategyTokenAmountToWithdraw)
-        external
-        override
-        onlyOwner
-        returns (uint256 amountWithdrawn)
+    function getBatchValueUsd()
+        public
+        view
+        returns (uint256 totalBalanceUsd, uint256[] memory supportedTokenBalancesUsd)
     {
-        address token0 = IUniswapV2Pair(address(lpToken)).token0();
-        address token1 = IUniswapV2Pair(address(lpToken)).token1();
-        uint256 balance0 = IERC20(token0).balanceOf(address(lpToken));
-        uint256 balance1 = IERC20(token1).balanceOf(address(lpToken));
+        supportedTokenBalancesUsd = new uint256[](supportedTokens.length());
+        for (uint256 i; i < supportedTokenBalancesUsd.length; i++) {
+            address token = supportedTokens.at(i);
+            uint256 balance = ERC20(token).balanceOf(address(this));
 
-        uint256 usdtAmt = strategyTokenAmountToWithdraw / 2;
-        uint256 busdAmt = strategyTokenAmountToWithdraw - usdtAmt;
-
-        (balance0, balance1) = token0 == address(usdt) ? (balance0, balance1) : (balance1, balance0);
-
-        busdAmt = dodoswapRouter.quote(busdAmt, balance0, balance1);
-
-        uint256 liquidityToRemove = (lpToken.totalSupply() * (usdtAmt + busdAmt)) / (balance0 + balance1);
-
-        farm.withdraw(poolId, liquidityToRemove);
-        lpToken.approve(address(dodoswapRouter), liquidityToRemove);
-        (usdtAmt, busdAmt) = dodoswapRouter.removeLiquidity(
-            address(usdt),
-            address(busd),
-            lpToken.balanceOf(address(this)),
-            0,
-            0,
-            address(this),
-            block.timestamp
-        );
-
-        Exchange exchange = strategyRouter.getExchange();
-        busd.transfer(address(exchange), busdAmt);
-        usdtAmt += exchange.swap(busdAmt, address(busd), address(usdt), address(this));
-        usdt.transfer(msg.sender, usdtAmt);
-        return usdtAmt;
-    }
-
-    function compound() external override onlyOwner {
-        // inside withdraw happens CLIP rewards collection
-        farm.withdraw(poolId, 0);
-        // use balance because CLIP is harvested on deposit and withdraw calls
-        uint256 dodoAmount = dodo.balanceOf(address(this));
-
-        if (dodoAmount > 0) {
-            fix_leftover(0);
-            sellReward(dodoAmount);
-            uint256 balanceA = usdt.balanceOf(address(this));
-            uint256 balanceB = busd.balanceOf(address(this));
-
-            usdt.approve(address(dodoswapRouter), balanceA);
-            busd.approve(address(dodoswapRouter), balanceB);
-
-            dodoswapRouter.addLiquidity(
-                address(usdt),
-                address(busd),
-                balanceA,
-                balanceB,
-                0,
-                0,
-                address(this),
-                block.timestamp
-            );
-
-            uint256 lpAmount = lpToken.balanceOf(address(this));
-            lpToken.approve(address(farm), lpAmount);
-            farm.deposit(poolId, lpAmount);
+            (uint256 price, uint8 priceDecimals) = oracle.getTokenUsdPrice(token);
+            balance = ((balance * price) / 10**priceDecimals);
+            balance = toUniform(balance, token);
+            supportedTokenBalancesUsd[i] = balance;
+            totalBalanceUsd += balance;
         }
     }
 
-    function totalTokens() external view override returns (uint256) {
-        (uint256 liquidity, ) = farm.userInfo(poolId, address(this));
+    // User Functions
 
-        uint256 _totalSupply = lpToken.totalSupply();
-        // this formula is from uniswap.remove_liquidity -> uniswapPair.burn function
-        uint256 balanceA = usdt.balanceOf(address(lpToken));
-        uint256 balanceB = busd.balanceOf(address(lpToken));
-        uint256 usdtAmt = (liquidity * balanceA) / _totalSupply;
-        uint256 busdAmt = (liquidity * balanceB) / _totalSupply;
+    /// @notice Withdraw tokens from batch while receipts are in batch.
+    /// @notice Receipts are burned.
+    /// @param receiptIds Receipt NFTs ids.
+    /// @dev Only callable by user wallets.
+    function withdraw(
+        address receiptOwner,
+        uint256[] calldata receiptIds,
+        uint256 _currentCycleId
+    ) public onlyStrategyRouter {
+        for (uint256 i = 0; i < receiptIds.length; i++) {
+            uint256 receiptId = receiptIds[i];
+            if (receiptContract.ownerOf(receiptId) != receiptOwner) revert NotReceiptOwner();
 
-        if (busdAmt > 0) {
-            address token0 = IUniswapV2Pair(address(lpToken)).token0();
+            ReceiptNFT.ReceiptData memory receipt = receiptContract.getReceipt(receiptId);
 
-            (uint256 _reserve0, uint256 _reserve1) = token0 == address(busd)
-                ? (balanceB, balanceA)
-                : (balanceA, balanceB);
+            // only for receipts in current batch
+            if (receipt.cycleId != _currentCycleId) revert CycleClosed();
 
-            // convert busdAmt to amount usdt
-            usdtAmt += dodoswapRouter.quote(busdAmt, _reserve0, _reserve1);
-        }
-
-        return usdtAmt;
-    }
-
-    function withdrawAll() external override onlyOwner returns (uint256 amountWithdrawn) {
-        (uint256 amount, ) = farm.userInfo(poolId, address(this));
-        if (amount > 0) {
-            farm.withdraw(poolId, amount);
-            uint256 lpAmount = lpToken.balanceOf(address(this));
-            lpToken.approve(address(dodoswapRouter), lpAmount);
-            dodoswapRouter.removeLiquidity(
-                address(usdt),
-                address(busd),
-                lpToken.balanceOf(address(this)),
-                0,
-                0,
-                address(this),
-                block.timestamp
-            );
-        }
-
-        uint256 usdtAmt = usdt.balanceOf(address(this));
-        uint256 busdAmt = busd.balanceOf(address(this));
-
-        if (busdAmt > 0) {
-            Exchange exchange = strategyRouter.getExchange();
-            busd.transfer(address(exchange), busdAmt);
-            usdtAmt += exchange.swap(busdAmt, address(busd), address(usdt), address(this));
-        }
-        if (usdtAmt > 0) {
-            usdt.transfer(msg.sender, usdtAmt);
-            return usdtAmt;
+            uint256 transferAmount = fromUniform(receipt.tokenAmountUniform, receipt.token);
+            ERC20(receipt.token).transfer(receiptOwner, transferAmount);
+            receiptContract.burn(receiptId);
+            emit WithdrawFromBatch(msg.sender, receipt.token, transferAmount);
         }
     }
 
-    /// @dev Swaps leftover tokens for a better ratio for LP.
-    function fix_leftover(uint256 amountIgnore) private {
-        Exchange exchange = strategyRouter.getExchange();
-        uint256 busdAmt = busd.balanceOf(address(this));
-        uint256 usdtAmt = usdt.balanceOf(address(this)) - amountIgnore;
-        uint256 toSwap;
-        if (busdAmt > usdtAmt && (toSwap = busdAmt - usdtAmt) > leftOverThresholdBusd) {
-            uint256 dexFee = exchange.getFee(toSwap / 2, address(usdt), address(busd));
-            toSwap = calculateSwapAmount(toSwap / 2, dexFee);
-            busd.transfer(address(exchange), toSwap);
-            exchange.swap(toSwap, address(busd), address(usdt), address(this));
-        } else if (usdtAmt > busdAmt && (toSwap = usdtAmt - busdAmt) > leftOverThresholdUsdt) {
-            uint256 dexFee = exchange.getFee(toSwap / 2, address(usdt), address(busd));
-            toSwap = calculateSwapAmount(toSwap / 2, dexFee);
-            usdt.transfer(address(exchange), toSwap);
-            exchange.swap(toSwap, address(usdt), address(busd), address(this));
-        }
-    }
-
-    // swap dodo for usdt & busd in proportions 50/50
-    function sellReward(uint256 dodoAmount) private returns (uint256 receivedA, uint256 receivedB) {
-        // sell for lp ratio
-        uint256 usdtAmt = dodoAmount / 2;
-        uint256 busdAmt = dodoAmount - usdtAmt;
-
-        Exchange exchange = strategyRouter.getExchange();
-        dodo.transfer(address(exchange), usdtAmt); 
-        receivedA = exchange.swap(usdtAmt, address(dodo), address(usdt), address(this));
-
-        dodo.transfer(address(exchange), busdAmt);
-        receivedB = exchange.swap(busdAmt, address(dodo), address(busd), address(this));
-
-        (receivedA, receivedB) = collectProtocolCommission(receivedA, receivedB);
-    }
-
-    function collectProtocolCommission(uint256 usdtAmt, uint256 busdAmt)
-        private
-        returns (uint256 usdtAmtfterFeeA, uint256 usdtAmtfterFeeB)
+    /// @notice converting token USD amount to token amount, i.e $1000 worth of token with price of $0.5 is 2000 tokens
+    function calculateTokenAmountFromUsdAmount(uint256 valueUsd, address token)
+        internal
+        view
+        returns (uint256 tokenAmountToTransfer)
     {
-        uint256 feePercent = StrategyRouter(strategyRouter).feePercent();
-        address feeAddress = StrategyRouter(strategyRouter).feeAddress();
-        uint256 ratioUint;
-        uint256 feeAmount = ((usdtAmt + busdAmt) * feePercent) / PERCENT_DENOMINATOR;
-        {
-            (uint256 r0, uint256 r1, ) = IUniswapV2Pair(address(lpToken)).getReserves();
-
-            // equation: (a - (c*v))/(b - (c-c*v)) = z/x
-            // solution for v = (a*x - b*z + c*z) / (c * (z+x))
-            // a,b is current token amounts, z,x is pair reserves, c is total fee amount to take from a+b
-            // v is ratio to apply to feeAmount and take fee from a and b
-            // a and z should be converted to same decimals as token b (TODO for cases when decimals are different)
-            int256 numerator = int256(usdtAmt * r1 + feeAmount * r0) - int256(busdAmt * r0);
-            int256 denominator = int256(feeAmount * (r0 + r1));
-            int256 ratio = (numerator * 1e18) / denominator;
-            // ratio here could be negative or greater than 1.0
-            // only need to be between 0 and 1
-            if (ratio < 0) ratio = 0;
-            if (ratio > 1e18) ratio = 1e18;
-
-            ratioUint = uint256(ratio);
-        }
-
-        // these two have same decimals, should adjust A to have A decimals,
-        // this is TODO for cases when usdt and busd has different decimals
-        uint256 comissionA = (feeAmount * ratioUint) / 1e18;
-        uint256 comissionB = feeAmount - comissionA;
-
-        usdt.transfer(feeAddress, comissionA);
-        busd.transfer(feeAddress, comissionB);
-
-        return (usdtAmt - comissionA, busdAmt - comissionB);
+        (uint256 tokenUsdPrice, uint8 oraclePriceDecimals) = oracle.getTokenUsdPrice(token);
+        tokenAmountToTransfer = (valueUsd * 10**oraclePriceDecimals) / tokenUsdPrice;
+        tokenAmountToTransfer = fromUniform(tokenAmountToTransfer, token);
     }
 
-    function calculateSwapAmount(uint256 half, uint256 dexFee) private view returns (uint256 usdtAmtfterFee) {
-        (uint256 r0, uint256 r1, ) = IUniswapV2Pair(address(lpToken)).getReserves();
-        uint256 halfWithFee = (2 * r0 * (dexFee + 1e18)) / ((r0 * (dexFee + 1e18)) / 1e18 + r1);
-        uint256 busdAmt = (half * halfWithFee) / 1e18;
-        return busdAmt;
+    /// @notice Deposit token into batch.
+    /// @notice Tokens not deposited into strategies immediately.
+    /// @param depositToken Supported token to deposit (Must be an NFT).
+    /// @param _amount Amount to deposit.
+    /// @dev User should approve `_amount` of `depositToken` to this contract.
+    /// @dev Only callable by user wallets.
+    function deposit(
+        address depositor,
+        address depositToken,
+        uint256 _amount,
+        uint256 _currentCycleId
+    ) external onlyStrategyRouter {
+        if (!supportsToken(depositToken)) revert UnsupportedToken();
+        (uint256 price, uint8 priceDecimals) = oracle.getTokenUsdPrice(depositToken);
+        uint256 depositedUsd = toUniform((_amount * price) / 10**priceDecimals, depositToken);
+        if (minDeposit > depositedUsd) revert DepositUnderMinimum();
+
+        uint256 amountUniform = toUniform(_amount, depositToken);
+
+        receiptContract.mint(_currentCycleId, amountUniform, depositToken, depositor);
+    }
+
+    function transfer(
+        address token,
+        address to,
+        uint256 amount
+    ) external onlyStrategyRouter {
+        ERC20(token).transfer(to, amount);
+    }
+
+    // Admin functions
+
+    /// @notice Minimum to be deposited in the batch.
+    /// @param amount Amount of usd, must be `UNIFORM_DECIMALS` decimals.
+    /// @dev Admin function.
+    function setMinDepositUsd(uint256 amount) external onlyStrategyRouter {
+        minDeposit = amount;
+    }
+
+    /// @notice Rebalance batch, so that token balances will match strategies weight.
+    /// @return balances Amounts to be deposited in strategies, balanced according to strategies weights.
+    function rebalance() public onlyStrategyRouter returns (uint256[] memory balances) {
+        /*
+        1 store supported-tokens (set of unique addresses)
+            [a,b,c]
+        2 store their balances
+            [10, 6, 8]
+        3 store their sum with uniform decimals
+            24
+        4 create array of length = supported_tokens + strategies_tokens (e.g. [a])
+            [a, b, c] + [a] = 4
+        5 store in that array balances from step 2, duplicated tokens should be ignored
+            [10, 0, 6, 8] (instead of [10,10...] we got [10,0...] because first two are both token a)
+        6a get desired balance for every strategy using their weights
+            [12, 0, 4.8, 7.2] (our 1st strategy will get 50%, 2nd and 3rd will get 20% and 30% respectively)
+        6b store amounts that we need to sell or buy for each balance in order to match desired balances
+            toSell [0, 0, 1.2, 0.8]
+            toBuy  [2, 0, 0, 0]
+            these arrays contain amounts with tokens' original decimals
+        7 now sell 'toSell' amounts of respective tokens for 'toBuy' tokens
+            (token to amount connection is derived by index in the array)
+            (also track new strategies balances for cases where 1 token is shared by multiple strategies)
+        */
+        uint256 totalInBatch;
+
+        // point 1
+        uint256 supportedTokensCount = supportedTokens.length();
+        address[] memory _tokens = new address[](supportedTokensCount);
+        uint256[] memory _balances = new uint256[](supportedTokensCount);
+
+        // point 2
+        for (uint256 i; i < supportedTokensCount; i++) {
+            _tokens[i] = supportedTokens.at(i);
+            _balances[i] = ERC20(_tokens[i]).balanceOf(address(this));
+
+            // point 3
+            totalInBatch += toUniform(_balances[i], _tokens[i]);
+        }
+
+        // point 4
+        uint256 strategiesCount = router.getStrategiesCount();
+
+        uint256[] memory _strategiesAndSupportedTokensBalances = new uint256[](strategiesCount + supportedTokensCount);
+
+        // point 5
+        // We fill in strategies balances with tokens that strategies are accepting and ignoring duplicates
+        for (uint256 i; i < strategiesCount; i++) {
+            address depositToken = router.getStrategyDepositToken(i);
+            for (uint256 j; j < supportedTokensCount; j++) {
+                if (depositToken == _tokens[j] && _balances[j] > 0) {
+                    _strategiesAndSupportedTokensBalances[i] = _balances[j];
+                    _balances[j] = 0;
+                    break;
+                }
+            }
+        }
+
+        // we fill in strategies balances with balances of remaining tokens that are supported as deposits but are not
+        // accepted in strategies
+        for (uint256 i = strategiesCount; i < _strategiesAndSupportedTokensBalances.length; i++) {
+            _strategiesAndSupportedTokensBalances[i] = _balances[i - strategiesCount];
+        }
+
+        // point 6a
+        uint256[] memory toBuy = new uint256[](strategiesCount);
+        uint256[] memory toSell = new uint256[](_strategiesAndSupportedTokensBalances.length);
+        for (uint256 i; i < strategiesCount; i++) {
+            uint256 desiredBalance = (totalInBatch * router.getStrategyPercentWeight(i)) / 1e18;
+            desiredBalance = fromUniform(desiredBalance, router.getStrategyDepositToken(i));
+            // we skip safemath check since we already do comparison in if clauses
+            unchecked {
+                // point 6b
+                if (desiredBalance > _strategiesAndSupportedTokensBalances[i]) {
+                    toBuy[i] = desiredBalance - _strategiesAndSupportedTokensBalances[i];
+                } else if (desiredBalance < _strategiesAndSupportedTokensBalances[i]) {
+                    toSell[i] = _strategiesAndSupportedTokensBalances[i] - desiredBalance;
+                }
+            }
+        }
+
+        // point 7
+        // all tokens we accept to deposit but are not part of strategies therefore we are going to swap them
+        // to tokens that strategies are accepting
+        for (uint256 i = strategiesCount; i < _strategiesAndSupportedTokensBalances.length; i++) {
+            toSell[i] = _strategiesAndSupportedTokensBalances[i];
+        }
+
+        for (uint256 i; i < _strategiesAndSupportedTokensBalances.length; i++) {
+            for (uint256 j; j < strategiesCount; j++) {
+                // if we are not going to buy this token (nothing to sell), we simply skip to the next one
+                // if we can sell this token we go into swap routine
+                // we proceed to swap routine if there is some tokens to buy and some tokens sell
+                // if found which token to buy and which token to sell we proceed to swap routine
+                if (toSell[i] > 0 && toBuy[j] > 0) {
+                    // if toSell's 'i' greater than strats-1 (e.g. strats 2, tokens 2, i=2, 2>2-1==true)
+                    // then take supported_token[2-2=0]
+                    // otherwise take strategy_token[0 or 1]
+                    address sellToken = i > strategiesCount - 1
+                        ? _tokens[i - strategiesCount]
+                        : router.getStrategyDepositToken(i);
+                    address buyToken = router.getStrategyDepositToken(j);
+
+                    uint256 toSellUniform = toUniform(toSell[i], sellToken);
+                    uint256 toBuyUniform = toUniform(toBuy[j], buyToken);
+                    /*
+                    Weight of strategies is in token amount not usd equivalent
+                    In case of stablecoin depeg an administrative decision will be made to move out of the strategy
+                    that has exposure to depegged stablecoin.
+                    curSell should have sellToken decimals
+                    */
+                    uint256 curSell = toSellUniform > toBuyUniform
+                        ? changeDecimals(toBuyUniform, UNIFORM_DECIMALS, ERC20(sellToken).decimals())
+                        : toSell[i];
+
+                    // no need to swap small amounts
+                    if (toUniform(curSell, sellToken) < REBALANCE_SWAP_THRESHOLD) {
+                        toSell[i] = 0;
+                        toBuy[j] -= changeDecimals(curSell, ERC20(sellToken).decimals(), ERC20(buyToken).decimals());
+                        break;
+                    }
+                    uint256 received = _trySwap(curSell, sellToken, buyToken);
+
+                    _strategiesAndSupportedTokensBalances[i] -= curSell;
+                    _strategiesAndSupportedTokensBalances[j] += received;
+                    toSell[i] -= curSell;
+                    toBuy[j] -= changeDecimals(curSell, ERC20(sellToken).decimals(), ERC20(buyToken).decimals());
+                }
+            }
+        }
+
+        _balances = new uint256[](strategiesCount);
+        for (uint256 i; i < strategiesCount; i++) {
+            _balances[i] = _strategiesAndSupportedTokensBalances[i];
+        }
+
+        return _balances;
+    }
+
+    /// @notice Set token as supported for user deposit and withdraw.
+    /// @dev Admin function.
+    function setSupportedToken(address tokenAddress, bool supported) external onlyStrategyRouter {
+        if (supported && supportsToken(tokenAddress)) revert AlreadySupportedToken();
+
+        if (supported) {
+            supportedTokens.add(tokenAddress);
+        } else {
+            uint8 len = uint8(router.getStrategiesCount());
+            // don't remove tokens that are in use by active strategies
+            for (uint256 i = 0; i < len; i++) {
+                if (router.getStrategyDepositToken(i) == tokenAddress) {
+                    revert CantRemoveTokenOfActiveStrategy();
+                }
+            }
+            supportedTokens.remove(tokenAddress);
+        }
+    }
+
+    // Internals
+
+    /// @dev Change decimal places of number from `oldDecimals` to `newDecimals`.
+    function changeDecimals(
+        uint256 amount,
+        uint8 oldDecimals,
+        uint8 newDecimals
+    ) private pure returns (uint256) {
+        if (oldDecimals < newDecimals) {
+            return amount * (10**(newDecimals - oldDecimals));
+        } else if (oldDecimals > newDecimals) {
+            return amount / (10**(oldDecimals - newDecimals));
+        }
+        return amount;
+    }
+
+    /// @dev Swap tokens if they are different (i.e. not the same token)
+    function _trySwap(
+        uint256 amount, // tokenFromAmount
+        address from, // tokenFrom
+        address to // tokenTo
+    ) private returns (uint256 result) {
+        if (from != to) {
+            IERC20(from).transfer(address(exchange), amount);
+            result = exchange.swap(amount, from, to, address(this));
+            return result;
+        }
+        return amount;
+    }
+
+    /// @dev Change decimal places from token decimals to `UNIFORM_DECIMALS`.
+    function toUniform(uint256 amount, address token) private view returns (uint256) {
+        return changeDecimals(amount, ERC20(token).decimals(), UNIFORM_DECIMALS);
+    }
+
+    /// @dev Convert decimal places from `UNIFORM_DECIMALS` to token decimals.
+    function fromUniform(uint256 amount, address token) private view returns (uint256) {
+        return changeDecimals(amount, UNIFORM_DECIMALS, ERC20(token).decimals());
     }
 }
