@@ -33,48 +33,51 @@ async function main() {
     await strategyRouter.deployed();
     const strategyAddress = strategyRouter.address;
     console.log("strategyAddress : deployed to", strategyAddress ); 
+    console.log("libAddress : deployed to", libAddress ); 
 
-    // SharesToken
-    const ShareToken =await ethers.getContractFactory("SharesTokenOnefile");
-    const shareToken = await ShareToken.deploy(strategyAddress);
-    await shareToken.deployed();
-    const shareTokenAddr = shareToken.address;
-    console.log("shareTokenAddr : deployed to", shareTokenAddr ); 
+    // // SharesToken
+    // const ShareToken =await ethers.getContractFactory("SharesTokenOnefile");
+    // const shareToken = await ShareToken.deploy(strategyAddress);
+    // await shareToken.deployed();
+    // const shareTokenAddr = shareToken.address;
+    // console.log("shareTokenAddr : deployed to", shareTokenAddr ); 
 
-    // ChainLinkOracle
-    const ChainlinkOracle =await ethers.getContractFactory("ChainlinkOracleOnefile");
-    const chainlinkOracle = await ChainlinkOracle.deploy();
-    await chainlinkOracle.deployed();
-    const chainlinkAddr = chainlinkOracle.address;
-    console.log("chainlinkAddrgy : deployed to", chainlinkAddr ); 
+    // // ChainLinkOracle
+    // const ChainlinkOracle =await ethers.getContractFactory("ChainlinkOracleOnefile");
+    // const chainlinkOracle = await ChainlinkOracle.deploy();
+    // await chainlinkOracle.deployed();
+    // const chainlinkAddr = chainlinkOracle.address;
+    // console.log("chainlinkAddrgy : deployed to", chainlinkAddr ); 
 
-    // Batch
-    const Batch = await ethers.getContractFactory("BatchOnefile");
-    const batch = await Batch.deploy();
-    await batch.deployed();
-    const batchAddr = batch.address;
-    console.log("batchAddr : deployed to", batchAddr ); 
+    // // Batch
+    // const Batch = await ethers.getContractFactory("BatchOnefile");
+    // const batch = await Batch.deploy();
+    // await batch.deployed();
+    // const batchAddr = batch.address;
+    // console.log("batchAddr : deployed to", batchAddr ); 
 
-    // Exchange
-    const Exchange =await ethers.getContractFactory("ExchangeOnefile");
-    const exchange = await Exchange.deploy();
-    await exchange.deployed();
-    const exchangeAddr = exchange.address;
-    console.log("exchangeAddr : deployed to", exchangeAddr ); 
+    // // Exchange
+    // const Exchange =await ethers.getContractFactory("ExchangeOnefile");
+    // const exchange = await Exchange.deploy();
+    // await exchange.deployed();
+    // const exchangeAddr = exchange.address;
+    // console.log("exchangeAddr : deployed to", exchangeAddr ); 
 
     // ReceiptNFT
     const ReceiptNFT =await ethers.getContractFactory("ReceiptNFTOnefile");
-    const receiptNFT = await ReceiptNFT.deploy(strategyAddress, batchAddress);
+    // const strategyAddress = "0x3c096b75636eD910bB25EB587bebFB99BAF8df94";
+    const batchAddr = "0x04e5Fbaf98d3Fe94c1c27A68c8eF0Ab46bB0a388"; 
+    const receiptNFT = await ReceiptNFT.deploy(strategyAddress, batchAddr);
     await receiptNFT.deployed();
     const receiptNFTAddr = receiptNFT.address;
     console.log("receiptNFTAddr : deployed to", receiptNFTAddr );
 
     // DodoStrategy
-    const DodoStrategy =await ethers.getContractFactory("DodoStrategyOnefile");
-    const dodoStrategy = await DodoStrategy.deploy();
-    await dodoStrategy.deployed();
-    const dodoAddr = dodoStrategy.address;
-    console.log("dodoAddr : deployed to", dodoAddr ); 
+    // const DodoStrategy =await ethers.getContractFactory("DodoStrategyOnefile");
+    // const dodoStrategy = await DodoStrategy.deploy();
+    // await dodoStrategy.deployed();
+    // const dodoAddr = dodoStrategy.address;
+    // console.log("dodoAddr : deployed to", dodoAddr ); 
 
 
    

@@ -22,3 +22,28 @@ StargateStrategy : deployed to 0x1E4c334bec7e182d9a18D3Ba881070f7415baB70
 Verified: 
   dodoStrategy  https://testnet.bscscan.com/address/0x3bAFcd1246a17C883253f24E21512E5b96DCE60c#code
   StargateStrategy: https://testnet.bscscan.com/address/0x1E4c334bec7e182d9a18D3Ba881070f7415baB70#code
+
+
+Currentr deployment
+===================
+Compiled 1 Solidity file successfully
+Deploying with the account: 0xF6B3862F287d1d255255A819bf5874858Aaa91F4
+Account balance: 637566620000000000
+strategyAddress : deployed to 0xd92cB834B13c35efd6AFd2cfC48F97161dCfb085
+libAddress : deployed to 0xE5c14409B717Ff90F1e614F0b9e23e6a2F49ec5C
+receiptNFTAddr : deployed to 0x3b581d1d9C75AAFBdE7EdC364BAEd63e3137d158
+shareTokenAddr : deployed to 0xDB9e6326B6c523844a6b37EE6CBa5a65d7dCD9fC
+chainlinkAddrgy : deployed to 0x78D6906Cba7c0b0E36d6CEf0754AF27517265579
+batchAddr : deployed to 0x04e5Fbaf98d3Fe94c1c27A68c8eF0Ab46bB0a388
+exchangeAddr : deployed to 0x6BD5b48C04d636B86EEEa58741Bec0cd7B6ee4ec
+dodoAddr : deployed to 0x2FB4DD8A12beaBe59F7e2d2B9afbbAf03E7DB6d8
+
+Verification
+============
+strategyRouter: https://testnet.bscscan.com/address/0xd92cB834B13c35efd6AFd2cfC48F97161dCfb085#code
+receiptNFTAddr :https://testnet.bscscan.com/address/0x3b581d1d9C75AAFBdE7EdC364BAEd63e3137d158#code
+shareTokenAddr : https://testnet.bscscan.com/address/0xDB9e6326B6c523844a6b37EE6CBa5a65d7dCD9fC#code
+chainlinkAddrgy : https://testnet.bscscan.com/address/0x78D6906Cba7c0b0E36d6CEf0754AF27517265579#code
+batchAddr : https://testnet.bscscan.com/address/0x04e5Fbaf98d3Fe94c1c27A68c8eF0Ab46bB0a388#code
+exchangeAddr :https://testnet.bscscan.com/address/0x6BD5b48C04d636B86EEEa58741Bec0cd7B6ee4ec#code
+dodoAddr : https://testnet.bscscan.com/address/0x2FB4DD8A12beaBe59F7e2d2B9afbbAf03E7DB6d8#code
