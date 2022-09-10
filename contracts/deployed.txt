@@ -47,3 +47,4 @@ chainlinkAddrgy : https://testnet.bscscan.com/address/0x78D6906Cba7c0b0E36d6CEf0
 batchAddr : https://testnet.bscscan.com/address/0x04e5Fbaf98d3Fe94c1c27A68c8eF0Ab46bB0a388#code
 exchangeAddr :https://testnet.bscscan.com/address/0x6BD5b48C04d636B86EEEa58741Bec0cd7B6ee4ec#code
 dodoAddr : https://testnet.bscscan.com/address/0x2FB4DD8A12beaBe59F7e2d2B9afbbAf03E7DB6d8#code
+StrategyRouterLib: https://testnet.bscscan.com/address/0xe5c14409b717ff90f1e614f0b9e23e6a2f49ec5c#code
