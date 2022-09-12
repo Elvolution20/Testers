@@ -7,7 +7,8 @@ function bnbChain() {
     usdt: "0x55d398326f99059fF775485246999027B3197955",
     dai: "0x1AF3F329e8BE154074D8769D1FFa4eE058B1DBc3",
 
-    bsw: "0x965f527d9159dce6288a2219db51fc6eef120dd1",
+    dodo: "0x2FB4DD8A12beaBe59F7e2d2B9afbbAf03E7DB6d8",
+    // dodo: "0x965f527d9159dce6288a2219db51fc6eef120dd1",
 
     // current token holders for tests, 
     // may not work based on block number used in forking, in such case try find other holders
@@ -23,7 +24,7 @@ function bnbChain() {
     tokens: [bnb.busd, bnb.usdt, bnb.dai, bnb.usdc]
   };
 
-  bnb.uniswapRouter = "0x10ED43C718714eb63d5aA57B78B54704E256024E";
+  bnb.uniswapRouter = "0x3a6d8ca21d1cf76f653a67577fa0d27453350dd8";
 
   bnb.BusdUsdPriceFeed = "0xcBb98864Ef56E9042e7d2efef76141f15731B82f";
   bnb.UsdcUsdPriceFeed = "0x51597f405303C4377E36123cBc172b13269EA163";

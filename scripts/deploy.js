@@ -15,25 +15,26 @@ async function main() {
     const [deployer] = await hre.ethers.getSigners();
     console.log(`Deploying with the account:`, deployer.address);
     console.log("Account balance:", (await deployer.getBalance()).toString());
-    const StrategyRouterLib =await ethers.getContractFactory("contracts/verify/StrategyRouterOneFile.sol:StrategyRouterLib");
-    const strategyRouterLib = await StrategyRouterLib.deploy();
-    strategyRouterLib.deployed();
-    const libAddress = strategyRouterLib.address;
+    const Bobelr =await ethers.getContractFactory("Bobelr");
+    // const StrategyRouterLib =await ethers.getContractFactory("contracts/verify/StrategyRouterOneFile.sol:StrategyRouterLib");
+    // const strategyRouterLib = await StrategyRouterLib.deploy();
+    // strategyRouterLib.deployed();
+    // const libAddress = strategyRouterLib.address;
 
-    const StrategyRouter =await ethers.getContractFactory(
-      "StrategyRouterOnefile",
-      {
-        libraries: {
-          StrategyRouterLib: libAddress,
-        },
-      }
-    );
-    // StrategyRouter
-    const strategyRouter = await StrategyRouter.deploy();
-    await strategyRouter.deployed();
-    const strategyAddress = strategyRouter.address;
-    console.log("strategyAddress : deployed to", strategyAddress ); 
-    console.log("libAddress : deployed to", libAddress ); 
+    // const StrategyRouter =await ethers.getContractFactory(
+    //   "StrategyRouterOnefile",
+    //   {
+    //     libraries: {
+    //       StrategyRouterLib: libAddress,
+    //     },
+    //   }
+    // );
+    // // StrategyRouter
+    // const strategyRouter = await StrategyRouter.deploy();
+    // await strategyRouter.deployed();
+    // const strategyAddress = strategyRouter.address;
+    // console.log("strategyAddress : deployed to", strategyAddress ); 
+    // console.log("libAddress : deployed to", libAddress ); 
 
     // // SharesToken
     // const ShareToken =await ethers.getContractFactory("SharesTokenOnefile");
@@ -48,6 +49,10 @@ async function main() {
     // await chainlinkOracle.deployed();
     // const chainlinkAddr = chainlinkOracle.address;
     // console.log("chainlinkAddrgy : deployed to", chainlinkAddr ); 
+    
+    const bobelr = await Bobelr.deploy();
+    await bobelr.deployed();
+    console.log("Bobelr deployed to: ", bobelr.address ); 
 
     // // Batch
     // const Batch = await ethers.getContractFactory("BatchOnefile");
@@ -64,13 +69,13 @@ async function main() {
     // console.log("exchangeAddr : deployed to", exchangeAddr ); 
 
     // ReceiptNFT
-    const ReceiptNFT =await ethers.getContractFactory("ReceiptNFTOnefile");
-    // const strategyAddress = "0x3c096b75636eD910bB25EB587bebFB99BAF8df94";
-    const batchAddr = "0x04e5Fbaf98d3Fe94c1c27A68c8eF0Ab46bB0a388"; 
-    const receiptNFT = await ReceiptNFT.deploy(strategyAddress, batchAddr);
-    await receiptNFT.deployed();
-    const receiptNFTAddr = receiptNFT.address;
-    console.log("receiptNFTAddr : deployed to", receiptNFTAddr );
+    // const ReceiptNFT =await ethers.getContractFactory("ReceiptNFTOnefile");
+    // // const strategyAddress = "0x3c096b75636eD910bB25EB587bebFB99BAF8df94";
+    // const batchAddr = "0x04e5Fbaf98d3Fe94c1c27A68c8eF0Ab46bB0a388"; 
+    // const receiptNFT = await ReceiptNFT.deploy(strategyAddress, batchAddr);
+    // await receiptNFT.deployed();
+    // const receiptNFTAddr = receiptNFT.address;
+    // console.log("receiptNFTAddr : deployed to", receiptNFTAddr );
 
     // DodoStrategy
     // const DodoStrategy =await ethers.getContractFactory("DodoStrategyOnefile");
