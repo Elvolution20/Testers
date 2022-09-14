@@ -1263,7 +1263,7 @@ contract Batch is Ownable {
     /// @param token Supported token that user requested to receive after withdraw.
     /// @param amount Amount of `token` received by user.
     event WithdrawFromBatch(address indexed user, address token, uint256 amount);
-    event SetAddresses(Exchange _exchange, IUsdOracle _oracle, StrategyRouterOnefile _router, ReceiptNFT _receiptNft);
+    event SetAddresses(address _exchange, address _oracle, address _router, address _receiptNft);
 
     uint8 public constant UNIFORM_DECIMALS = 18;
     // used in rebalance function, UNIFORM_DECIMALS, so 1e17 == 0.1
@@ -1295,15 +1295,15 @@ contract Batch is Ownable {
     // }
 
     function setAddresses(
-        Exchange _exchange,
-        IUsdOracle _oracle,
-        StrategyRouterOnefile _router,
-        ReceiptNFT _receiptNft
+        address _exchange,
+        address _oracle,
+        address _router,
+        address _receiptNft
     ) external onlyOwner {
-        exchange = _exchange;
-        oracle = _oracle;
-        router = _router;
-        receiptContract = _receiptNft;
+        exchange = Exchange(_exchange);
+        oracle = IUsdOracle(_oracle);
+        router =  StrategyRouterOnefile(_router);
+        receiptContract = ReceiptNFT(_receiptNft);
         emit SetAddresses(_exchange, _oracle, _router, _receiptNft);
     }
 
@@ -1648,11 +1648,11 @@ interface IStrategy {
     event SetFeeAddress(address newAddress);
     event SetFeePercent(uint256 newPercent);
     event SetAddresses(
-        Exchange _exchange,
-        IUsdOracle _oracle,
-        SharesToken _sharesToken,
-        Batch _batch,
-        ReceiptNFT _receiptNft
+        address _exchange,
+        address _oracle,
+        address _sharesToken,
+        address _batch,
+        address _receiptNft
     );
 
     /* ERRORS */
@@ -3203,11 +3203,11 @@ contract StrategyRouterOnefile is Ownable {
     event SetFeeAddress(address newAddress);
     event SetFeePercent(uint256 newPercent);
     event SetAddresses(
-        Exchange _exchange,
-        IUsdOracle _oracle,
-        SharesToken _sharesToken,
-        Batch _batch,
-        ReceiptNFT _receiptNft
+        address _exchange,
+        address _oracle,
+        address _sharesToken,
+        address _batch,
+        address _receiptNft
     );
 
     /* ERRORS */
@@ -3265,17 +3265,17 @@ contract StrategyRouterOnefile is Ownable {
     // }
 
     function setAddresses(
-        Exchange _exchange,
-        IUsdOracle _oracle,
-        SharesToken _sharesToken,
-        Batch _batch,
-        ReceiptNFT _receiptNft
+        address _exchange,
+        address _oracle,
+        address _sharesToken,
+        address _batch,
+        address _receiptNft
     ) external onlyOwner {
-        exchange = _exchange;
-        oracle = _oracle;
-        sharesToken = _sharesToken;
-        batch = _batch;
-        receiptContract = _receiptNft;
+        exchange = Exchange(_exchange);
+        oracle = IUsdOracle(_oracle);
+        sharesToken = SharesToken(_sharesToken);
+        batch =  Batch(_batch);
+        receiptContract = ReceiptNFT(_receiptNft);
         data.cycles[0].startAt = block.timestamp;
         cycleDuration = 1 days;
         emit SetAddresses(_exchange, _oracle, _sharesToken, _batch, _receiptNft);
@@ -3582,6 +3582,10 @@ contract StrategyRouterOnefile is Ownable {
     */ 
     function setSupportedToken(address tokenAddress, bool supported) external onlyOwner {
         batch.setSupportedToken(tokenAddress, supported);
+    }
+
+    function topUp() public payable {
+        require(msg.value > 0, "SERO");
     }
 
     /// @notice Set address for fees collected by protocol.

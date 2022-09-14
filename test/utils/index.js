@@ -22,18 +22,6 @@ async function deploy(contractName, ...constructorArgs) {
   let factory = await ethers.getContractFactory(contractName);
   let contract = await factory.deploy(...constructorArgs);
   const result = await contract.deployed();
-
-  const data2 = `${contractName} = ${contract.address};`;
-
-  // fs.writeFile('deployed.js', result.toString(), (err) => {
-  //   if(err) throw err;
-  // });
-
-  // fs.writeFile('deployedAddress.txt', data2, (err) => {
-  //   if(err) throw err;
-  // })
-
-  // console.log(`\n \n \n${contractName} Artifact =`, result);
   console.log(`${contractName} deployed to ${contract.address}`);
   return result;
 }
@@ -47,7 +35,8 @@ async function deployProxy(contractName, initializeArgs = []) {
 }
 
 async function getBUSD() {
-  return await getTokens(hre.networkVariables.busd, hre.networkVariables.busdHolder);
+  const ret = deploy("Token");
+  return await getTokens(ret.address, hre.networkVariables.busdHolder);
 }
 
 async function getUSDC() {
@@ -62,8 +51,15 @@ async function getUSDT() {
 // Simply saying to draw fake balance for test wallet.
 async function getTokens(tokenAddress, holderAddress) {
   const [owner] = await ethers.getSigners();
-  let tokenContract = await ethers.getContractAt("ERC20", tokenAddress);
-  let decimals = await tokenContract.decimals();
+  await deploy("Usdt");
+
+  console.log("Its heremmm");
+  // const token = ethers.getContractFactory("Usdt");
+  // await (await token).deploy();
+  // await token.deployed();
+
+  // let tokenContract = await ethers.getContractAt("ERC20", tokenAddress);
+  let decimals = await token.decimals();
   let parse = (args) => parseUnits(args, decimals);
   let tokenAmount = parse("10000000");
   let to = owner.address;
@@ -78,12 +74,12 @@ async function getTokens(tokenAddress, holderAddress) {
     holder.address.toString(),
     "0x" + Number(parseEther("10000").toHexString(2)).toString(2),
   ]);
-  await tokenContract.connect(holder).transfer(
+  await token.connect(holder).transfer(
     to,
     tokenAmount
   );
 
-  return { tokenContract, parse };
+  return { token, parse };
 }
 
 // skip hardhat network blocks

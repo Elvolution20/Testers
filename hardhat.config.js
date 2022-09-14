@@ -102,29 +102,33 @@ require('hardhat-contract-sizer');
 require('@openzeppelin/hardhat-upgrades');
 require('solidity-docgen');
 
-const networkVariables = require('./networkVariables');
+// const networkVariables = require('./networkVariables');
 
-// Fill networkVariables object with settings and addresses based on current network or fork.
-extendEnvironment((hre) => {
-  if(hre.network.name == 'hardhat') {
-    if(hre.network.config.forking.enabled) {
-      switch (hre.network.config.forking.url) {
-        case process.env.BNB_URL:
-          // console.log(networkVariables);
-          hre.networkVariables = networkVariables['bnb'];
-          break;
-        case process.env.BNB_TEST_URL:
-          // console.log(networkVariables);
-          hre.networkVariables = networkVariables['bnbTest'];
-          break;
-      }
-    }
-  } else {
-    hre.networkVariables = networkVariables[hre.network.name];
-  }
-  if(!hre.networkVariables) throw Error("network variables are missing");
-  console.log(hre.networkVariables);
-});
+// // Fill networkVariables object with settings and addresses based on current network or fork.
+// extendEnvironment((hre) => {
+//   if(hre.network.name == 'hardhat') {
+//     if(hre.network.config.forking.enabled) {
+//       switch (hre.network.config.forking.url) {
+//         case process.env.BNB_URL:
+//           // console.log(networkVariables);
+//           hre.networkVariables = networkVariables['bnb'];
+//           break;
+//         case process.env.BNB_TEST_URL:
+//           // console.log(networkVariables);
+//           hre.networkVariables = networkVariables['bnbTest'];
+//           break;
+//         default:
+//           hre.networkVariables = networkVariables['development'];
+//       }
+//     } else {
+
+//     }
+//   } else {
+//     hre.networkVariables = networkVariables[hre.network.name];
+//   }
+//   if(!hre.networkVariables) throw Error("network variables are missing");
+//   console.log(hre.networkVariables);
+// });
 
 /**
  * @type import('hardhat/config').HardhatUserConfig
@@ -132,21 +136,21 @@ extendEnvironment((hre) => {
 module.exports = {
   networks: {
     hardhat: {
-      forking: {
-        url: process.env.BNB_URL,
-        // blockNumber: 19232650, // use this only with archival node
-        enabled: true
-      },
-      // allowUnlimitedContractSize: true,
-      // loggingEnabled: false
+      // forking: {
+      //   url: process.env.BNB_URL,
+      //   // blockNumber: 19232650, // use this only with archival node
+      //   enabled: true
+      // },
+      allowUnlimitedContractSize: true,
+      loggingEnabled: false
       // accounts: [{privateKey: process.env.PRIVATE_KEY, balance: parseEther("10000").toString()}],
     },
 
-    // development: {
-    //   url: "http://127.0.0.1:8545",     // Localhost (default: none)
-    //   port: 8545,            // Standard Ethereum port (default: none)
-    //   network_id: "*",       // Any network (default: none)
-    // },
+    development: {
+      url: "http://127.0.0.1:8545",     // Localhost (default: none)
+      port: 8545,            // Standard Ethereum port (default: none)
+      network_id: "*",       // Any network (default: none)
+    },
     bnb: {
       url: process.env.BNB_URL,
       accounts: process.env.PRIVATE_KEY !== undefined ? [process.env.PRIVATE_KEY] : [],

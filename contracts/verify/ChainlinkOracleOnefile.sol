@@ -139,6 +139,8 @@ contract ChainlinkOracleOnefile is IUsdOracle, Ownable {
 
     /// @custom:oz-upgrades-unsafe-allow constructor
     constructor() {
+        // prices[USDC][Denominations.USD] = Price(100_100_000, 8); // 1.001$
+        // prices[BUSD][Denominations.USD] = Price(10_000_000_000, 10); // 1$
         // lock implementation
         // _disableInitializers();
     }

@@ -2830,11 +2830,11 @@ contract StrategyRouter is Ownable {
     event SetFeeAddress(address newAddress);
     event SetFeePercent(uint256 newPercent);
     event SetAddresses(
-        Exchange _exchange,
-        IUsdOracle _oracle,
-        SharesToken _sharesToken,
-        BatchOnefile _batch,
-        ReceiptNFT _receiptNft
+        address _exchange,
+        address _oracle,
+        address _sharesToken,
+        address _batch,
+        address _receiptNft
     );
 
     /* ERRORS */
@@ -2891,18 +2891,20 @@ contract StrategyRouter is Ownable {
         cycleDuration = 1 days;
     }
 
+    
     function setAddresses(
-        Exchange _exchange,
-        IUsdOracle _oracle,
-        SharesToken _sharesToken,
-        BatchOnefile _batch,
-        ReceiptNFT _receiptNft
+        address _exchange,
+        address _oracle,
+        address _sharesToken,
+        address _batch,
+        address _receiptNft
     ) external onlyOwner {
-        exchange = _exchange;
-        oracle = _oracle;
-        sharesToken = _sharesToken;
-        batch = _batch;
-        receiptContract = _receiptNft;
+        exchange = Exchange(_exchange);
+        oracle = IUsdOracle(_oracle);
+        sharesToken = SharesToken(_sharesToken);
+        batch =  BatchOnefile(_batch);
+        receiptContract = ReceiptNFT(_receiptNft);
+     
         emit SetAddresses(_exchange, _oracle, _sharesToken, _batch, _receiptNft);
     }
 
@@ -3451,7 +3453,7 @@ contract BatchOnefile is Ownable {
     /// @param token Supported token that user requested to receive after withdraw.
     /// @param amount Amount of `token` received by user.
     event WithdrawFromBatch(address indexed user, address token, uint256 amount);
-    event SetAddresses(Exchange _exchange, IUsdOracle _oracle, StrategyRouter _router, ReceiptNFT _receiptNft);
+    event SetAddresses(address _exchange, address _oracle, address _router, address _receiptNft);
 
     uint8 public constant UNIFORM_DECIMALS = 18;
     // used in rebalance function, UNIFORM_DECIMALS, so 1e17 == 0.1
@@ -3483,19 +3485,18 @@ contract BatchOnefile is Ownable {
     //     __Ownable_init();
     //     __UUPSUpgradeable_init();
     // }
-
     function setAddresses(
-        Exchange _exchange,
-        IUsdOracle _oracle,
-        StrategyRouter _router,
-        ReceiptNFT _receiptNft
+        address _exchange,
+        address _oracle,
+        address _router,
+        address _receiptNft
     ) external onlyOwner {
         require(!initializer, "Already initialized");
         initializer = true;
-        exchange = _exchange;
-        oracle = _oracle;
-        router = _router;
-        receiptContract = _receiptNft;
+        exchange = Exchange(_exchange);
+        oracle = IUsdOracle(_oracle);
+        router =  StrategyRouter(_router);
+        receiptContract = ReceiptNFT(_receiptNft);
         emit SetAddresses(_exchange, _oracle, _router, _receiptNft);
     }
 

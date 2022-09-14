@@ -15,6 +15,8 @@ async function deployFakeStrategy({ router, token, weight = 10_000, profitPercen
   await router.addStrategy(strategy.address, token.address, weight);
 }
 
+let _clip;
+
 // Deploy TestCurrencies and mint totalSupply to the 'owner'
 async function setupFakeTokens() {
 
@@ -34,18 +36,28 @@ async function setupFakeTokens() {
 
 };
 
+let uniswapRouter;
+
+
 // Create liquidity on uniswap-like router with test tokens
 async function setupTokensLiquidityOnPancake(tokenA, tokenB, amount) {
-  const [owner, feeAddress] = await ethers.getSigners();
+  const [owner, sender] = await ethers.getSigners();
   // let uniswapRouter = await ethers.getContractAt("IUniswapV2Router02", hre.networkVariables.uniswapRouter);
   let weth = await deploy("WETH");
-  let factory = await deploy("UniswapV2Factory", feeAddress.address);
-  let uniswapRouter = await deploy("UniswapV2Router02", factory.address, weth.address);
-
+  // tokenA = await deploy("Usdt");
+  // tokenB = await deploy("Usdt");
+  // console.log("Hereeeeee1");
+  let factory = await deploy("UniswapV2Factory", owner.address);
+  uniswapRouter = await deploy("UniswapV2Router02", factory.address, weth.address);
   let amountA = parseUnits(amount, await tokenA.decimals());
   let amountB = parseUnits(amount, await tokenB.decimals());
-  await tokenA.approve(uniswapRouter.address, amountA);
-  await tokenB.approve(uniswapRouter.address, amountB);
+
+  await tokenA.mint(sender.address, amountA);
+  await tokenB.mint(sender.address, amountB);
+
+  await tokenA.connect(sender).approve(uniswapRouter.address, amountA);
+  await tokenB.connect(sender).approve(uniswapRouter.address, amountB);
+  
   await uniswapRouter.addLiquidity(
     tokenA.address,
     tokenB.address,
@@ -138,7 +150,8 @@ async function setupTestParams(router, oracle, exchange, usdc, usdt, busd) {
   let usdcAmount = parseUnits("1.0", await usdc.decimals());
   await oracle.setPrice(usdc.address, usdcAmount);
 
-  let clip = hre.networkVariables.clip;
+  const _clip = await deploy("Usdt");
+  let clip = _clip.address;
 
   let pancakePlugin = await deploy("UniswapPlugin");
   let pancake = (pancakePlugin).address;
@@ -153,7 +166,7 @@ async function setupTestParams(router, oracle, exchange, usdc, usdt, busd) {
   );
 
   // pancake plugin params
-  await pancakePlugin.setUniswapRouter(hre.networkVariables.uniswapRouter);
+  await pancakePlugin.setUniswapRouter(uniswapRouter);
   // await pancakePlugin.setUseWeth(clip, busd, true);
   // await pancakePlugin.setUseWeth(clip, usdt, true);
   // await pancakePlugin.setUseWeth(clip, usdc, true);
@@ -181,7 +194,8 @@ async function setupFakePrices(oracle, usdc, usdt, busd) {
 }
 
 async function setupPancakePlugin(exchange, usdc, usdt, busd) {
-  let clip = hre.networkVariables.clip;
+  _clip = await deploy("Token");
+  let clip = _clip.address;
 
   let pancakePlugin = await deploy("UniswapPlugin");
   let pancake = (pancakePlugin).address;
@@ -196,7 +210,7 @@ async function setupPancakePlugin(exchange, usdc, usdt, busd) {
   );
 
   // pancake plugin params
-  await pancakePlugin.setUniswapRouter(hre.networkVariables.uniswapRouter);
+  await pancakePlugin.setUniswapRouter(uniswapRouter);
   // await pancakePlugin.setUseWeth(clip, busd, true);
   // await pancakePlugin.setUseWeth(clip, usdt, true);
   // await pancakePlugin.setUseWeth(clip, usdc, true);
@@ -244,7 +258,7 @@ async function setupPluginsOnBNB(exchange) {
   );
 
   // pancake plugin params
-  await pancakePlugin.setUniswapRouter(hre.networkVariables.uniswapRouter);
+  await pancakePlugin.setUniswapRouter(uniswapRouter);
   await pancakePlugin.setUseWeth(clip, busd, true);
   await pancakePlugin.setUseWeth(clip, usdt, true);
   await pancakePlugin.setUseWeth(clip, usdc, true);
